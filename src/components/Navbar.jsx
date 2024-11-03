@@ -5,9 +5,11 @@ import { SettingsOutline, PersonOutline, MenuOutline, ChevronDownOutline } from 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+    setIsMobileDropdownOpen(false); // Close mobile dropdown when toggling menu
   };
 
   const toggleDropdown = (e) => {
@@ -15,8 +17,15 @@ function Navbar() {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const closeDropdown = () => {
+  const toggleMobileDropdown = (e) => {
+    e.preventDefault();
+    setIsMobileDropdownOpen(!isMobileDropdownOpen);
+  };
+
+  const closeDropdown = (e) => {
+    e.stopPropagation();
     setIsDropdownOpen(false);
+    setIsMobileDropdownOpen(false);
   };
 
   return (
@@ -29,28 +38,25 @@ function Navbar() {
 
         {/* Navbar links */}
         <div className="flex-grow flex items-center justify-center space-x-6">
-          {/* Render these links only for larger screens */}
           <div className="hidden lg:flex space-x-6">
             <a href="#beranda" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
               Beranda
             </a>
             <div className="relative">
-              <a
-                href="#blog/artikel"
-                className="flex items-center px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded cursor-pointer"
+              <button
+                className="flex items-center px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded cursor-pointer focus:outline-none"
                 onClick={toggleDropdown}
               >
-                <span>Blog/Artikel</span>
-                <ChevronDownOutline color={"#000000"} title="" height="24px" width="24px" className="ml-2" />
-              </a>
+                Blog/Artikel
+                <ChevronDownOutline color={"#000000"} height="24px" width="24px" className="ml-2" />
+              </button>
               {isDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-60 bg-white shadow-lg rounded-md border">
-                  <ul className="py-2">
+                <div className="absolute left-0 mt-2 w-60 bg-white shadow-lg rounded-md border z-10">
+                  <ul className="py-2" onClick={closeDropdown}>
                     <li>
                       <a
                         href="#Tips-Perawatan-Tanaman"
                         className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded"
-                        onClick={closeDropdown}
                       >
                         Tips Perawatan Tanaman
                       </a>
@@ -59,7 +65,6 @@ function Navbar() {
                       <a
                         href="#Artikel-Penyakit-Tanaman"
                         className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded"
-                        onClick={closeDropdown}
                       >
                         Artikel Penyakit dan Hama
                       </a>
@@ -77,7 +82,7 @@ function Navbar() {
           </div>
         </div>
 
-        {/* Navbar icons */}
+        {/* Navbar icons for desktop */}
         <div className="hidden lg:flex items-center space-x-10">
           <a href="#user" className="text-gray-800">
             <PersonOutline color="#000000" height="24px" width="24px" />
@@ -87,17 +92,17 @@ function Navbar() {
           </a>
         </div>
 
-        {/* Mobile menu icon */}
-        <div className="lg:hidden flex items-center">
+        {/* Mobile menu icon with settings and user icons */}
+        <div className="lg:hidden flex items-center space-x-4">
+          <a href="#user" className="text-gray-800">
+            <PersonOutline color="#000000" height="24px" width="24px" />
+          </a>
+          <a href="#settings" className="text-gray-800">
+            <SettingsOutline color="#000000" height="24px" width="24px" />
+          </a>
           <button className="text-gray-800 focus:outline-none" onClick={toggleMenu}>
             <MenuOutline color={"#000000"} height="24px" width="24px" />
           </button>
-          <a href="#user" className="text-gray-800 ml-4">
-            <PersonOutline color="#000000" height="24px" width="24px" />
-          </a>
-          <a href="#settings" className="text-gray-800 ml-2">
-            <SettingsOutline color="#000000" height="24px" width="24px" />
-          </a>
         </div>
       </div>
 
@@ -111,22 +116,19 @@ function Navbar() {
               </a>
             </li>
             <li>
-              <a
-                href="#blog/artikel"
-                className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsDropdownOpen(!isDropdownOpen);
-                }}
+              <button
+                onClick={toggleMobileDropdown}
+                className="flex justify-between w-full px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded focus:outline-none"
               >
                 Blog/Artikel
-              </a>
-              {isDropdownOpen && (
-                <ul className="mt-2 space-y-2">
+                <ChevronDownOutline color={"#000000"} height="24px" width="24px" />
+              </button>
+              {isMobileDropdownOpen && (
+                <ul className="mt-2 space-y-2 ml-4">
                   <li>
                     <a
                       href="#Tips-Perawatan-Tanaman"
-                      className="block px-4 py-2 text-gray-800  hover:bg-[#C5D9A4]  rounded"
+                      className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded"
                       onClick={closeDropdown}
                     >
                       Tips Perawatan Tanaman
@@ -135,7 +137,7 @@ function Navbar() {
                   <li>
                     <a
                       href="#Artikel-Penyakit-Tanaman"
-                      className="block px-4 py-2 text-gray-800  hover:bg-[#C5D9A4] rounded"
+                      className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded"
                       onClick={closeDropdown}
                     >
                       Artikel Penyakit dan Hama

@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/Logo.jpg"; // Make sure this path is correct
+import logo from "../assets/Logo.png"; // Make sure this path is correct
 
 const Footer = () => {
   return (
