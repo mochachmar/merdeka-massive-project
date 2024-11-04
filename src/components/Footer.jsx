@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import logo from "../assets/Logo.png"; // Make sure this path is correct
 
 const Footer = () => {
@@ -19,24 +20,24 @@ const Footer = () => {
         {/* Navigation Links */}
         <ul className="flex space-x-4 mb-4 md:mb-0">
           <li>
-            <a href="#beranda" className="hover:text-gray-600">
+            <Link to="/beranda" className="hover:text-gray-600">
               Beranda
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#blog/artikel" className="hover:text-gray-600">
+            <Link to="/blog/artikel" className="hover:text-gray-600">
               Blog/Artikel
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#perawatan" className="hover:text-gray-600">
+            <Link to="/perawatan" className="hover:text-gray-600">
               Perawatan
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#tentangkami" className="hover:text-gray-600">
+            <Link to="/tentangkami" className="hover:text-gray-600">
               Tentang Kami
-            </a>
+            </Link>
           </li>
         </ul>
 

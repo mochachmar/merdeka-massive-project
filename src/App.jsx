@@ -6,7 +6,7 @@ import EmailCode from "./pages/EmailCode";
 import SignIn from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
 import ForgotPasswordCode from "./pages/ForgotPasswordCode";
-import Dashboard from "./pages/Dashboard"
+import Beranda from "./pages/Beranda"
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/forgot-password-code" element={<ForgotPasswordCode />} />
-      <Route path="/Dashboard" element={<Dashboard />} />
+      <Route path="/Beranda" element={<Beranda />} />
     </Routes>
   );
 }

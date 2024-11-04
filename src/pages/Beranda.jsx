@@ -1,6 +1,6 @@
 import React from "react";
 
-function Dashboard() {
+function Beranda() {
   return (
     <div>
       {/* Hero Section */}
@@ -81,7 +81,7 @@ function Dashboard() {
       <section className="py-12 bg-[#E7F0DC]">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Artikel</h2>
-          <p className="text-center text-gray-600 mb-6">
+          <p className="text-center text-gray-900 mb-6">
             Kami menyediakan artikel / blog yang dapat anda akses mengenai
             informasi penyakit dan perawatan tanaman dari sumber terpercaya.
           </p>
@@ -95,13 +95,13 @@ function Dashboard() {
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-6">
-                  <p className="text-sm text-green-600">
+                  <p className="text-sm text-gray-600">
                     Minggu, 25 Oktober 2024
                   </p>
                   <h3 className="text-lg font-semibold">
                     Hama pada Bunga Mawar
                   </h3>
-                  <p className="text-gray-600 mt-2 text-left">
+                  <p className="text-gray-900 mt-2 text-left">
                     Artikel ini membahas berbagai jenis hama yang sering
                     menyerang tanaman bunga mawar.
                   </p>
@@ -118,11 +118,11 @@ function Dashboard() {
                 className="w-full h-48 object-cover"
               />
               <div className="p-6">
-                <p className="text-sm text-green-600">Minggu, 25 Okt 2024</p>
+                <p className="text-sm text-gray-600">Minggu, 25 Okt 2024</p>
                 <h3 className="text-lg font-semibold">
                   Hama pada Bunga Melati
                 </h3>
-                <p className="text-gray-600 mt-2 text-left">
+                <p className="text-gray-900 mt-2 text-left">
                   Artikel ini membahas berbagai jenis hama yang sering menyerang
                   tanaman bunga melati.
                 </p>
@@ -139,7 +139,7 @@ function Dashboard() {
                 className="w-full h-48 object-cover"
               />
               <div className="p-6">
-                <p className="text-sm text-green-600">
+                <p className="text-sm text-grey-600">
                   Minggu, 25 Oktober 2024
                 </p>
                 <h3 className="text-lg font-semibold">
@@ -177,7 +177,7 @@ function Dashboard() {
             <h2 className="text-3xl font-bold mb-4">
               Mengapa Memilih TanamanKu?
             </h2>
-            <p className="text-gray-600 text-left">
+            <p className="text-gray-900 text-left">
               TanamanKu menggabungkan teknologi mutakhir dengan keindahan alam.
               AI kami didesain untuk memberikan panduan yang mudah dipahami oleh
               pemula, namun tetap akurat untuk para pecinta tanaman hias yang
@@ -197,4 +197,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Beranda;

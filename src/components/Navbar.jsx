@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from 'react-router-dom';
 import logo from "../assets/Logo.png";
 import { SettingsOutline, PersonOutline, MenuOutline, ChevronDownOutline } from "react-ionicons";
 
@@ -39,9 +40,9 @@ function Navbar() {
         {/* Navbar links */}
         <div className="flex-grow flex items-center justify-center space-x-6">
           <div className="hidden lg:flex space-x-6">
-            <a href="#beranda" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
+            <Link to="/beranda" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
               Beranda
-            </a>
+            </Link>
             <div className="relative">
               <button
                 className="flex items-center px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded cursor-pointer focus:outline-none"
@@ -54,52 +55,52 @@ function Navbar() {
                 <div className="absolute left-0 mt-2 w-60 bg-white shadow-lg rounded-md border z-10">
                   <ul className="py-2" onClick={closeDropdown}>
                     <li>
-                      <a
-                        href="#Tips-Perawatan-Tanaman"
+                      <Link
+                        to="/tips-perawatan-tanaman"
                         className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded"
                       >
                         Tips Perawatan Tanaman
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
-                        href="#Artikel-Penyakit-Tanaman"
+                      <Link
+                        to="/artikel-penyakit-tanaman"
                         className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded"
                       >
                         Artikel Penyakit dan Hama
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
               )}
             </div>
-            <a href="#perawatan" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
+            <Link to="/perawatan" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
               Perawatan
-            </a>
-            <a href="#tentangkami" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
+            </Link>
+            <Link to="/tentangkami" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
               Tentang Kami
-            </a>
+            </Link>
           </div>
         </div>
 
         {/* Navbar icons for desktop */}
         <div className="hidden lg:flex items-center space-x-10">
-          <a href="#user" className="text-gray-800">
+          <Link to="/user" className="text-gray-800">
             <PersonOutline color="#000000" height="24px" width="24px" />
-          </a>
-          <a href="#settings" className="text-gray-800">
+          </Link>
+          <Link to="/settings" className="text-gray-800">
             <SettingsOutline color="#000000" height="24px" width="24px" />
-          </a>
+          </Link>
         </div>
 
         {/* Mobile menu icon with settings and user icons */}
         <div className="lg:hidden flex items-center space-x-4">
-          <a href="#user" className="text-gray-800">
+          <Link to="/user" className="text-gray-800">
             <PersonOutline color="#000000" height="24px" width="24px" />
-          </a>
-          <a href="#settings" className="text-gray-800">
+          </Link>
+          <Link to="/settings" className="text-gray-800">
             <SettingsOutline color="#000000" height="24px" width="24px" />
-          </a>
+          </Link>
           <button className="text-gray-800 focus:outline-none" onClick={toggleMenu}>
             <MenuOutline color={"#000000"} height="24px" width="24px" />
           </button>
@@ -111,9 +112,9 @@ function Navbar() {
         <div className="lg:hidden bg-[#E7F0DC] p-4">
           <ul className="flex flex-col space-y-5">
             <li>
-              <a href="#beranda" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
+              <Link to="/beranda" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
                 Beranda
-              </a>
+              </Link>
             </li>
             <li>
               <button
@@ -126,35 +127,35 @@ function Navbar() {
               {isMobileDropdownOpen && (
                 <ul className="mt-2 space-y-2 ml-4">
                   <li>
-                    <a
-                      href="#Tips-Perawatan-Tanaman"
+                    <Link
+                      to="/tips-perawatan-tanaman"
                       className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded"
                       onClick={closeDropdown}
                     >
                       Tips Perawatan Tanaman
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
-                      href="#Artikel-Penyakit-Tanaman"
+                    <Link
+                      to="/artikel-penyakit-tanaman"
                       className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded"
                       onClick={closeDropdown}
                     >
                       Artikel Penyakit dan Hama
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               )}
             </li>
             <li>
-              <a href="#perawatan" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
+              <Link to="/perawatan" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
                 Perawatan
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#tentangkami" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
+              <Link to="/tentangkami" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
                 Tentang Kami
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
