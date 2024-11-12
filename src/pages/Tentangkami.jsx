@@ -18,7 +18,7 @@ const Tentangkami = () => {
             className="w-full h-96 object-cover"
           />
           <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-            <h2 className="text-3xl md:text-4xl font-semibold text-white px-6 text-center">Alat Ramah Lingkungan untuk Hobi Berkebun</h2>
+            <h2 className="text-3xl md:text-4xl font-semibold text-white px-6 text-center">Alat Ramah Lingkungan untuk orang yang memiliki hobi berkebun</h2>
           </div>
         </section>
 
@@ -46,7 +46,9 @@ const Tentangkami = () => {
             {/* Second Row */}
             <div className="flex flex-col-reverse lg:flex-row items-center gap-8 lg:gap-16 p-6 rounded-lg shadow bg-gray-50">
               <div className="lg:w-1/2 text-center lg:text-left">
-                <p className="text-lg text-gray-700">Memberikan akses mudah ke teknologi AI yang mampu mendeteksi penyakit dan pertumbuhan tanaman secara akurat, membantu pengguna merawat tanaman dengan lebih baik.</p>
+                <p className="text-lg text-gray-700">
+                  Menjadi platform digital terdepan dalam perawatan tanaman hidroponik, yang memanfaatkan teknologi AI untuk memberikan solusi cerdas dan personal kepada setiap pecinta tanaman di seluruh dunia
+                </p>
               </div>
               <div className="w-full lg:w-1/2">
                 <img src="./src/assets/ttgkami1.jpg" alt="Tentang Kami 2" className="w-full h-auto object-cover rounded-lg transition-transform duration-300 hover:scale-105" />
@@ -78,7 +80,7 @@ const Tentangkami = () => {
           <div className="mt-16 bg-[#E8E9E1] py-12 px-8 rounded-lg shadow border-t-4 border-[#6D7E5E]">
             <h3 className="text-2xl font-bold text-gray-800 mb-4">Inspirasi dan Ide</h3>
             <p className="text-gray-700 max-w-2xl mb-8 leading-relaxed">
-              TanamanKu adalah platform inovatif berbasis AI yang dirancang untuk membantu Anda merawat Tanaman Hidroponik dengan lebih mudah dan efektif. Mulai dari deteksi penyakit hingga panduan perawatan, TanamanKu memberikan solusi
+              TanamanKu adalah platform inovatif berbasis AI yang dirancang untuk membantu Anda merawat tanaman hidroponik dengan lebih mudah dan efektif. Mulai dari deteksi penyakit hingga panduan perawatan, TanamanKu memberikan solusi
               cerdas yang dapat diakses di mana saja.
             </p>
 
