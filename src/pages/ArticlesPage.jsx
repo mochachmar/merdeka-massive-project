@@ -61,7 +61,7 @@ const articlesData = [
     img: gambarArtikel,
     description: 'Artikel ini membahas berbagai jenis hama yang sering menyerang buah tomat.',
     content:
-      'Menyiram tanaman hias tidak boleh sembarangan karena dapat menyebabkan akar busuk jika terlalu banyak air, atau tanaman layu jika kurang air. Tips utama dalam menyiram tanaman adalah memperhatikan jenis tanah dan pot yang digunakan. Gunakan pot yang memiliki lubang drainase, dan siram tanaman ketika lapisan atas tanah mulai kering. Tanaman hias yang berada di dalam ruangan umumnya membutuhkan lebih sedikit air dibandingkan tanaman yang ditempatkan di luar ruangan. Pastikan untuk mengecek kebutuhan air tanaman Anda sesuai dengan jenis dan lingkungannya.',
+      'Menyiram Tanaman Hidroponik tidak boleh sembarangan karena dapat menyebabkan akar busuk jika terlalu banyak air, atau tanaman layu jika kurang air. Tips utama dalam menyiram tanaman adalah memperhatikan jenis tanah dan pot yang digunakan. Gunakan pot yang memiliki lubang drainase, dan siram tanaman ketika lapisan atas tanah mulai kering. Tanaman Hidroponik yang berada di dalam ruangan umumnya membutuhkan lebih sedikit air dibandingkan tanaman yang ditempatkan di luar ruangan. Pastikan untuk mengecek kebutuhan air tanaman Anda sesuai dengan jenis dan lingkungannya.',
   },
   {
     id: 7,

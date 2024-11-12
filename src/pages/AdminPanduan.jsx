@@ -3,7 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import FooterAdmin from '../components/FooterAdmin';
 import Breadcrumbs from '../components/BreadCrumbs';
 import NavbarAdmin from '../components/NavAdmin';
-import ContohGambar from '../assets/contoh-gambar.png';
+import tomat from '../assets/tomat.png';
+import timun from '../assets/timun.png';
+import paprika from '../assets/paprika.png';
 
 function AdminPanduan() {
   const navigate = useNavigate(); // Inisialisasi navigate
@@ -17,32 +19,20 @@ function AdminPanduan() {
   const data = [
     {
       id: 1,
-      title: 'Hama Pada Bunga Mawar',
-      image: ContohGambar,
+      title: 'Tomat',
+      image: tomat,
       status: 'Publik',
     },
     {
       id: 2,
-      title: 'Hama Pada Bunga Anggrek',
-      image: ContohGambar,
+      title: 'Timun',
+      image: timun,
       status: 'Publik',
     },
     {
       id: 3,
-      title: 'Hama Pada Bunga Tulip',
-      image: ContohGambar,
-      status: 'Draft',
-    },
-    {
-      id: 4,
-      title: 'Hama Pada Bunga Kamboja',
-      image: ContohGambar,
-      status: 'Draft',
-    },
-    {
-      id: 5,
-      title: 'Hama Pada Bunga Janda Bolong',
-      image: ContohGambar,
+      title: 'Paprika',
+      image: paprika,
       status: 'Draft',
     },
   ];

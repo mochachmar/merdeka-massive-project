@@ -3,7 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import FooterAdmin from '../components/FooterAdmin';
 import Breadcrumbs from '../components/BreadCrumbs';
 import NavbarAdmin from '../components/NavAdmin';
-import ContohGambar from '../assets/contoh-gambar.png';
+import gambarSelada from '../assets/selada.png';
+import gambarBayam from '../assets/bayam.png';
+import gambarKale from '../assets/kale.png';
+import gambarArigula from '../assets/arigula.png';
+import gambarPakcoi from '../assets/pakcoi.png';
 
 function AdminArtikel() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,32 +21,32 @@ function AdminArtikel() {
   const data = [
     {
       id: 1,
-      title: 'Hama Pada Bunga Mawar',
-      image: ContohGambar,
+      title: 'Hama pada Tanaman Selada',
+      image: gambarSelada,
       status: 'Publik',
     },
     {
       id: 2,
-      title: 'Hama Pada Bunga Anggrek',
-      image: ContohGambar,
+      title: 'Hama Pada Tanaman Bayam',
+      image: gambarBayam,
       status: 'Publik',
     },
     {
       id: 3,
-      title: 'Hama Pada Bunga Tulip',
-      image: ContohGambar,
+      title: 'Hama pada Tanaman Kale',
+      image: gambarKale,
       status: 'Draft',
     },
     {
       id: 4,
-      title: 'Hama Pada Bunga Kamboja',
-      image: ContohGambar,
+      title: 'Hama pada Tanaman Arigula',
+      image: gambarArigula,
       status: 'Draft',
     },
     {
       id: 5,
-      title: 'Hama Pada Bunga Janda Bolong',
-      image: ContohGambar,
+      title: 'Hama pada Tanaman pak choi',
+      image: gambarPakcoi,
       status: 'Draft',
     },
   ];
