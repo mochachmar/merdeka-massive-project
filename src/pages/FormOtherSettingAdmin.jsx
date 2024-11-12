@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import lockIcon from '../assets/lock-icon.svg';
 import userIcon from '../assets/user-icon.svg';
 import otherIcon from '../assets/menu-icon.svg';
+import kembaliIcon from '../assets/settings-icon.svg';
 
 const FormOtherSettingAdmin = () => {
   const [formData, setFormData] = useState({
@@ -33,6 +34,10 @@ const FormOtherSettingAdmin = () => {
       {/* Sidebar */}
       <div className="w-full md:w-1/4 bg-gray-100 p-5">
         <div className="flex flex-col space-y-4">
+          <Link to="/admin" className="flex items-center space-x-2">
+            <img src={kembaliIcon} alt="Kembali Icon" className="w-5 h-5" />
+            <h2 className="text-lg font-bold">Pengaturan</h2>
+          </Link>
           <Link to="/admin/personal-setting" className="hover:bg-gray-200 transition-all duration-300 p-3 rounded cursor-pointer flex items-center">
             <img src={userIcon} alt="user" className="inline-block w-5 h-5 mr-2" />
             Pribadi

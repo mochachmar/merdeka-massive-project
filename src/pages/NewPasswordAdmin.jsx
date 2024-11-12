@@ -46,16 +46,16 @@ const NewPassword = () => {
 
       if (response.ok) {
         setShowModal(false);
-        navigate('/sign-in');
+        navigate('/sign-in-admin');
       } else {
         console.log('Server error ignored for frontend usage.');
         setShowModal(false);
-        navigate('/sign-in');
+        navigate('/sign-in-admin');
       }
     } catch (err) {
       console.log('Connection error ignored for frontend usage.');
       setShowModal(false);
-      navigate('/sign-in');
+      navigate('/sign-in-admin');
     }
   };
 

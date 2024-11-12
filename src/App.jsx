@@ -6,7 +6,10 @@ import EmailCode from './pages/EmailCode';
 import SignIn from './pages/SignIn';
 import ForgotPassword from './pages/ForgotPassword';
 import ForgotPasswordCode from './pages/ForgotPasswordCode';
+import ForgotPasswordAdmin from './pages/ForgotPasswordAdmin';
+import ForgotPasswordCodeAdmin from './pages/ForgotPasswordCodeAdmin';
 import NewPassword from './pages/NewPassword';
+import NewPasswordAdmin from './pages/NewPasswordAdmin';
 import Beranda from './pages/Beranda';
 import SplashScreen from './pages/SplashScreen';
 import SplashScreenLogin from './pages/SplashScreenLogin';
@@ -71,6 +74,9 @@ function App() {
 
       {/* Route Admin */}
       <Route path="/admin" element={<Admin />} />
+      <Route path="/forgot-password-admin" element={<ForgotPasswordAdmin />} />
+      <Route path="/forgot-password-admin-code" element={<ForgotPasswordCodeAdmin />} />
+      <Route path="/new-password-admin" element={<NewPasswordAdmin />} />
 
       {/* Route Artikel */}
       <Route path="/admin/card-artikel" element={<AdminArtikel />} />

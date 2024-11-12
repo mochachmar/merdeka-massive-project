@@ -25,7 +25,7 @@ export const ForgotPassword = () => {
       setError('');
     }
 
-    navigate('/forgot-password-code', { state: { email } });
+    navigate('/forgot-password-admin-code', { state: { email } });
   };
 
   return (
@@ -68,7 +68,7 @@ export const ForgotPassword = () => {
           <div className="text-center mt-6">
             <p className="text-base font-semibold text-[#5b5b5b]">
               Sudah ingat kata sandi Anda?{' '}
-              <span className="text-black cursor-pointer hover:text-blue-500" onClick={() => navigate('/sign-in')}>
+              <span className="text-black cursor-pointer hover:text-blue-500" onClick={() => navigate('/sign-in-admin')}>
                 Masuk
               </span>
             </p>

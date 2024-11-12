@@ -15,7 +15,7 @@ function BerandaLogin() {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen w-full">
       <NavbarLogin />
       {/* Hero Section */}
       <section className="relative">
