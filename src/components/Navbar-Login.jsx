@@ -41,7 +41,11 @@ function NavbarLogin() {
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center">
-          <img src={logo} alt="Logo" className="w-25 h-10" />
+          <Link to="/beranda-login">
+            {' '}
+            {/* Tambahkan Link di sini */}
+            <img src={logo} alt="Logo" className="w-25 h-10" />
+          </Link>
         </div>
 
         {/* Navbar links */}

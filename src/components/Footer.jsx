@@ -6,9 +6,11 @@ const Footer = () => {
   return (
     <footer style={{ backgroundColor: '#F5F5F5' }} className="text-black py-6">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
-        {/* Logo and Copyright */}
+        {/* Logo dan Copyright */}
         <div className="flex items-center mb-4 md:mb-0">
-          <img src={logo} alt="Logo" className="h-10 w-auto mr-3" />
+          <Link to="/beranda">
+            <img src={logo} alt="Logo" className="h-10 w-auto mr-3" />
+          </Link>
           <span className="text-xl font-semibold"></span>
         </div>
         <div className="flex justify-center items-center">
