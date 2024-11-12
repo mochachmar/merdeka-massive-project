@@ -91,7 +91,7 @@ const articlesData = [
 
 function ArticlesPage() {
   return (
-    <div className="min-h-screen mx-auto">
+    <div className="flex flex-col min-h-screen w-full">
       <Navbar />
       <div
         className="relative bg-cover bg-center h-72 flex items-center justify-center"

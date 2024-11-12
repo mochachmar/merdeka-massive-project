@@ -37,19 +37,19 @@ function Beranda() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Fitur TanamanKu</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-            <div onClick={() => navigate('/ai-detection')} className="cursor-pointer bg-[#6D7E5E] p-6 rounded-lg shadow-md">
+            <div onClick={() => navigate('/sign-in')} className="cursor-pointer bg-[#6D7E5E] p-6 rounded-lg shadow-md">
               <img src={iconDetek} alt="AI Detection" className="mx-auto mb-4 w-12 h-12" />
               <p className="text-sm text-white text-left">
                 AI kami mampu mendeteksi berbagai penyakit dan hama yang dapat menyerang tanaman Anda. Cukup unggah foto tanaman, dan sistem kami akan memberikan diagnosis serta langkah-langkah perawatan.
               </p>
             </div>
-            <div onClick={() => navigate('/articles')} className="cursor-pointer bg-[#6D7E5E] p-6 rounded-lg shadow-md">
+            <div onClick={() => navigate('/artikel-penyakit-tanaman')} className="cursor-pointer bg-[#6D7E5E] p-6 rounded-lg shadow-md">
               <img src={iconUnduh} alt="Articles" className="mx-auto mb-4 w-12 h-12" />
               <p className="text-sm text-white text-left">
                 Jelajahi berbagai artikel yang memberikan tips dan trik perawatan tanaman hidroponik. Dari pemula hingga ahli, temukan inspirasi dan panduan yang tepat untuk menjaga tanaman Anda tetap sehat dan subur.
               </p>
             </div>
-            <div onClick={() => navigate('/guide-download')} className="cursor-pointer bg-[#6D7E5E] p-6 rounded-lg shadow-md">
+            <div onClick={() => navigate('/panduan')} className="cursor-pointer bg-[#6D7E5E] p-6 rounded-lg shadow-md">
               <img src={iconGrow} alt="Guide Download" className="mx-auto mb-4 w-12 h-12" />
               <p className="text-sm text-white text-left">Unduh panduan lengkap tips dan trik perawatan tanaman hidroponik, mulai dari pemula hingga ahli. Dapatkan inspirasi dan cara tepat menjaga tanaman Anda tetap sehat dan subur!</p>
             </div>
@@ -80,7 +80,7 @@ function Beranda() {
                 date: 'Minggu, 25 Oktober 2024',
               },
             ].map((article, index) => (
-              <div key={index} onClick={() => navigate('/artikelsaatdibuka')} className="cursor-pointer rounded-lg shadow-md overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${article.src})` }}>
+              <div key={index} onClick={() => navigate('/artikel-penyakit-tanaman')} className="cursor-pointer rounded-lg shadow-md overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${article.src})` }}>
                 {/* Empty Space */}
                 <div className="h-48"></div>
 

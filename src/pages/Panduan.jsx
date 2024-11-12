@@ -4,7 +4,7 @@ import CardPanduan from '../components/CardPanduan';
 import tomat from '../assets/tomat.png';
 import timun from '../assets/timun.png';
 import paprika from '../assets/paprika.png';
-import blog from '../assets/blog.png';
+import gambarBanner from '../assets/hero-section.png';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
@@ -35,21 +35,23 @@ function Panduan() {
       {/* Konten Utama */}
       <main className="flex-grow">
         {/* Header Image Section */}
-        <div className="relative w-full h-64 bg-cover bg-center" style={{ backgroundImage: `url(${blog})` }}>
-          <div className="absolute inset-0 bg-black opacity-20 backdrop-blur-lg"></div>
-          <h1
-            className="text-white text-center font-semibold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 
-                       text-lg sm:text-xl md:text-2xl lg:text-3xl px-4"
-          >
+        <div
+          className="relative bg-cover bg-center h-72 flex items-center justify-center"
+          style={{
+            backgroundImage: `url(${gambarBanner})`,
+          }}
+        >
+          <div className="absolute inset-0 bg-black opacity-50 backdrop-blur-lg"></div>
+          <h1 className="text-white text-center text-3xl font-semibold relative z-10">
             Temukan artikel dan perawatan untuk <br />
-            meningkatkan kualitas tanaman Anda!
+            meningkatkan kualitas tanaman anda!
           </h1>
         </div>
 
         {/* Main Content */}
         <header className="text-center mb-8 mt-6">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black">Tips Perawatan Tanaman</h1>
-          <p className="text-base sm:text-lg text-gray-600 mt-2">Panduan perawatan pada tanaman hidroponik</p>
+          <h1 className="text-center text-4xl font-bold py-4">Tips Perawatan Tanaman</h1>
+          <p className="text-center text-xl font-regular">Panduan perawatan pada tanaman hidroponik</p>
         </header>
 
         {/* Card Section */}
