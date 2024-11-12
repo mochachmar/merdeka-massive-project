@@ -100,10 +100,13 @@ function BerandaLogin() {
 
       {/* About Section */}
       <section className="py-12 bg-white">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center">
+        <div className="container mx-auto px-5 flex flex-col md:flex-row items-center">
           <img src={tentangKamiImage} alt="About TanamanKu" className="mx-auto object-cover rounded-lg shadow-md" style={{ width: '500px', height: '300px' }} />
           <div className="md:ml-8">
-            <h2 className="text-3xl font-bold mb-4">Mengapa Memilih TanamanKu?</h2>
+            <h2 className="text-3xl font-bold mb-4">
+              <br />
+              Mengapa Memilih TanamanKu?
+            </h2>
             <p className="text-gray-900 text-left">
               TanamanKu menggabungkan teknologi mutakhir dengan keindahan alam. AI kami didesain untuk memberikan panduan yang mudah dipahami oleh pemula, namun tetap akurat untuk para pecinta tanaman hidroponik yang berpengalaman. Solusi
               lengkap untuk setiap langkah merawat tanaman, dari bibit hingga dewasa.

@@ -17,8 +17,8 @@ const HistoryDeteksi = () => {
         {' '}
         {/* Main content container */}
         <div className="flex justify-between items-center my-4">
-          <Link to="/identifikasi-ai" className="flex items-center text-black font-semibold text-sm">
-            <ArrowBackOutline className="mr-2" color="black" height="20px" width="20px" />
+          <Link to="/deteksi-penyakit" className="flex items-center text-black font-semibold text-sm ml-4">
+            <ArrowBackOutline className="mr-5" color="black" height="50px" width="30px" />
             Kembali
           </Link>
         </div>
