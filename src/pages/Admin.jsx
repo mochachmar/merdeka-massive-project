@@ -6,22 +6,18 @@ import IconArtikel from '../assets/artikel.svg';
 import IconPanduan from '../assets/panduan.svg';
 
 export default function Admin() {
-  // Placeholder untuk jumlah artikel dan panduan; nantinya bisa diganti dengan data dari backend
-  const jumlahArtikel = 7; // angka imajiner untuk sementara
-  const jumlahPanduan = 12; // angka imajiner untuk sementara
+  const jumlahArtikel = 7;
+  const jumlahPanduan = 12;
 
   return (
     <div className="flex flex-col min-h-screen w-full">
       <NavbarAdmin>
         <Breadcrumbs />
-        {/* Main Content */}
         <div className="p-6">
           <h1 className="text-2xl font-semibold text-gray-800 mb-6">Dashboard Admin</h1>
-          {/* Card Container */}
-          <div className="flex gap-8 justify-center">
+          <div className="flex flex-wrap gap-8 justify-center">
             {/* Artikel Card */}
-            <div className="relative border border-green-500 rounded-lg p-6 w-60 text-center">
-              {/* Badge Jumlah Artikel */}
+            <div className="relative border border-green-500 rounded-lg p-6 w-full sm:w-1/2 md:w-1/3 lg:w-60 text-center">
               <div className="absolute top-2 right-2 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-semibold">{jumlahArtikel}</div>
               <img src={IconArtikel} alt="Artikel Icon" className="mx-auto mb-4 w-12 h-12" />
               <h2 className="font-bold text-lg text-gray-800 mb-2">Artikel</h2>
@@ -34,8 +30,7 @@ export default function Admin() {
             </div>
 
             {/* Panduan Card */}
-            <div className="relative border border-green-500 rounded-lg p-6 w-60 text-center">
-              {/* Badge Jumlah Panduan */}
+            <div className="relative border border-green-500 rounded-lg p-6 w-full sm:w-1/2 md:w-1/3 lg:w-60 text-center">
               <div className="absolute top-2 right-2 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-semibold">{jumlahPanduan}</div>
               <img src={IconPanduan} alt="Panduan Icon" className="mx-auto mb-4 w-12 h-12" />
               <h2 className="font-bold text-lg text-gray-800 mb-2">Panduan</h2>

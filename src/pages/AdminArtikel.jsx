@@ -71,56 +71,58 @@ function AdminArtikel() {
       <NavbarAdmin>
         <Breadcrumbs />
         <div className="flex-1 p-6 scrollable">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-semibold text-gray-800">Daftar Artikel</h1>
-            <Link to="/admin/card-artikel/tambah-artikel" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+          <div className="flex justify-between items-center mb-4 flex-wrap">
+            <h1 className="text-2xl font-semibold text-gray-800 w-full md:w-auto">Daftar Artikel</h1>
+            <Link to="/admin/card-artikel/tambah-artikel" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4 md:mt-0">
               Tambah Artikel
             </Link>
           </div>
 
           <div className="bg-white shadow-md rounded-lg overflow-hidden">
-            <table className="min-w-full table-auto">
-              <thead className="bg-green-200">
-                <tr>
-                  <th className="px-4 py-2 text-left text-gray-800 font-semibold">#</th>
-                  <th className="px-4 py-2 text-left text-gray-800 font-semibold">Judul Artikel</th>
-                  <th className="px-4 py-2 text-left text-gray-800 font-semibold">Gambar Utama</th>
-                  <th className="px-4 py-2 text-center text-gray-800 font-semibold">Status</th>
-                  <th className="px-4 py-2 text-center text-gray-800 font-semibold">Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => (
-                  <tr key={item.id} className="border-b hover:bg-gray-100">
-                    <td className="px-4 py-2 text-center font-medium text-gray-700">{index + 1}</td>
-                    <td
-                      className="px-4 py-2 text-gray-700"
-                      style={{
-                        maxWidth: '200px',
-                        whiteSpace: 'normal',
-                        wordWrap: 'break-word',
-                      }}
-                    >
-                      {item.title}
-                    </td>
-                    <td className="px-4 py-2">
-                      <img src={item.image} alt={item.title} className="h-12 w-20 object-cover rounded-md" />
-                    </td>
-                    <td className="px-4 py-2 text-center">
-                      <span className={`px-3 py-1 rounded-full text-white font-semibold ${item.status === 'Publik' ? 'bg-green-500' : 'bg-yellow-500'}`}>{item.status}</span>
-                    </td>
-                    <td className="px-4 py-2 text-center">
-                      <button onClick={handleEditArtikel} className="bg-yellow-500 text-white px-2 py-1 rounded mr-2 hover:bg-yellow-600">
-                        ✏️
-                      </button>
-                      <button onClick={() => openModal(item)} className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
-                        🗑️
-                      </button>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="min-w-full table-auto">
+                <thead className="bg-green-200">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-gray-800 font-semibold">#</th>
+                    <th className="px-4 py-2 text-left text-gray-800 font-semibold">Judul Artikel</th>
+                    <th className="px-4 py-2 text-left text-gray-800 font-semibold">Gambar Utama</th>
+                    <th className="px-4 py-2 text-center text-gray-800 font-semibold">Status</th>
+                    <th className="px-4 py-2 text-center text-gray-800 font-semibold">Aksi</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data.map((item, index) => (
+                    <tr key={item.id} className="border-b hover:bg-gray-100">
+                      <td className="px-4 py-2 text-center font-medium text-gray-700">{index + 1}</td>
+                      <td
+                        className="px-4 py-2 text-gray-700"
+                        style={{
+                          maxWidth: '200px',
+                          whiteSpace: 'normal',
+                          wordWrap: 'break-word',
+                        }}
+                      >
+                        {item.title}
+                      </td>
+                      <td className="px-4 py-2">
+                        <img src={item.image} alt={item.title} className="h-12 w-20 object-cover rounded-md" />
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        <span className={`px-3 py-1 rounded-full text-white font-semibold ${item.status === 'Publik' ? 'bg-green-500' : 'bg-yellow-500'}`}>{item.status}</span>
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        <button onClick={handleEditArtikel} className="bg-yellow-500 text-white px-2 py-1 rounded mr-2 hover:bg-yellow-600">
+                          ✏️
+                        </button>
+                        <button onClick={() => openModal(item)} className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
+                          🗑️
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           {/* Delete Confirmation Modal */}

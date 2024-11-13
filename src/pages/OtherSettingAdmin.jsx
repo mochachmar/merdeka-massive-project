@@ -61,7 +61,7 @@ const OtherSettingAdmin = () => {
         <h2 className="text-2xl font-bold mb-6">Lainnya</h2>
 
         {/* Add User and Cancel Buttons */}
-        <div className="flex space-x-4 mb-4">
+        <div className="flex flex-wrap space-x-4 mb-4">
           {/* Batal Button */}
           <button
             onClick={() => navigate('/admin/')} // Go back to the previous page
@@ -77,30 +77,32 @@ const OtherSettingAdmin = () => {
         </div>
 
         {/* User Table */}
-        <table className="w-full border border-gray-200 text-left">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="p-3 border-b">No</th>
-              <th className="p-3 border-b">Username</th>
-              <th className="p-3 border-b">Email</th>
-              <th className="p-3 border-b">Nama</th>
-              <th className="p-3 border-b">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="p-3 border-b">1</td>
-              <td className="p-3 border-b">Admin2</td>
-              <td className="p-3 border-b">Admin2@gmail.com</td>
-              <td className="p-3 border-b">Sarah Isnaini Alnauri</td>
-              <td className="p-3 border-b">
-                <button onClick={() => handleDeleteClick('Admin2')} className="hover:bg-gray-200 p-2 rounded transition-all duration-300">
-                  <img src={deleteIcon} alt="delete" className="w-5 h-5" />
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="overflow-x-auto">
+          <table className="w-full border border-gray-200 text-left">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="p-3 border-b">No</th>
+                <th className="p-3 border-b">Username</th>
+                <th className="p-3 border-b">Email</th>
+                <th className="p-3 border-b">Nama</th>
+                <th className="p-3 border-b">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="p-3 border-b">1</td>
+                <td className="p-3 border-b">Admin2</td>
+                <td className="p-3 border-b">Admin2@gmail.com</td>
+                <td className="p-3 border-b">Sarah Isnaini Alnauri</td>
+                <td className="p-3 border-b">
+                  <button onClick={() => handleDeleteClick('Admin2')} className="hover:bg-gray-200 p-2 rounded transition-all duration-300">
+                    <img src={deleteIcon} alt="delete" className="w-5 h-5" />
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         {/* Delete Confirmation Popup */}
         {showDeletePopup && (
