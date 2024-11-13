@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
-import { SettingsOutline, MenuOutline, ChevronDownOutline } from 'react-ionicons';
+import { SettingsOutline, PersonOutline, MenuOutline, ChevronDownOutline } from 'react-ionicons';
 
 function NavbarLogin() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isPerawatanDropdownOpen, setIsPerawatanDropdownOpen] = useState(false); // Tambahkan state untuk dropdown Perawatan
+  const [isPerawatanDropdownOpen, setIsPerawatanDropdownOpen] = useState(false);
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false); // New state for profile dropdown
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-    setIsMobileDropdownOpen(false); // Close mobile dropdown when toggling menu
+    setIsMobileDropdownOpen(false);
+    setIsProfileDropdownOpen(false); // Close profile dropdown when toggling menu
   };
 
   const toggleDropdown = (e) => {
@@ -21,7 +23,7 @@ function NavbarLogin() {
 
   const togglePerawatanDropdown = (e) => {
     e.preventDefault();
-    setIsPerawatanDropdownOpen(!isPerawatanDropdownOpen); // Fungsi untuk membuka dropdown Perawatan
+    setIsPerawatanDropdownOpen(!isPerawatanDropdownOpen);
   };
 
   const toggleMobileDropdown = (e) => {
@@ -29,11 +31,17 @@ function NavbarLogin() {
     setIsMobileDropdownOpen(!isMobileDropdownOpen);
   };
 
+  const toggleProfileDropdown = (e) => {
+    e.preventDefault();
+    setIsProfileDropdownOpen(!isProfileDropdownOpen);
+  };
+
   const closeDropdown = (e) => {
     e.stopPropagation();
     setIsDropdownOpen(false);
     setIsMobileDropdownOpen(false);
-    setIsPerawatanDropdownOpen(false); // Tutup dropdown Perawatan ketika mengklik di luar
+    setIsPerawatanDropdownOpen(false);
+    setIsProfileDropdownOpen(false); // Close profile dropdown when clicking outside
   };
 
   return (
@@ -42,8 +50,6 @@ function NavbarLogin() {
         {/* Logo */}
         <div className="flex items-center">
           <Link to="/beranda-login">
-            {' '}
-            {/* Tambahkan Link di sini */}
             <img src={logo} alt="Logo" className="w-25 h-10" />
           </Link>
         </div>
@@ -108,18 +114,50 @@ function NavbarLogin() {
         </div>
 
         {/* Navbar icons for desktop */}
-        <div className="hidden lg:flex items-center space-x-10">
-          <Link to="/personal-setting" className="text-gray-800">
+        <div className="hidden lg:flex items-center space-x-4">
+          <div className="relative flex items-center">
+            <button onClick={toggleProfileDropdown} className="text-gray-800 focus:outline-none flex items-center">
+              <PersonOutline color="#000000" height="24px" width="24px" />
+            </button>
+            {isProfileDropdownOpen && (
+              <div className="absolute top-full right-0 mt-2 w-40 bg-white shadow-lg rounded-md border z-10">
+                <ul className="py-2">
+                  <li>
+                    <Link to="/" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
+                      Logout
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+          <Link to="/personal-setting" className="text-gray-800 flex items-center">
             <SettingsOutline color="#000000" height="24px" width="24px" />
           </Link>
         </div>
 
         {/* Mobile menu icon with settings and user icons */}
         <div className="lg:hidden flex items-center space-x-4">
-          <Link to="/personal-setting" className="text-gray-800">
+          <div className="relative flex items-center">
+            <button onClick={toggleProfileDropdown} className="text-gray-800 focus:outline-none flex items-center">
+              <PersonOutline color="#000000" height="24px" width="24px" />
+            </button>
+            {isProfileDropdownOpen && (
+              <div className="absolute top-full right-0 mt-2 w-40 bg-white shadow-lg rounded-md border z-10">
+                <ul className="py-2">
+                  <li>
+                    <Link to="/" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
+                      Logout
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+          <Link to="/personal-setting" className="text-gray-800 flex items-center">
             <SettingsOutline color="#000000" height="24px" width="24px" />
           </Link>
-          <button className="text-gray-800 focus:outline-none" onClick={toggleMenu}>
+          <button className="text-gray-800 focus:outline-none flex items-center" onClick={toggleMenu}>
             <MenuOutline color={'#000000'} height="24px" width="24px" />
           </button>
         </div>
