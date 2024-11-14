@@ -1,4 +1,4 @@
-import Navbar from '../components/Navbar-Login.jsx';
+import Navbar from '../components/Navbar.jsx';
 import gambarSelada from '../assets/selada.png';
 import gambarBayam from '../assets/bayam.png';
 import gambarKale from '../assets/kale.png';
@@ -9,8 +9,8 @@ import gambarCabai from '../assets/cabai.png';
 import gambarTimun from '../assets/timun.png';
 import gambarPaprika from '../assets/paprika.png';
 import gambarBanner from '../assets/hero-section.png';
-import Footer from '../components/FooterLogin';
-import Card from '../components/CardLogin.jsx';
+import Footer from '../components/Footer.jsx';
+import Card from '../components/Card.jsx';
 
 const articlesData = [
   {
