@@ -1,10 +1,11 @@
 import mysql2 from "mysql2/promise";
-
+import dotenv from "dotenv";
+dotenv.config();
 const db = mysql2.createPool({
-	host: "localhost",
-	user: "root",
-	password: "",
-	database: "tanamanku_massive_project",
+	host: process.env.DB_HOST || "localhost",
+    user: process.env.DB_USER || "root",
+    password: process.env.PASSWORD_DATABASE || "",
+    database: process.env.DB_NAME || "tanamanku_massive_project",
 });
 
 async function testConnection() {
@@ -12,7 +13,7 @@ async function testConnection() {
 		await db.getConnection()
 		console.log("Berhasil terhubung ke database !");
 	} catch (e) {
-		console.e("Gagal terhubung ke database !", e);
+		console.error("Gagal terhubung ke database !", e);
 	} 
 }
 
