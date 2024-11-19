@@ -36,7 +36,7 @@ const NewPassword = () => {
 
   const submitNewPassword = async () => {
     try {
-      const response = await fetch('/api/reset-password', {
+      const response = await fetch('/api/new-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
