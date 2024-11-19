@@ -56,3 +56,49 @@ build/
 # Temporary files
 *.tmp
 *.swp
+
+# Python virtual environment files
+venv/
+env/
+.venv/
+ENV/
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.db
+
+# Flask configuration and other Python dependencies
+instance/
+*.log
+*.pid
+*.pot
+*.mo
+
+# Docker-related files
+.docker/
+
+# Pytest cache
+.pytest_cache/
+
+# Pycharm specific
+.idea/
+
+# Flask migrations
+migrations/
+
+# Other Python environment files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# MySQL database dump files
+*.sql
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# VS Code settings
+.settings/
+
+# Docker volumes
+.dockerignore
