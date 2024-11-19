@@ -57,8 +57,22 @@ export const User = {
   },
 
   findByEmail: async (email) => {
-    const query = `SELECT * FROM Users WHERE email = ?`;
-    const [rows] = await db.execute(query, [email]);
+    const query = `SELECT * FROM Users WHERE LOWER(email) = LOWER(?)`; // Case insensitive query
+    const [rows] = await db.execute(query, [email.toLowerCase()]); // Ensure the email is passed in lowercase
+    return rows[0];
+  },
+
+  findOne: async (conditions) => {
+    const verificationToken = conditions.verificationToken || null;
+    const currentTime = conditions.currentTime || Date.now();
+
+    const query = `
+      SELECT * FROM Users 
+      WHERE verificationToken = ? 
+      AND verificationTokenExpiresAt > ?
+    `;
+
+    const [rows] = await db.execute(query, [verificationToken, currentTime]);
     return rows[0];
   },
 
