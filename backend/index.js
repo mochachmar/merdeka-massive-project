@@ -4,12 +4,11 @@ import { testConnection } from './database/db.js';
 import authRoutes from './routes/auth.route.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import part from 'path';
+import articlesRoutes from './routes/articlesRoutes.js';
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
-const __dirname = part.resolve();
 
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
@@ -21,13 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
-
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('frontend/build'));
-  app.get('*', (req, res) => {
-    res.sendFile(part.resolve(__dirname, 'frontend', 'build', 'index.html'));
-  });
-}
+app.use('/api/articles', articlesRoutes);
 
 app.listen(3000, () => {
   testConnection();
