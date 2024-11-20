@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: your_database_name
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - backend
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: backend
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+      - DB_NAME=your_database_name
+    ports:
+      - 5000:5000
+    depends_on:
+      - mysql
+    networks:
+      - backend
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: frontend
+    ports:
+      - 80:80
+    networks:
+      - backend
+    depends_on:
+      - backend
+
+volumes:
+  mysql-data:
+
+networks:
+  backend:
+    driver: bridge
