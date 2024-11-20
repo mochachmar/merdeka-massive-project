@@ -48,7 +48,46 @@ import PanduanLogin from './pages/Panduan-Login';
 import Tips from './pages/Tips';
 import TipsLogin from './pages/Tips-Login';
 
+import { useAuth } from './store/FetchDataWithAxios';
+import { useEffect } from 'react';
+
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, user } = useAuthStore();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/sign-in" replace />;
+  }
+
+  if (!user.isVerified) {
+    return <Navigate to="/verify-email" replace />;
+  }
+
+  return children;
+};
+
+// redirect authenticated users to the home page
+const RedirectAuthenticatedUser = ({ children }) => {
+  const { isAuthenticated, user } = useAuthStore();
+
+  if (isAuthenticated && user.isVerified) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
+
 function App() {
+  const { isCheckingAuth, checkAuth, isAuthenticated, user } = useAuth();
+
+  useEffect(() => {
+    if (!isCheckingAuth) {
+      checkAuth();
+    }
+  }, [isCheckingAuth, checkAuth]);
+
+  console.log('isAuthenticated:', isAuthenticated);
+  console.log('user:', user);
+
   return (
     <Routes>
       <Route path="/" element={<SplashScreen />} />
@@ -108,6 +147,9 @@ function App() {
       <Route path="/panduan-login" element={<PanduanLogin />} />
       <Route path="/tips" element={<Tips />} />
       <Route path="/tips-login" element={<TipsLogin />} />
+
+      {/* catch all routes */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

@@ -4,7 +4,9 @@
   "description": "",
   "main": "backend/index.js",
   "scripts": {
-    "dev": "nodemon backend/index.js"
+    "dev": "NODE_ENV=development nodemon backend/index.js",
+    "start": "NODE_ENV=production node backend/index.js",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,7 @@
   },
   "homepage": "https://github.com/mochachmar/merdeka-massive-project#readme",
   "dependencies": {
+    "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -27,7 +30,8 @@
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
     "mailtrap": "^3.4.0",
-    "mysql2": "^3.11.4"
+    "mysql2": "^3.11.4",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
