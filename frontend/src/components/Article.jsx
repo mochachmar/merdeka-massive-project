@@ -1,13 +1,8 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import Card from "../components/Card";
-import gambarArtikel from "../assets/ArticleImageExample.png";
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import Card from '../components/Card';
 
-const articlesList = [
-  /* Artikel array di sini, sesuai kodingan temanmu */
-];
-
-function Article() {
+function Article({ articlesList }) {
   const { id } = useParams();
   const article = articlesList.find((item) => item.id === parseInt(id));
 
@@ -18,6 +13,12 @@ function Article() {
   const relatedArticles = articlesList
     .filter((item) => item.id !== parseInt(id))
     .slice(0, 3);
+
+  const formattedDate = new Date(article.date).toLocaleDateString('id-ID', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 
   return (
     <div className="full-width p-6">
@@ -45,7 +46,7 @@ function Article() {
         <div className="flex justify-center items-center gap-x-2 mb-6 text-gray-600">
           <p>{article.author || "Penulis Tidak Diketahui"}</p>
           <span>•</span>
-          <p>{article.date}</p>
+          <p>{formattedDate}</p>
         </div>
 
         <div className="prose max-w-full text-gray-700 leading-relaxed">

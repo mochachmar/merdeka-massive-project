@@ -154,7 +154,7 @@ function TambahArtikel() {
                 onClick={() => handleSubmit('draft')}
                 className="px-6 py-2 bg-blue-200 text-blue-700 rounded-md hover:bg-blue-300"
               >
-                Simpan Draft
+                Draft
               </button>
               <button
                 onClick={() => handleSubmit('published')}

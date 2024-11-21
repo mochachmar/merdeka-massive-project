@@ -100,7 +100,7 @@ function App() {
       <Route path="/tentang-kami" element={<Tentangkami />} />
       <Route path="/tentang-kami-login" element={<Tentangkamilogin />} />
 
-      {/* Route Perawatamn */}
+      {/* Route Perawatan */}
       <Route path="/deteksi-penyakit" element={<DeteksiPenyakit />} />
       <Route path="/identifikasi-ai" element={<IdentifikasiAi />} />
       <Route path="/histori-tanaman" element={<HistoryDeteksi />} />
