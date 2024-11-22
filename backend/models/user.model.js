@@ -63,17 +63,43 @@ export const User = {
   },
 
   findOne: async (conditions) => {
-    const verificationToken = conditions.verificationToken || null;
-    const currentTime = conditions.currentTime || Date.now();
+    if (!conditions || Object.keys(conditions).length === 0) {
+      throw new Error('No conditions provided for findOne query.');
+    }
 
-    const query = `
-      SELECT * FROM Users 
-      WHERE verificationToken = ? 
-      AND verificationTokenExpiresAt > ?
-    `;
+    let query = `SELECT * FROM Users WHERE `;
+    const queryConditions = [];
+    const values = [];
 
-    const [rows] = await db.execute(query, [verificationToken, currentTime]);
-    return rows[0];
+    if (conditions.resetPasswordToken) {
+      queryConditions.push(`resetPasswordToken = ?`);
+      values.push(conditions.resetPasswordToken);
+    }
+
+    if (conditions.resetPasswordExpiresAt) {
+      queryConditions.push(`resetPasswordExpiresAt > ?`);
+      values.push(new Date(conditions.resetPasswordExpiresAt)); // Convert to Date if necessary
+    }
+
+    if (conditions.verificationToken) {
+      queryConditions.push(`verificationToken = ?`);
+      values.push(conditions.verificationToken);
+    }
+
+    if (conditions.verificationTokenExpiresAt) {
+      queryConditions.push(`verificationTokenExpiresAt > ?`);
+      values.push(new Date(conditions.verificationTokenExpiresAt));
+    }
+
+    // Ensure conditions are present
+    if (queryConditions.length === 0) {
+      throw new Error('Invalid conditions provided for findOne query.');
+    }
+
+    query += queryConditions.join(' AND ');
+
+    const [rows] = await db.execute(query, values);
+    return rows[0]; // Return the first result or undefined if no match
   },
 
   update: async (id, updateData) => {

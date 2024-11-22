@@ -4,7 +4,6 @@ import { testConnection } from './database/db.js';
 import authRoutes from './routes/auth.route.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import articlesRoutes from './routes/articlesRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -20,7 +19,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
-app.use('/api/articles', articlesRoutes);
 
 app.listen(3000, () => {
   testConnection();
