@@ -60,7 +60,7 @@ export const ForgotPassword = () => {
             <input className="w-full h-14 pl-4 pr-4 py-2 border border-solid border-black rounded-md text-base" placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
             <button type="submit" className="w-full h-14 bg-tanamanku-2 hover:bg-tanamanku-3 active:bg-tanamanku-4 rounded-lg font-bold text-black mt-4" disabled={isLoading}>
-              {isLoading ? 'Mengirim...' : 'Kirim Kode'}
+              {isLoading ? 'Mengirim...' : 'Submit'}
             </button>
           </form>
 

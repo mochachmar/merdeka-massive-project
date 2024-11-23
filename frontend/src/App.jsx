@@ -229,7 +229,7 @@ function App() {
         }
       />
 
-      <Route path="*" element={<Navigate to="/sign-up" replace />} />
+      <Route path="*" element={<Navigate to="/sign-in" replace />} />
     </Routes>
   );
 }
