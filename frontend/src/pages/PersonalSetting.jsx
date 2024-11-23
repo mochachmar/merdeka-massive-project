@@ -1,11 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const PersonalSetting = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className="flex flex-col lg:flex-row h-screen w-screen overflow-hidden">
+    <div className="flex h-screen w-screen overflow-hidden">
+      {/* Hamburger Menu */}
+      <button onClick={toggleSidebar} className="lg:hidden p-4 z-30 fixed top-0 left-0" aria-label="Toggle Sidebar">
+        {isSidebarOpen ? (
+          // Icon Close
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        ) : (
+          // Icon Hamburger
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        )}
+      </button>
+
       {/* Sidebar */}
-      <aside className="w-full lg:w-1/4 bg-green-100 p-4 sm:p-6">
+      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:relative lg:w-1/4 w-3/4 bg-green-100 p-4 sm:p-6 h-full transition-transform duration-300 ease-in-out z-20`}>
         <Link to="/beranda-login" className="flex items-center space-x-2">
           <img
             src="./src/assets/settings-icon.svg" // Add the icon path here
@@ -43,7 +64,7 @@ const PersonalSetting = () => {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 p-4 sm:p-8">
+      <div className="flex-1 p-4 sm:p-8 overflow-y-auto h-full lg:ml-0">
         <h2 className="text-xl font-semibold mb-6">Pribadi</h2>
         <form className="space-y-4">
           <div>

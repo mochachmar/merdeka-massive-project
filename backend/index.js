@@ -12,22 +12,23 @@ const corsOptions = {
   origin: 'http://localhost:5173', // Alamat frontend saat pengembangan
   credentials: true, // Aktifkan jika ada cookies atau session
 };
-app.use(cors(corsOptions));
 
-const PORT = process.env.PORT || 3000;
+// Middleware
+app.use(cors(corsOptions)); // Pastikan middleware ini berada di urutan atas
+app.options('*', cors(corsOptions)); // Tangani permintaan preflight
+app.use(express.json());
+app.use(cookieParser());
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-
+// Routes
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-app.use(express.json());
-app.use(cookieParser());
-
 app.use('/api/auth', authRoutes);
 
-app.listen(3000, () => {
+// Start Server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
   testConnection();
   console.log('Server sedang berjalan di PORT:', PORT);
 });

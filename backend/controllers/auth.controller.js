@@ -98,12 +98,12 @@ export const login = async (req, res) => {
   try {
     const user = await User.findByEmail(email);
     if (!user) {
-      return res.status(400).json({ success: false, message: 'Gagal login! Mohon periksa email Anda!' });
+      return res.status(400).json({ success: false, message: 'Gagal login! Mohon periksa email dan password Anda!' });
     }
 
     const isPasswordValid = await bcryptjs.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(400).json({ success: false, message: 'Gagal login! Mohon periksa password Anda!' });
+      return res.status(400).json({ success: false, message: 'Gagal login! Mohon periksa email dan password Anda!' });
     }
 
     // Generate JWT and set cookie

@@ -7,11 +7,11 @@ import { useAuthStore } from '../store/FetchDataWithAxios'; // Using your store
 import toast from 'react-hot-toast';
 
 const NewPassword = () => {
-  const navigate = useNavigate();
-  const { token } = useParams(); // Getting the reset token from URL params
-  const { resetPassword, isLoading, error, message } = useAuthStore(); // Using store for password reset
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const { resetPassword, isLoading, error, message } = useAuthStore(); // Menggunakan store untuk reset password
+  const navigate = useNavigate();
+  const { token } = useParams();
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -44,13 +44,12 @@ const NewPassword = () => {
   // Submit new password to the backend
   const submitNewPassword = async () => {
     try {
-      await resetPassword(token, newPassword); // Call the resetPassword function from store
-      toast.success('Kata sandi berhasil direset, mengalihkan ke halaman login...');
-      setTimeout(() => {
-        navigate('/sign-in'); // Redirect to login after successful reset
-      }, 2000);
+      await resetPassword(token, newPassword); // Sertakan token sebagai parameter
+      toast.success('Kata sandi berhasil direset!');
+      navigate('/sign-in'); // Navigasi langsung tanpa timeout
     } catch (err) {
-      toast.error(err.message || 'Terjadi kesalahan saat mereset kata sandi');
+      console.error('Error resetting password:', err.response?.data || err.message);
+      toast.error(err.response?.data?.message || 'Terjadi kesalahan saat mereset kata sandi');
     }
   };
 
