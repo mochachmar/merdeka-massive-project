@@ -58,3 +58,5 @@ build/
 *.swp
 
 uploads/*
+
+public/
