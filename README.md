@@ -1,3 +1,3 @@
-backend -> npm install
+backend -> npm install -> npm run dwv
 
-frontend -> npm install
+frontend -> npm install -> npm run dev
