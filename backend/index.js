@@ -2,6 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { testConnection } from './database/db.js';
 import authRoutes from './routes/auth.route.js';
+import articlesRoutes from './routes/articlesRoutes.js';
+import guidesRoute from './routes/guidesRoute.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
@@ -25,6 +27,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/articles', articlesRoutes);
+app.use('/api', guidesRoute);
 
 // Start Server
 const PORT = process.env.PORT || 3000;

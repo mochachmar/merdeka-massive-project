@@ -43,7 +43,7 @@ function TambahArtikel() {
     if (image) formData.append('thumbnail_image', image);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/articles', formData, {
+      const response = await axios.post('http://localhost:3000/api/articles', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       console.log('Respon dari server:', response.data);
@@ -66,14 +66,7 @@ function TambahArtikel() {
               <label htmlFor="title" className="block font-semibold mb-2 text-gray-700">
                 Judul Artikel
               </label>
-              <input
-                id="title"
-                type="text"
-                className="w-full p-2 border border-green-500 rounded-md"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Judul Artikel"
-              />
+              <input id="title" type="text" className="w-full p-2 border border-green-500 rounded-md" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Judul Artikel" />
             </div>
 
             {/* Input Tanggal Publikasi */}
@@ -81,13 +74,7 @@ function TambahArtikel() {
               <label htmlFor="date" className="block font-semibold mb-2 text-gray-700">
                 Tanggal Publikasi
               </label>
-              <input
-                id="date"
-                type="date"
-                className="w-full p-2 border border-green-500 rounded-md"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
+              <input id="date" type="date" className="w-full p-2 border border-green-500 rounded-md" value={date} onChange={(e) => setDate(e.target.value)} />
             </div>
 
             {/* Input Deskripsi Singkat */}
@@ -95,13 +82,7 @@ function TambahArtikel() {
               <label htmlFor="description" className="block font-semibold mb-2 text-gray-700">
                 Deskripsi Singkat
               </label>
-              <textarea
-                id="description"
-                className="w-full p-2 border border-green-500 rounded-md"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Deskripsi Singkat Artikel"
-              />
+              <textarea id="description" className="w-full p-2 border border-green-500 rounded-md" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Deskripsi Singkat Artikel" />
             </div>
 
             {/* Input Isi Artikel */}
@@ -109,13 +90,7 @@ function TambahArtikel() {
               <label htmlFor="content" className="block font-semibold mb-2 text-gray-700">
                 Isi Artikel
               </label>
-              <textarea
-                id="content"
-                className="w-full p-2 border border-green-500 rounded-md"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Isi Artikel"
-              />
+              <textarea id="content" className="w-full p-2 border border-green-500 rounded-md" value={content} onChange={(e) => setContent(e.target.value)} placeholder="Isi Artikel" />
             </div>
 
             {/* Input Gambar */}
@@ -123,10 +98,7 @@ function TambahArtikel() {
               <label className="block font-semibold mb-2 text-gray-700">Gambar</label>
               <div className="flex items-center">
                 <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" id="imageUpload" />
-                <label
-                  htmlFor="imageUpload"
-                  className="flex items-center border border-green-500 text-green-500 px-4 py-2 rounded-md cursor-pointer"
-                >
+                <label htmlFor="imageUpload" className="flex items-center border border-green-500 text-green-500 px-4 py-2 rounded-md cursor-pointer">
                   {image ? image.name : 'Pilih Gambar'}
                 </label>
               </div>
@@ -150,16 +122,10 @@ function TambahArtikel() {
 
             {/* Tombol Submit */}
             <div className="flex justify-end gap-4 mt-6">
-              <button
-                onClick={() => handleSubmit('draft')}
-                className="px-6 py-2 bg-blue-200 text-blue-700 rounded-md hover:bg-blue-300"
-              >
+              <button onClick={() => handleSubmit('draft')} className="px-6 py-2 bg-blue-200 text-blue-700 rounded-md hover:bg-blue-300">
                 Draft
               </button>
-              <button
-                onClick={() => handleSubmit('published')}
-                className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-              >
+              <button onClick={() => handleSubmit('published')} className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
                 Publikasikan
               </button>
             </div>

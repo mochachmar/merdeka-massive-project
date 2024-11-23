@@ -1,5 +1,5 @@
 import express from 'express';
-import articlesController from '../controller/articlesController.js';
+import articlesController from '../controllers/articlesController.js';
 import { singleUpload } from '../middleware/uploadMiddleware.js';
 
 const router = express.Router();

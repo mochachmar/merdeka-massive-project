@@ -19,13 +19,13 @@ function EditArtikel() {
   // Fungsi untuk mengambil data artikel berdasarkan ID
   const fetchArticle = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/articles/${id}`);
+      const response = await axios.get(`http://localhost:3000/api/articles/${id}`);
       const { title, date, description, thumbnail_image } = response.data;
 
       setTitle(title);
       setDate(date);
       setDescription(description);
-      setImage(`http://localhost:5000/uploads/${thumbnail_image}`);
+      setImage(`http://localhost:3000/uploads/${thumbnail_image}`);
     } catch (error) {
       console.error('Error fetching article data:', error);
     }
@@ -64,7 +64,7 @@ function EditArtikel() {
 
     // Mengirimkan data artikel melalui PUT request
     axios
-      .put(`http://localhost:5000/api/articles/${id}`, formData, {
+      .put(`http://localhost:3000/api/articles/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -91,14 +91,7 @@ function EditArtikel() {
               <label htmlFor="title" className="block font-semibold mb-2 text-gray-700">
                 Judul Artikel
               </label>
-              <input
-                id="title"
-                type="text"
-                className="w-full p-2 border border-green-500 rounded-md"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Judul Artikel"
-              />
+              <input id="title" type="text" className="w-full p-2 border border-green-500 rounded-md" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Judul Artikel" />
             </div>
 
             {/* Input Tanggal Publikasi */}
@@ -106,13 +99,7 @@ function EditArtikel() {
               <label htmlFor="date" className="block font-semibold mb-2 text-gray-700">
                 Tanggal Publikasi
               </label>
-              <input
-                id="date"
-                type="date"
-                className="w-full p-2 border border-green-500 rounded-md"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
+              <input id="date" type="date" className="w-full p-2 border border-green-500 rounded-md" value={date} onChange={(e) => setDate(e.target.value)} />
             </div>
 
             {/* Input Deskripsi */}
@@ -120,13 +107,7 @@ function EditArtikel() {
               <label htmlFor="description" className="block font-semibold mb-2 text-gray-700">
                 Deskripsi
               </label>
-              <textarea
-                id="description"
-                className="w-full p-2 border border-green-500 rounded-md"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Deskripsi Artikel"
-              />
+              <textarea id="description" className="w-full p-2 border border-green-500 rounded-md" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Deskripsi Artikel" />
             </div>
 
             {/* Input Gambar */}
@@ -134,42 +115,24 @@ function EditArtikel() {
               <label className="block font-semibold mb-2 text-gray-700">Gambar Artikel</label>
               {image ? (
                 <div>
-                  <img
-                    src={image}
-                    alt="Thumbnail"
-                    className="h-40 w-40 object-cover mb-4 rounded-md"
-                  />
-                  <button
-                    onClick={handleRemoveImage}
-                    className="text-red-500 hover:text-red-700"
-                  >
+                  <img src={image} alt="Thumbnail" className="h-40 w-40 object-cover mb-4 rounded-md" />
+                  <button onClick={handleRemoveImage} className="text-red-500 hover:text-red-700">
                     Hapus Gambar
                   </button>
                 </div>
               ) : (
                 <div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="mb-4"
-                  />
+                  <input type="file" accept="image/*" onChange={handleImageUpload} className="mb-4" />
                 </div>
               )}
             </div>
 
             {/* Tombol Submit */}
             <div className="flex space-x-4">
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                onClick={() => handleSubmit('published')}
-              >
+              <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" onClick={() => handleSubmit('published')}>
                 Terbitkan
               </button>
-              <button
-                className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
-                onClick={() => handleSubmit('draft')}
-              >
+              <button className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600" onClick={() => handleSubmit('draft')}>
                 Simpan Sebagai Draft
               </button>
             </div>
