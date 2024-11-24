@@ -1,4 +1,5 @@
 import { Navigate, Routes, Route } from 'react-router-dom';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import './App.css';
 import SignUp from './pages/SignUp';
 import EmailCreate from './pages/EmailCreate';
@@ -45,28 +46,27 @@ import Panduan from './pages/Panduan';
 import PanduanLogin from './pages/Panduan-Login';
 import Tips from './pages/Tips';
 import TipsLogin from './pages/Tips-Login';
-import { Toaster } from 'react-hot-toast';
 import { useAuthStore } from './store/FetchDataWithAxios';
 
+// Modifikasi ProtectedRoute
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'warning',
+      title: 'Harus login dulu! Anda akan dialihkan!',
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+    });
+    return <Navigate to="/sign-in" replace />;
   }
 
   if (!user.isVerified) {
     return <Navigate to="/verify-email" replace />;
-  }
-
-  return children;
-};
-
-const RedirectAuthenticatedUser = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
-
-  if (isAuthenticated && user.isVerified) {
-    return <Navigate to="/" replace />;
   }
 
   return children;
@@ -79,7 +79,6 @@ function App() {
       <Route path="/create-with-email" element={<EmailCreate />} />
       <Route path="/email-code" element={<EmailCode />} />
       <Route path="/sign-in" element={<SignIn />} />
-      <Route path="/sign-in-admin" element={<SignInAdmin />} />
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/new-password" element={<NewPassword />} />
@@ -150,85 +149,6 @@ function App() {
           </ProtectedRoute>
         }
       />
-
-      {/* Route Admin */}
-      <Route path="/admin" element={<Admin />} />
-      <Route path="/forgot-password-admin" element={<ForgotPasswordAdmin />} />
-      <Route path="/new-password-admin" element={<NewPasswordAdmin />} />
-
-      {/* Route Artikel */}
-      <Route path="/admin/card-artikel" element={<AdminArtikel />} />
-      <Route path="/admin/card-artikel/tambah-artikel" element={<TambahArtikel />} />
-      <Route path="/admin/isi-artikel" element={<IsiArtikel />} />
-      <Route path="/admin/card-artikel/edit-artikel/:id" element={<EditArtikel />} />
-      <Route path="/admin/isi-artikel/edit-isi-artikel/:id" element={<EditIsiArtikel />} />
-      <Route path="/admin/personal-setting" element={<PersonalSettingAdmin />} />
-      <Route path="/admin/password-setting" element={<PasswordSettingAdmin />} />
-      <Route path="/admin/other-setting" element={<OtherSettingAdmin />} />
-      <Route path="/admin/form-other-setting" element={<FormOtherSettingAdmin />} />
-
-      {/* Route Panduan */}
-      <Route path="/admin/card-panduan" element={<AdminPanduan />} />
-      <Route path="/admin/card-panduan/tambah-panduan" element={<TambahPanduan />} />
-      <Route path="/admin/isi-panduan" element={<IsiPanduan />} />
-      <Route path="/admin/card-panduan/edit-panduan" element={<EditPanduan />} />
-      <Route path="/admin/isi-panduan/edit-isi-panduan" element={<EditIsiPanduan />} />
-
-      {/* Route Tentang Kami */}
-      <Route path="/tentang-kami" element={<Tentangkami />} />
-      <Route
-        path="/tentang-kami-login"
-        element={
-          <ProtectedRoute>
-            <Tentangkamilogin />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Route Perawatan */}
-      <Route
-        path="/deteksi-penyakit"
-        element={
-          <ProtectedRoute>
-            <DeteksiPenyakit />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/identifikasi-ai"
-        element={
-          <ProtectedRoute>
-            <IdentifikasiAi />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/histori-tanaman"
-        element={
-          <ProtectedRoute>
-            <HistoryDeteksi />
-          </ProtectedRoute>
-        }
-      />
-      <Route path="/panduan" element={<Panduan />} />
-      <Route
-        path="/panduan-login"
-        element={
-          <ProtectedRoute>
-            <PanduanLogin />
-          </ProtectedRoute>
-        }
-      />
-      <Route path="/tips" element={<Tips />} />
-      <Route
-        path="/tips-login"
-        element={
-          <ProtectedRoute>
-            <TipsLogin />
-          </ProtectedRoute>
-        }
-      />
-
       <Route path="*" element={<Navigate to="/sign-in" replace />} />
     </Routes>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/FetchDataWithAxios'; // Menggunakan authStore
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import closeUpGreenLeavesNature from '../assets/close-up-green-leaves-nature.png';
 import removeRedEye from '../assets/remove-red-eye.svg';
 import google from '../assets/Google.svg';
@@ -12,7 +13,7 @@ export const SignIn = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const { login, isLoading, error } = useAuthStore(); // Ambil fungsi dan state dari authStore
+  const { login, isLoading } = useAuthStore(); // Ambil fungsi dan state dari authStore
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -22,9 +23,30 @@ export const SignIn = () => {
     e.preventDefault();
     try {
       await login(email, password); // Gunakan login dari authStore
-      navigate('/splash-login'); // Navigasi ke halaman berikutnya setelah login berhasil
+
+      // Menampilkan toast sukses
+      Swal.fire({
+        toast: true, // Mode toast
+        position: 'top-end', // Posisi kanan atas
+        icon: 'success',
+        title: 'Berhasil masuk! Anda akan dialihkan!',
+        showConfirmButton: false, // Tidak ada tombol OK
+        timer: 2000, // Tampilkan selama 1,5 detik
+        timerProgressBar: true, // Progress bar
+      });
+
+      navigate('/splash-login'); // Navigasi ke halaman berikutnya
     } catch (err) {
-      console.error('Login gagal:', err);
+      // Menampilkan toast error
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: err.response?.data?.message || 'Login gagal. Silakan coba lagi.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
     }
   };
 
@@ -52,9 +74,6 @@ export const SignIn = () => {
             Selamat datang <br /> di TanamanKu
           </h1>
           <p className="text-xl font-semibold text-[#000000cc] text-center mt-4">Masuk Akun Anda</p>
-
-          {/* Error Message */}
-          {error && <p className="text-red-500">{error}</p>}
 
           {/* Email Input */}
           <input className="w-full max-w-md h-14 pl-4 pr-4 py-2 border border-solid border-black rounded-md text-base" placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -100,11 +119,37 @@ export const SignIn = () => {
           </button>
 
           {/* Google and Facebook Sign-In Buttons */}
-          <button className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-4">
+          <button
+            className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-4"
+            onClick={() => {
+              Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'info',
+                title: 'Sign in dengan Google belum tersedia.',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+              });
+            }}
+          >
             <img className="w-5 h-5" alt="Google" src={google} />
             <span className="text-[#565e6d] font-normal text-base">Masuk dengan Google</span>
           </button>
-          <button className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-2">
+          <button
+            className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-2"
+            onClick={() => {
+              Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'info',
+                title: 'Sign in dengan Facebook belum tersedia.',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+              });
+            }}
+          >
             <img className="w-5 h-5" alt="Logo fb simple" src={logoFbSimple} />
             <span className="text-[#565e6d] font-normal text-base">Masuk dengan Facebook</span>
           </button>
