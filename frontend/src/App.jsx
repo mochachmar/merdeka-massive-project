@@ -63,7 +63,7 @@ function App() {
       <Route path="/beranda" element={<Beranda />} />
       <Route path="/artikel-penyakit-tanaman" element={<ArticlesPage />} />
       <Route path="/artikel-penyakit-tanaman-login" element={<ArticlesPageLogin />} />
-      <Route path="/article/:id" element={<Article />} />
+      <Route path="/article/" element={<Article />} />
       <Route path="/article-login/:id" element={<ArticleLogin />} />
       <Route path="/splash-login" element={<SplashScreenLogin />} />
       <Route path="/beranda-login" element={<BerandaLogin />} />

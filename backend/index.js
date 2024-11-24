@@ -3,6 +3,13 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import articlesRoutes from './routes/articlesRoutes.js';
 import { testConnection } from './config/db.js';
+import path from 'path';
+
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 dotenv.config(); // Load .env configuration
 
@@ -20,6 +27,10 @@ app.use(express.json());
 
 // Routes
 app.use('/api/articles', articlesRoutes);
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
 
 // Test koneksi ke database
 testConnection();

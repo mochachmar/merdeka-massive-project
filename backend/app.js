@@ -84,6 +84,11 @@ app.delete('/api/articles/:id', (req, res) => {
   res.json(deletedArticle);
 });
 
+
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
 // Menjalankan server
 app.listen(port, () => {
   console.log(`Server berjalan di http://localhost:${port}`);

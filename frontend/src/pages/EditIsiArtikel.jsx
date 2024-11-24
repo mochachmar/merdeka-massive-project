@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import NavbarAdmin from "../components/NavAdmin";
 import FooterAdmin from "../components/FooterAdmin";
 import Breadcrumbs from "../components/BreadCrumbs";
+import axios from "axios";
 
 function EditIsiArtikel() {
   const navigate = useNavigate();
+  const { id } = useParams();
 
   // State untuk menyimpan data form
   const [title, setTitle] = useState("");
@@ -16,12 +18,48 @@ function EditIsiArtikel() {
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState("");
 
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/articles/${id}`
+        );
+        const data = response.data;
+        console.log(data)
+
+
+        setTitle(data.title);
+        setPublisher(data.created_by ?? "");
+
+        const publishDate = new Date(data.publish_date);
+        const formattedDate = `${publishDate.getFullYear()}-${(
+          publishDate.getMonth() + 1
+        )
+          .toString()
+          .padStart(2, "0")}-${publishDate
+          .getDate()
+          .toString()
+          .padStart(2, "0")}`;
+        setPublishDate(formattedDate);
+        setContent(data.long_description);
+
+        if (data.thumbnail_image) {
+          setImageName(data.thumbnail_image);
+        }
+      } catch (error) {
+        console.error("Error fetching articles:", error);
+      }
+    };
+
+    fetchArticles();
+  }, [id]);
+
   // Fungsi untuk menangani perubahan input gambar
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file)); // Membuat URL untuk pratinjau gambar
-      setImageName(file.name); // Menyimpan nama file untuk ditampilkan
+      setImage(file); // Simpan file untuk diunggah
+      setImageName(file.name); // Tampilkan nama file
     }
   };
 
@@ -31,22 +69,40 @@ function EditIsiArtikel() {
     setImageName("");
   };
 
-  // Fungsi untuk mengirim artikel sebagai draft atau kirim (publish)
-  const handleSubmit = (status) => {
-    const newArticle = {
-      title,
-      subtitle,
-      publisher,
-      publishDate,
-      content,
-      image,
-      status, // status: 'Draft' atau 'Publik' sesuai tombol yang diklik
-    };
+  // Fungsi untuk mengirim artikel sebagai draft atau publish
+  const handleSubmit = async (status) => {
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("short_description", subtitle);
+      formData.append("long_description", content);
+      formData.append("publish_date", publishDate);
+      formData.append('created_by' , publisher)
+      formData.append("status", status);
+      if (image) {
+        formData.append("thumbnail_image", image);
+      }
 
-    console.log("Artikel baru yang dikirim:", newArticle);
+      const response = await axios.put(
+        `http://localhost:5000/api/articles/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-    // Navigasi kembali ke halaman daftar artikel setelah submit
-    navigate("/admin/card-artikel");
+      if (response.status === 200) {
+        alert("Artikel berhasil diperbarui");
+        navigate("/admin/articles");
+      } else {
+        alert("Gagal memperbarui artikel");
+      }
+    } catch (error) {
+      console.error("Error updating article:", error);
+      alert("Terjadi kesalahan saat memperbarui artikel");
+    }
   };
 
   return (
@@ -77,81 +133,56 @@ function EditIsiArtikel() {
               />
             </div>
 
-            {/* Konten Artikel */}
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">
-                Konten Artikel
-              </h3>
+            {/* Input Penerbit */}
+            <div className="mb-4">
+              <label
+                htmlFor="publisher"
+                className="block font-semibold mb-2 text-gray-700"
+              >
+                Penerbit
+              </label>
+              <input
+                id="publisher"
+                type="text"
+                className="w-full p-2 border border-green-500 rounded-md"
+                value={publisher}
+                onChange={(e) => setPublisher(e.target.value)}
+                placeholder="Penerbit Artikel"
+              />
+            </div>
 
-              {/* Input Subjudul */}
-              <div className="mb-4">
-                <label
-                  htmlFor="subtitle"
-                  className="block font-semibold mb-2 text-gray-700"
-                >
-                  Subjudul
-                </label>
-                <input
-                  id="subtitle"
-                  type="text"
-                  className="w-full p-2 border border-green-500 rounded-md"
-                  value={subtitle}
-                  onChange={(e) => setSubtitle(e.target.value)}
-                  placeholder="Subjudul Artikel"
-                />
-              </div>
+            {/* Input Tanggal Terbit */}
+            <div className="mb-4">
+              <label
+                htmlFor="publishDate"
+                className="block font-semibold mb-2 text-gray-700"
+              >
+                Tanggal Terbit
+              </label>
+              <input
+                id="publishDate"
+                type="date"
+                className="w-full p-2 border border-green-500 rounded-md"
+                value={publishDate}
+                onChange={(e) => setPublishDate(e.target.value)}
+              />
+            </div>
 
-              {/* Input Penerbit */}
-              <div className="mb-4">
-                <label
-                  htmlFor="publisher"
-                  className="block font-semibold mb-2 text-gray-700"
-                >
-                  Penerbit
-                </label>
-                <input
-                  id="publisher"
-                  type="text"
-                  className="w-full p-2 border border-green-500 rounded-md"
-                  value={publisher}
-                  onChange={(e) => setPublisher(e.target.value)}
-                  placeholder="Penerbit Artikel"
-                />
-              </div>
-
-              {/* Input Tanggal Terbit */}
-              <div className="mb-4">
-                <label
-                  htmlFor="publishDate"
-                  className="block font-semibold mb-2 text-gray-700"
-                >
-                  Tanggal Terbit
-                </label>
-                <input
-                  id="publishDate"
-                  type="date"
-                  className="w-full p-2 border border-green-500 rounded-md"
-                  value={publishDate}
-                  onChange={(e) => setPublishDate(e.target.value)}
-                />
-              </div>
-
-              {/* Input Isi Artikel */}
-              <div className="mb-4">
-                <label
-                  htmlFor="content"
-                  className="block font-semibold mb-2 text-gray-700"
-                >
-                  Isi Artikel
-                </label>
-                <textarea
-                  id="content"
-                  className="w-full p-2 border border-green-500 rounded-md"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="Isi Artikel"
-                />
-              </div>
+            {/* Input Isi Artikel */}
+            <div className="mb-4">
+              <label
+                htmlFor="content"
+                className="block font-semibold mb-2 text-gray-700"
+              >
+                Isi Artikel
+              </label>
+              <textarea
+                id="content"
+                className="w-full p-2 border border-green-500 rounded-md"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="Isi Artikel"
+              />
             </div>
 
             {/* Input Gambar */}
@@ -176,28 +207,18 @@ function EditIsiArtikel() {
               </div>
               {image && (
                 <div className="mt-4">
-                  <p className="text-gray-700 mb-2">Your Image</p>
-                  <div className="relative">
-                    <img
-                      src={image}
-                      alt="Preview"
-                      className="w-full h-48 object-cover rounded-md mb-2"
-                    />
-                    <div className="absolute top-2 right-2 flex space-x-2">
-                      <button
-                        onClick={handleRemoveImage}
-                        className="bg-red-500 text-white px-2 py-1 rounded"
-                      >
-                        Hapus Gambar
-                      </button>
-                      <label
-                        htmlFor="imageUpload"
-                        className="bg-blue-500 text-white px-2 py-1 rounded cursor-pointer"
-                      >
-                        Ganti Gambar
-                      </label>
-                    </div>
-                  </div>
+                  <p className="text-gray-700 mb-2">Pratinjau Gambar</p>
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt="Preview"
+                    className="w-full h-48 object-cover rounded-md mb-2"
+                  />
+                  <button
+                    onClick={handleRemoveImage}
+                    className="bg-red-500 text-white px-4 py-2 rounded"
+                  >
+                    Hapus Gambar
+                  </button>
                 </div>
               )}
             </div>
@@ -214,7 +235,7 @@ function EditIsiArtikel() {
                 onClick={() => handleSubmit("Publik")}
                 className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
               >
-                Kirim
+                Publik
               </button>
             </div>
           </div>

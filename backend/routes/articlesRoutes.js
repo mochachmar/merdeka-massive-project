@@ -11,4 +11,5 @@ router.post('/', singleUpload, articlesController.createArticle);
 router.put('/:id', singleUpload, articlesController.updateArticle);
 router.delete('/:id', articlesController.deleteArticle);
 
+// router.get('/uploads', articlesController.getAllArticles);
 export default router;

@@ -20,10 +20,10 @@ const createArticle = async (article) => {
 };
 
 const updateArticle = async (id, article) => {
-  const { title, thumbnail_image, short_description, long_description, publish_date, status } = article;
+  const { title, thumbnail_image, short_description, long_description, publish_date, status , created_by } = article;
   const [result] = await db.query(
-    'UPDATE articles SET title = ?, thumbnail_image = ?, short_description = ?, long_description = ?, publish_date = ?, status = ? WHERE article_id = ?',
-    [title, thumbnail_image, short_description, long_description, publish_date, status, id]
+    'UPDATE articles SET title = ?, thumbnail_image = ?, short_description = ?, long_description = ?, publish_date = ?, status = ? , created_by = ? WHERE article_id = ?',
+    [title, thumbnail_image, short_description, long_description, publish_date, status,  created_by , id]
   );
   return result.affectedRows > 0;
 };

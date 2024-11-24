@@ -54,7 +54,7 @@ function EditArtikel() {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('date', date);
-    formData.append('description', description);
+    formData.append('long_description', description);
     formData.append('status', status);
 
     // Menambahkan gambar jika ada
