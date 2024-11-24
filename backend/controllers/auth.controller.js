@@ -226,3 +226,85 @@ export const checkAuth = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const getUserData = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId); // userId diambil dari token
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User tidak ditemukan' });
+    }
+
+    res.status(200).json({
+      success: true,
+      user: {
+        email: user.email,
+        name: user.name,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Terjadi kesalahan', error: error.message });
+  }
+};
+
+export const updateUserName = async (req, res) => {
+  const { name } = req.body;
+  try {
+    await User.update(req.userId, { name });
+    res.status(200).json({ success: true, message: 'Nama berhasil diperbarui' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Gagal memperbarui nama', error: error.message });
+  }
+};
+
+export const deleteUserAccount = async (req, res) => {
+  const { password } = req.body; // Ambil password dari request body
+  const userId = req.userId;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User tidak ditemukan!' });
+    }
+
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ success: false, message: 'Password salah!' });
+    }
+
+    await User.delete(userId);
+    res.status(200).json({ success: true, message: 'Akun berhasil dihapus!' });
+  } catch (error) {
+    console.error('Gagal menghapus akun:', error);
+    res.status(500).json({ success: false, message: 'Terjadi kesalahan saat menghapus akun.' });
+  }
+};
+
+export const updatePassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const userId = req.userId; // Ambil userId dari token
+
+  try {
+    // Cari user berdasarkan ID
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User tidak ditemukan!' });
+    }
+
+    // Verifikasi password lama
+    const isPasswordValid = await bcryptjs.compare(currentPassword, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ success: false, message: 'Password lama salah!' });
+    }
+
+    // Hash password baru
+    const hashedNewPassword = await bcryptjs.hash(newPassword, 10);
+
+    // Update password di database
+    await User.update(userId, { password: hashedNewPassword });
+
+    res.status(200).json({ success: true, message: 'Kata sandi berhasil diubah!' });
+  } catch (error) {
+    console.error('Gagal mengubah password:', error);
+    res.status(500).json({ success: false, message: 'Terjadi kesalahan saat mengubah password.' });
+  }
+};
