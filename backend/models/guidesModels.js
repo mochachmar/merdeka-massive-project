@@ -1,71 +1,81 @@
-import { db } from "../config/Database.js";  
-import { Sequelize } from "sequelize";
+import { db } from '../database/db.js';
 
-const { DataTypes } = Sequelize;
+// Validasi status untuk memastikan hanya nilai yang diperbolehkan yang disimpan
+const validateStatus = (status) => {
+  const validStatuses = ['draft', 'published']; // Nilai yang valid
+  return validStatuses.includes(status) ? status : 'draft'; // Default ke "draft" jika tidak valid
+};
 
-const Guides = db.define(
-  "Guides", 
-  {
-    guide_id: {  
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,  
-      autoIncrement: true,  
-    },
-    title: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-      validate: {
-        len: [3, 255], 
-      },
-      unique: true, 
-    },
-    thumbnail_image: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
-      validate: {
-        isUrl: true,  
-      },
-    },
-    short_description: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    long_description: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    tips_and_tricks: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    pdf_file: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
-      validate: {
-        isUrl: true, 
-      },
-    },
-    status: {
-      type: DataTypes.ENUM("DRAFT", "PUBLISHED"), 
-      allowNull: false,
-      defaultValue: "DRAFT",
-    },
-  },
-  {
-    tableName: 'guides',  
-    freezeTableName: true, 
-    timestamps: true, 
-    indexes: [
-      {
-        unique: true,
-        fields: ['title'], 
-      },
-      {
-        fields: ['status'], 
-      },
+// Menyimpan guide baru
+const createGuide = (guideData, callback) => {
+  const { title, thumbnail_image, short_description, long_description = null, tips_and_tricks = null, status } = guideData;
+
+  const query = `
+    INSERT INTO guides (title, thumbnail_image, short_description, long_description, tips_and_tricks, status)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+
+  db.execute(
+    query,
+    [
+      title,
+      thumbnail_image,
+      short_description,
+      long_description,
+      tips_and_tricks,
+      validateStatus(status), // Validasi status sebelum menyimpan
     ],
-  }
-);
+    callback
+  );
+};
 
-export default Guides;
+// Mendapatkan semua guides
+const getGuides = (callback) => {
+  const query = 'SELECT * FROM guides';
+  db.execute(query, callback);
+};
+
+// Mendapatkan guide berdasarkan ID
+const getGuideById = (guideId, callback) => {
+  const query = 'SELECT * FROM guides WHERE guide_id = ?';
+  db.execute(query, [guideId], callback);
+};
+
+// Memperbarui guide
+const updateGuide = (guideId, guideData, callback) => {
+  const { title, thumbnail_image, short_description, long_description = null, tips_and_tricks = null, status } = guideData;
+
+  const query = `
+    UPDATE guides
+    SET title = ?, thumbnail_image = ?, short_description = ?, long_description = ?, tips_and_tricks = ?, status = ?
+    WHERE guide_id = ?
+  `;
+
+  db.execute(
+    query,
+    [
+      title,
+      thumbnail_image,
+      short_description,
+      long_description,
+      tips_and_tricks,
+      validateStatus(status), // Validasi status sebelum memperbarui
+      guideId,
+    ],
+    callback
+  );
+};
+
+// Menghapus guide berdasarkan ID
+const deleteGuide = (guideId, callback) => {
+  const query = 'DELETE FROM guides WHERE guide_id = ?';
+  db.execute(query, [guideId], callback);
+};
+
+export default {
+  createGuide,
+  getGuides,
+  getGuideById,
+  updateGuide,
+  deleteGuide,
+};

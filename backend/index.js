@@ -2,27 +2,37 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { testConnection } from './database/db.js';
 import authRoutes from './routes/auth.route.js';
+import articlesRoutes from './routes/articlesRoutes.js';
+import guidesRoute from './routes/guidesRoute.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import articlesRoutes from './routes/articlesRoutes.js';
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+const corsOptions = {
+  origin: 'http://localhost:5173', // Alamat frontend saat pengembangan
+  credentials: true, // Aktifkan jika ada cookies atau session
+};
 
+// Middleware
+app.use(cors(corsOptions)); // Pastikan middleware ini berada di urutan atas
+app.options('*', cors(corsOptions)); // Tangani permintaan preflight
+app.use(express.json());
+app.use(cookieParser());
+
+// Routes
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-app.use(express.json());
-app.use(cookieParser());
-
 app.use('/api/auth', authRoutes);
 app.use('/api/articles', articlesRoutes);
+app.use('/api', guidesRoute);
 
-app.listen(3000, () => {
+// Start Server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
   testConnection();
   console.log('Server sedang berjalan di PORT:', PORT);
 });

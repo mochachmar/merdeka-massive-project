@@ -15,7 +15,7 @@ export const signup = async (req, res) => {
     const userAlreadyExists = await User.findByEmail(email);
 
     if (userAlreadyExists) {
-      return res.status(400).json({ success: false, message: 'User already exists' });
+      return res.status(400).json({ success: false, message: 'User sudah login' });
     }
 
     // Hash the password
@@ -41,7 +41,7 @@ export const signup = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: 'User created successfully',
+      message: 'Berhasil menambahkan user !',
       user: {
         id: newUser.id,
         email: newUser.email,
@@ -58,39 +58,38 @@ export const signup = async (req, res) => {
 
 export const verifyEmail = async (req, res) => {
   const { code } = req.body;
+
   try {
+    // Pastikan kondisi diisi dengan benar
     const user = await User.findOne({
       verificationToken: code,
-      verificationTokenExpiresAt: { $gt: Date.now() }, // Ensure token is not expired
+      verificationTokenExpiresAt: Date.now(),
     });
 
     if (!user) {
-      return res.status(400).json({ success: false, message: 'Invalid or expired verification code' });
+      return res.status(400).json({
+        success: false,
+        message: 'Kode verifikasi sudah kadaluarsa atau salah memasukkan kode',
+      });
     }
 
-    // Prepare the update data, ensuring undefined fields are replaced with null
-    const updateData = {
+    // Update user untuk memverifikasi email
+    await User.update(user.id, {
       isVerified: true,
-      verificationToken: null, // Set null instead of undefined
-      verificationTokenExpiresAt: null, // Set null instead of undefined
-    };
-
-    // Update the user using the correct method (User.update instead of User.updateOne)
-    await User.update(user.id, updateData);
+      verificationToken: null,
+      verificationTokenExpiresAt: null,
+    });
 
     await sendWelcomeEmail(user.email, user.name);
 
     res.status(200).json({
       success: true,
-      message: 'Email verified successfully',
-      user: {
-        ...user, // Return the user object with updated data
-        password: undefined, // Hide password
-      },
+      message: 'Email berhasil diverifikasi!',
+      user: { ...user, password: undefined },
     });
   } catch (error) {
-    console.log('error in verifyEmail ', error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    console.error('Gagal verifikasi email:', error);
+    res.status(500).json({ success: false, message: 'Server lagi error!' });
   }
 };
 
@@ -99,12 +98,12 @@ export const login = async (req, res) => {
   try {
     const user = await User.findByEmail(email);
     if (!user) {
-      return res.status(400).json({ success: false, message: 'Invalid credentials' });
+      return res.status(400).json({ success: false, message: 'Gagal login! Mohon periksa email dan password Anda!' });
     }
 
     const isPasswordValid = await bcryptjs.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(400).json({ success: false, message: 'Invalid credentials' });
+      return res.status(400).json({ success: false, message: 'Gagal login! Mohon periksa email dan password Anda!' });
     }
 
     // Generate JWT and set cookie
@@ -117,14 +116,14 @@ export const login = async (req, res) => {
     // Send response with user data, excluding the password
     res.status(200).json({
       success: true,
-      message: 'Logged in successfully',
+      message: 'Berhasil login!',
       user: {
         ...user, // Return the user object with updated data
         password: undefined, // Hide password
       },
     });
   } catch (error) {
-    console.log('Error in login ', error);
+    console.log('Gagal login! ', error);
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -135,7 +134,7 @@ export const loginAdmin = async (req, res) => {
 
 export const logout = async (req, res) => {
   res.clearCookie('token');
-  res.status(200).json({ success: true, message: 'Logout successful' });
+  res.status(200).json({ success: true, message: 'Berhasil keluar dari akun!' });
 };
 
 export const logoutAdmin = async (req, res) => {
@@ -149,7 +148,7 @@ export const forgotPassword = async (req, res) => {
     const user = await User.findByEmail(email);
 
     if (!user) {
-      return res.status(400).json({ success: false, message: 'User not found' });
+      return res.status(400).json({ success: false, message: 'Akun tidak ditemukan!' });
     }
 
     // Generate reset token
@@ -166,14 +165,14 @@ export const forgotPassword = async (req, res) => {
       resetPasswordExpiresAt: new Date(resetPasswordExpiresAt),
     });
 
-    console.log('Reset password token updated:', resetToken, resetPasswordExpiresAt);
+    console.log('Token reset password di update:', resetToken, resetPasswordExpiresAt);
 
     // Send password reset email with the reset token URL
     await sendPasswordResetEmail(user.email, `${process.env.CLIENT_URL}new-password/${resetToken}`);
 
-    res.status(200).json({ success: true, message: 'Password reset link sent to your email' });
+    res.status(200).json({ success: true, message: 'Link reset password berhasil dikirim di email Anda!' });
   } catch (error) {
-    console.log('Error in forgotPassword ', error);
+    console.log('Terjadi error saat reset password! ', error);
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -183,28 +182,30 @@ export const resetPassword = async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
 
+    // Cari user berdasarkan token dan waktu kadaluarsa
     const user = await User.findOne({
       resetPasswordToken: token,
-      resetPasswordExpiresAt: { $gt: Date.now() },
+      resetPasswordExpiresAt: Date.now(),
     });
 
     if (!user) {
-      return res.status(400).json({ success: false, message: 'Invalid or expired reset token' });
+      return res.status(400).json({ success: false, message: 'Terjadi error! Token reset tidak valid atau kedaluwarsa' });
     }
 
-    // update password
+    // Update password
     const hashedPassword = await bcryptjs.hash(password, 10);
 
-    user.password = hashedPassword;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpiresAt = undefined;
-    await user.save();
+    await User.update(user.id, {
+      password: hashedPassword,
+      resetPasswordToken: null, // Hapus token
+      resetPasswordExpiresAt: null, // Hapus waktu kadaluarsa
+    });
 
     await sendResetSuccessEmail(user.email);
 
-    res.status(200).json({ success: true, message: 'Password reset successful' });
+    res.status(200).json({ success: true, message: 'Reset password berhasil!' });
   } catch (error) {
-    console.log('Error in resetPassword ', error);
+    console.log('Terjadi error saat reset password! ', error);
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -213,7 +214,7 @@ export const checkAuth = async (req, res) => {
   try {
     const user = await User.findById(req.userId);
     if (!user) {
-      return res.status(400).json({ success: false, message: 'User not found' });
+      return res.status(400).json({ success: false, message: 'Akun tidak ditemukan!' });
     }
 
     // Exclude the password field before sending the response
@@ -221,7 +222,7 @@ export const checkAuth = async (req, res) => {
 
     res.status(200).json({ success: true, user: userWithoutPassword });
   } catch (error) {
-    console.log('Error in checkAuth ', error);
+    console.log('Terjadi error saat pengecekan autentikasi! ', error);
     res.status(400).json({ success: false, message: error.message });
   }
 };

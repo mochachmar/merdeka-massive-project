@@ -5,6 +5,7 @@ const db = mysql2.createPool({
   user: 'root',
   password: '',
   database: 'tanamanku_massive_project',
+  port: 3306,
 });
 
 async function testConnection() {
