@@ -1,17 +1,17 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
-import { ArrowBackOutline, DownloadOutline } from "react-ionicons";
-import "../index.css";
-import tomat from "../assets/tomat.png";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { ArrowBackOutline, DownloadOutline } from 'react-ionicons';
+import '../index.css';
+import tomat from '../assets/tomat.png';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const Tips = () => {
   const navigate = useNavigate(); // Initialize useNavigate hook
 
   const handleDownloadClick = () => {
     // Navigate to the login page when the download button is clicked
-    navigate("/sign-up");
+    navigate('/sign-up');
   };
 
   return (
@@ -22,7 +22,6 @@ const Tips = () => {
       {/* Konten Utama */}
       <main className="flex-grow flex flex-col items-center w-full px-4 pb-8">
         {' '}
-       
         <div className="flex justify-between items-center w-full max-w-4xl mt-4 mb-6">
           {/* Tombol Kembali */}
           <Link to="/panduan" className="flex items-center text-black font-semibold text-sm">
@@ -41,7 +40,7 @@ const Tips = () => {
             }}
             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#91A079')}
             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#6D7E5E')}
-            onClick={handleDownloadClick} 
+            onClick={handleDownloadClick}
           >
             <DownloadOutline className="mr-2" color="white" height="20px" width="20px" />
             Download

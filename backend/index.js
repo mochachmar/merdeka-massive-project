@@ -4,6 +4,7 @@ import { testConnection } from './database/db.js';
 import authRoutes from './routes/auth.route.js';
 import articlesRoutes from './routes/articlesRoutes.js';
 import guidesRoute from './routes/guidesRoute.js';
+import router from './routes/routes.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
@@ -19,6 +20,7 @@ const corsOptions = {
 app.use(cors(corsOptions)); // Pastikan middleware ini berada di urutan atas
 app.options('*', cors(corsOptions)); // Tangani permintaan preflight
 app.use(express.json());
+app.use(express.static('public'));
 app.use(cookieParser());
 
 // Routes
@@ -29,6 +31,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/articles', articlesRoutes);
 app.use('/api', guidesRoute);
+app.use('/api', router);
 
 // Start Server
 const PORT = process.env.PORT || 3000;

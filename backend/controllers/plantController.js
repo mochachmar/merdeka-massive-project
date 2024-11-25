@@ -1,30 +1,32 @@
-import { insertPlantHistory } from '../models/plantModel.js';
+import { insertPlant } from '../models/plantModel.js';
 
 export const addPlantHistory = async (req, res) => {
   try {
-    const { plant_name, disease_name, health_status, user_id } = req.body;
-    const photo_url = req.file.path;
+    const { plant_name, scientific_name, description, care_instructions, created_by } = req.body;
+
+    // Ambil `photo_url` dari file upload jika ada
+    const photo_url = req.file ? req.file.path : null;
+    console.log('File:', req.file); // Debugging file
+    console.log('Body:', req.body); // Debugging body data
 
     // Validasi input
-    if (!plant_name || !photo_url || !health_status || !user_id) {
-      return res.status(400).json({ message: 'All fields are required!' });
+    if (!plant_name || !created_by || !photo_url) {
+      return res.status(400).json({ message: 'plant_name, created_by, and photo_url are required!' });
     }
 
-    // Convert the current date ke MySQL DATETIME format (YYYY-MM-DD HH:MM:SS)
-    const detected_at = new Date().toISOString().replace('T', ' ').replace('Z', '');
-    // Insert ke database
-    const healthId = await insertPlantHistory({
+    // Insert data ke database
+    const plantId = await insertPlant({
       plant_name,
+      scientific_name,
+      description,
+      care_instructions,
       photo_url,
-      disease_name,
-      health_status,
-      user_id,
-      detected_at,  
+      created_by,
     });
 
-    res.status(201).json({ message: 'Plant history added successfully!', healthId });
+    res.status(201).json({ message: 'Plant history added successfully!', plantId });
   } catch (error) {
-    console.error(error);
+    console.error('Error adding plant history:', error);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 };
