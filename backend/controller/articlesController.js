@@ -1,11 +1,11 @@
-import fs from "fs";
+import fs from 'fs';
 import {
   getAllArticles,
   getArticleById,
   createArticle,
   updateArticle,
   deleteArticle,
-} from "../models/articles.js";
+} from '../models/articles.js';
 
 const articlesController = {
   getAllArticles: async (req, res) => {
@@ -13,38 +13,25 @@ const articlesController = {
       const articles = await getAllArticles();
       res.json(articles);
     } catch (error) {
-      console.error("Error fetching articles:", error.message);
-      res.status(500).send("Server Error");
+      console.error('Error fetching articles:', error.message);
+      res.status(500).send('Server Error');
     }
   },
 
   getArticleById: async (req, res) => {
     try {
       const article = await getArticleById(req.params.id);
-      if (article) {
-        res.json(article);
-      } else {
-        res.status(404).send("Article not found");
-      }
+      if (!article) return res.status(404).send('Article not found');
+      res.json(article);
     } catch (error) {
-      console.error("Error fetching article by ID:", error.message);
-      res.status(500).send("Server Error");
+      console.error('Error fetching article:', error.message);
+      res.status(500).send('Server Error');
     }
   },
 
   createArticle: async (req, res) => {
     try {
-      console.log("Request body:", req.body);
-      console.log("Uploaded file:", req.file);
-
-      const {
-        title,
-        short_description,
-        long_description,
-        publish_date,
-        status,
-        created_by,
-      } = req.body;
+      const { title, short_description, long_description, publish_date, status, created_by } = req.body;
       const thumbnail_image = req.file ? req.file.filename : null;
 
       const newArticleId = await createArticle({
@@ -59,25 +46,18 @@ const articlesController = {
 
       res.status(201).json({ id: newArticleId });
     } catch (error) {
-      console.error("Error creating article:", error.message);
-      res.status(500).send("Server Error");
+      console.error('Error creating article:', error.message);
+      res.status(500).send('Server Error');
     }
   },
 
   updateArticle: async (req, res) => {
     try {
-      const {
-        title,
-        short_description,
-        long_description,
-        publish_date,
-        status,
-        created_by,
-      } = req.body;
+      const { title, short_description, long_description, publish_date, status, created_by } = req.body;
       const articleId = req.params.id;
 
       const existingArticle = await getArticleById(articleId);
-      if (!existingArticle) return res.status(404).send("Article not found");
+      if (!existingArticle) return res.status(404).send('Article not found');
 
       if (req.file) {
         const oldImagePath = `uploads/${existingArticle.thumbnail_image}`;
@@ -86,9 +66,7 @@ const articlesController = {
         }
       }
 
-      const thumbnail_image = req.file
-        ? req.file.filename
-        : existingArticle.thumbnail_image;
+      const thumbnail_image = req.file ? req.file.filename : existingArticle.thumbnail_image;
 
       const success = await updateArticle(articleId, {
         title,
@@ -101,13 +79,13 @@ const articlesController = {
       });
 
       if (success) {
-        res.send("Article updated");
+        res.send('Article updated');
       } else {
-        res.status(404).send("Article not found");
+        res.status(404).send('Article not found');
       }
     } catch (error) {
-      console.error("Error updating article:", error.message);
-      res.status(500).send("Server Error");
+      console.error('Error updating article:', error.message);
+      res.status(500).send('Server Error');
     }
   },
 
@@ -116,7 +94,7 @@ const articlesController = {
       const articleId = req.params.id;
 
       const existingArticle = await getArticleById(articleId);
-      if (!existingArticle) return res.status(404).send("Article not found");
+      if (!existingArticle) return res.status(404).send('Article not found');
 
       const oldImagePath = `uploads/${existingArticle.thumbnail_image}`;
       if (fs.existsSync(oldImagePath)) {
@@ -125,13 +103,13 @@ const articlesController = {
 
       const success = await deleteArticle(articleId);
       if (success) {
-        res.send("Article deleted");
+        res.send('Article deleted');
       } else {
-        res.status(404).send("Article not found");
+        res.status(404).send('Article not found');
       }
     } catch (error) {
-      console.error("Error deleting article:", error.message);
-      res.status(500).send("Server Error");
+      console.error('Error deleting article:', error.message);
+      res.status(500).send('Server Error');
     }
   },
 };

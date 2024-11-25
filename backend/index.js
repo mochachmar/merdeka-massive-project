@@ -30,8 +30,6 @@ app.use('/api/articles', articlesRoutes);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-
-
 // Test koneksi ke database
 testConnection();
 

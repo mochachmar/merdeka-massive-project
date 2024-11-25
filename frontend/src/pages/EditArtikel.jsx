@@ -53,8 +53,8 @@ function EditArtikel() {
   const handleSubmit = (status) => {
     const formData = new FormData();
     formData.append('title', title);
-    formData.append('date', date);
-    formData.append('long_description', description);
+    formData.append('publish_date', publishDate);
+    formData.append('short_description', description);
     formData.append('status', status);
 
     // Menambahkan gambar jika ada
@@ -107,10 +107,10 @@ function EditArtikel() {
                 Tanggal Publikasi
               </label>
               <input
-                id="date"
+                id="publishDate"
                 type="date"
                 className="w-full p-2 border border-green-500 rounded-md"
-                value={date}
+                value={publishDate}
                 onChange={(e) => setDate(e.target.value)}
               />
             </div>

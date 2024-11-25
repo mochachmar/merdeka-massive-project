@@ -226,13 +226,13 @@ function EditIsiArtikel() {
             {/* Tombol Submit */}
             <div className="flex justify-end gap-4 mt-6">
               <button
-                onClick={() => handleSubmit("Draft")}
+                onClick={() => handleSubmit("draft")}
                 className="px-6 py-2 bg-blue-200 text-blue-700 rounded-md hover:bg-blue-300"
               >
                 Draft
               </button>
               <button
-                onClick={() => handleSubmit("Published")}
+                onClick={() => handleSubmit("published")}
                 className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
               >
                 Publik
