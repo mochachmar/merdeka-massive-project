@@ -95,7 +95,7 @@ function EditIsiArtikel() {
 
       if (response.status === 200) {
         alert("Artikel berhasil diperbarui");
-        navigate("/admin/articles");
+        navigate("/admin/isi-artikel");
       } else {
         alert("Gagal memperbarui artikel");
       }
@@ -232,7 +232,7 @@ function EditIsiArtikel() {
                 Draft
               </button>
               <button
-                onClick={() => handleSubmit("Publik")}
+                onClick={() => handleSubmit("Published")}
                 className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
               >
                 Publik
