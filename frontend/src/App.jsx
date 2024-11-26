@@ -28,7 +28,6 @@ import EditIsiArtikel from './pages/EditIsiArtikel';
 import AppearanceSettings from './pages/AppearanceSettings';
 import OtherSettings from './pages/OtherSettings';
 import EditPanduan from './pages/EditPanduan';
-import EditIsiPanduan from './pages/EditIsiPanduan';
 import PersonalSettingAdmin from './pages/PersonalSettingAdmin';
 import PasswordSettingAdmin from './pages/PasswordSettingAdmin';
 import OtherSettingAdmin from './pages/OtherSettingAdmin';
@@ -171,8 +170,7 @@ function App() {
       <Route path="/admin/card-panduan" element={<AdminPanduan />} />
       <Route path="/admin/card-panduan/tambah-panduan" element={<TambahPanduan />} />
       <Route path="/admin/isi-panduan" element={<IsiPanduan />} />
-      <Route path="/admin/card-panduan/edit-panduan" element={<EditPanduan />} />
-      <Route path="/admin/isi-panduan/edit-isi-panduan" element={<EditIsiPanduan />} />
+      <Route path="/admin/card-panduan/edit-panduan/:id" element={<EditPanduan />} />
 
       {/* Route Tentang Kami */}
       <Route path="/tentang-kami" element={<Tentangkami />} />
@@ -229,7 +227,7 @@ function App() {
         }
       />
 
-      <Route path="*" element={<Navigate to="/sign-in" replace />} />
+      {/* <Route path="*" element={<Navigate to="/sign-in" replace />} /> */}
     </Routes>
   );
 }

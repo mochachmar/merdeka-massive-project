@@ -15,7 +15,7 @@ const validateInput = (guideData) => {
 };
 
 // Menyimpan guide baru
-const createGuide = async (guideData, callback) => {
+const createGuide = async (guideData) => {
   try {
     validateInput(guideData);
     const { title, thumbnail_image, short_description, long_description = null, tips_and_tricks = null, status } = guideData;
@@ -25,28 +25,25 @@ const createGuide = async (guideData, callback) => {
       VALUES (?, ?, ?, ?, ?, ?)
     `;
 
-    db.execute(
-      query,
-      [
-        title,
-        thumbnail_image,
-        short_description,
-        long_description,
-        tips_and_tricks,
-        validateStatus(status), // Validasi status sebelum menyimpan
-      ],
-      callback
-    );
+    const [result] = await db.execute(query, [title, thumbnail_image, short_description, long_description, tips_and_tricks, validateStatus(status)]);
+
+    return result;
   } catch (error) {
     console.error('Error creating guide:', error.message);
-    callback(error, null);
+    throw error;
   }
 };
 
 // Mendapatkan semua guides
-const getGuides = (callback) => {
+const getGuides = async () => {
   const query = 'SELECT * FROM guides';
-  db.execute(query, callback);
+  try {
+    const [rows] = await db.execute(query); // Use await with promises
+    return rows;
+  } catch (error) {
+    console.error('Error fetching guides:', error.message);
+    throw error;
+  }
 };
 
 // Mendapatkan guide berdasarkan ID
@@ -55,55 +52,25 @@ const getGuideById = (guideId, callback) => {
   db.execute(query, [guideId], callback);
 };
 
-const updateGuide = async (guideId, guideData, callback) => {
+const updateGuide = async (guideId, guideData) => {
   try {
-    // Validasi input, pastikan semua field penting valid
     validateInput(guideData);
 
-    const {
-      title = '', // Default ke string kosong jika tidak ada
-      thumbnail_image = '', // Default ke string kosong jika tidak ada
-      short_description = '', // Default ke string kosong jika tidak ada
-      long_description = null, // Default ke null
-      tips_and_tricks = null, // Default ke null
-      status = 'draft', // Default ke "draft"
-    } = guideData;
+    const { title = '', thumbnail_image = '', short_description = '', long_description = null, tips_and_tricks = null, status = 'draft' } = guideData;
 
-    // Validasi status
     const validatedStatus = validateStatus(status);
-    if (!validatedStatus) {
-      throw new Error('Invalid status value.');
-    }
-
     const query = `
       UPDATE guides
       SET title = ?, thumbnail_image = ?, short_description = ?, long_description = ?, tips_and_tricks = ?, status = ?
       WHERE guide_id = ?
     `;
 
-    db.execute(
-      query,
-      [
-        title,
-        thumbnail_image || null, // Gunakan null jika kosong
-        short_description || null, // Gunakan null jika kosong
-        long_description || null,
-        tips_and_tricks || null,
-        validatedStatus,
-        guideId,
-      ],
-      (err, result) => {
-        if (err) {
-          console.error('Error updating guide:', err);
-          callback(err, null);
-        } else {
-          callback(null, result);
-        }
-      }
-    );
+    const [result] = await db.execute(query, [title, thumbnail_image || null, short_description || null, long_description || null, tips_and_tricks || null, validatedStatus, guideId]);
+
+    return result;
   } catch (error) {
     console.error('Error in updateGuide:', error.message);
-    callback(error, null);
+    throw error;
   }
 };
 

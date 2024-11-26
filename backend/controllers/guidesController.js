@@ -10,13 +10,8 @@ const __dirname = path.dirname(__filename);
 // Mengambil semua data guides
 export const getGuides = async (req, res) => {
   try {
-    Guides.getGuides((err, guides) => {
-      if (err) {
-        console.error('Error fetching guides:', err);
-        return res.status(500).send('Server Error');
-      }
-      res.json(guides);
-    });
+    const guides = await Guides.getGuides(); // Use await instead of callback
+    res.json(guides);
   } catch (error) {
     console.error('Error in getGuides:', error);
     res.status(500).send('Server Error');
