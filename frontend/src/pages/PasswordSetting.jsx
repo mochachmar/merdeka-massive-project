@@ -1,15 +1,31 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import removeRedEye from '../assets/remove-red-eye.svg'; // Pastikan path ikon benar
 import Swal from 'sweetalert2'; // Import SweetAlert2
 
 const PasswordSetting = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false); // State untuk kata sandi lama
+  const [showNewPassword, setShowNewPassword] = useState(false); // State untuk kata sandi baru
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State untuk konfirmasi kata sandi
   const [formData, setFormData] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
+
+  const toggleCurrentPasswordVisibility = () => {
+    setShowCurrentPassword(!showCurrentPassword); // Toggle visibility untuk kata sandi lama
+  };
+
+  const toggleNewPasswordVisibility = () => {
+    setShowNewPassword(!showNewPassword); // Toggle visibility untuk kata sandi baru
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword); // Toggle visibility untuk konfirmasi kata sandi
+  };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -42,16 +58,20 @@ const PasswordSetting = () => {
       });
 
       Swal.fire({
-        toast: true, // Mode toast
-        position: 'top-end', // Posisi kanan atas
+        toast: true,
+        position: 'top-end',
         icon: 'success',
         title: 'Kata sandi berhasil diubah!',
-        showConfirmButton: false, // Tidak ada tombol OK
-        timer: 2000, // Tampilkan selama 1,5 detik
+        showConfirmButton: false,
+        timer: 2000,
         timerProgressBar: true,
       });
 
-      setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setFormData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
     } catch (error) {
       Swal.fire({
         icon: 'error',
@@ -120,18 +140,37 @@ const PasswordSetting = () => {
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block font-medium">Kata Sandi Lama</label>
-            <input type="password" name="currentPassword" className="w-full p-2 border rounded-md mt-1" placeholder="************" value={formData.currentPassword} onChange={handleChange} />
+            <div className="relative">
+              <input type={showCurrentPassword ? 'text' : 'password'} name="currentPassword" className="w-full p-2 border rounded-md mt-1" placeholder="*************" value={formData.currentPassword} onChange={handleChange} />
+              <img className="absolute top-1/2 right-3 transform -translate-y-1/2 w-6 h-6 cursor-pointer" alt="Toggle password visibility" src={removeRedEye} onClick={toggleCurrentPasswordVisibility} />
+            </div>
           </div>
           <div>
             <label className="block font-medium">Kata Sandi Baru</label>
-            <input type="password" name="newPassword" className="w-full p-2 border rounded-md mt-1" placeholder="************" value={formData.newPassword} onChange={handleChange} />
+            <div className="relative">
+              <input type={showNewPassword ? 'text' : 'password'} name="newPassword" className="w-full p-2 border rounded-md mt-1" placeholder="*************" value={formData.newPassword} onChange={handleChange} />
+              <img className="absolute top-1/2 right-3 transform -translate-y-1/2 w-6 h-6 cursor-pointer" alt="Toggle password visibility" src={removeRedEye} onClick={toggleNewPasswordVisibility} />
+            </div>
           </div>
           <div>
             <label className="block font-medium">Konfirmasi Kata Sandi</label>
-            <input type="password" name="confirmPassword" className="w-full p-2 border rounded-md mt-1" placeholder="************" value={formData.confirmPassword} onChange={handleChange} />
+            <div className="relative">
+              <input type={showConfirmPassword ? 'text' : 'password'} name="confirmPassword" className="w-full p-2 border rounded-md mt-1" placeholder="*************" value={formData.confirmPassword} onChange={handleChange} />
+              <img className="absolute top-1/2 right-3 transform -translate-y-1/2 w-6 h-6 cursor-pointer" alt="Toggle password visibility" src={removeRedEye} onClick={toggleConfirmPasswordVisibility} />
+            </div>
           </div>
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mt-6">
-            <button type="button" className="border rounded-md px-4 py-2" onClick={() => setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' })}>
+            <button
+              type="button"
+              className="border rounded-md px-4 py-2"
+              onClick={() =>
+                setFormData({
+                  currentPassword: '',
+                  newPassword: '',
+                  confirmPassword: '',
+                })
+              }
+            >
               Batal
             </button>
             <button type="submit" className="bg-green-700 text-white rounded-md px-4 py-2">
