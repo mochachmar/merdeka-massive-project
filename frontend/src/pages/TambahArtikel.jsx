@@ -59,7 +59,7 @@ function TambahArtikel() {
         <Breadcrumbs />
         <div className="p-6">
           <div className="bg-white shadow-md rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-6 text-gray-800">Tambah Artikel Baru</h2>
+            <h2 className="text-2xl font-semibold mb-6 text-gray-800">Tambah Artikel</h2>
 
             {/* Input Judul Artikel */}
             <div className="mb-4">
@@ -125,7 +125,7 @@ function TambahArtikel() {
               <button onClick={() => handleSubmit('draft')} className="px-6 py-2 bg-blue-200 text-blue-700 rounded-md hover:bg-blue-300">
                 Draft
               </button>
-              <button onClick={() => handleSubmit('Published')} className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+              <button onClick={() => handleSubmit('published')} className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
                 Publikasikan
               </button>
             </div>

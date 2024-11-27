@@ -53,8 +53,8 @@ function EditArtikel() {
   const handleSubmit = (status) => {
     const formData = new FormData();
     formData.append('title', title);
-    formData.append('date', date);
-    formData.append('description', description);
+    formData.append('publish_date', publishDate);
+    formData.append('short_description', description);
     formData.append('status', status);
 
     // Menambahkan gambar jika ada
@@ -99,7 +99,7 @@ function EditArtikel() {
               <label htmlFor="date" className="block font-semibold mb-2 text-gray-700">
                 Tanggal Publikasi
               </label>
-              <input id="date" type="date" className="w-full p-2 border border-green-500 rounded-md" value={date} onChange={(e) => setDate(e.target.value)} />
+              <input id="publishDate" type="date" className="w-full p-2 border border-green-500 rounded-md" value={publishDate} onChange={(e) => setDate(e.target.value)} />
             </div>
 
             {/* Input Deskripsi */}
@@ -129,7 +129,7 @@ function EditArtikel() {
 
             {/* Tombol Submit */}
             <div className="flex space-x-4">
-              <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" onClick={() => handleSubmit('Published')}>
+              <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" onClick={() => handleSubmit('published')}>
                 Terbitkan
               </button>
               <button className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600" onClick={() => handleSubmit('draft')}>

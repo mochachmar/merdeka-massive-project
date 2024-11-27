@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function CardPanduan({ plants = [] }) {
+function CardPanduanLogin({ plants = [] }) {
   const navigate = useNavigate();
 
   // Fungsi untuk scroll ke atas sebelum navigasi
@@ -26,6 +26,7 @@ function CardPanduan({ plants = [] }) {
                 // src={imageUrl}
                 alt={plant.title || 'Plant'}
               />
+
               <div className="p-6 flex flex-col justify-between">
                 <h2 className="text-xl font-semibold text-black text-center">{plant.title || 'Unknown Plant'}</h2>
                 <p className="mt-2 text-gray-600 text-sm h-20 overflow-hidden">{plant.short_description || 'No care instructions available.'}</p>
@@ -54,4 +55,4 @@ function CardPanduan({ plants = [] }) {
   );
 }
 
-export default CardPanduan;
+export default CardPanduanLogin;

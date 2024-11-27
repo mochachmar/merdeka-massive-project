@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer';
-import Card from '../components/CardLogin.jsx';
+import Card from '../components/Card.jsx';
 import gambarBanner from '../assets/hero-section.png';
 
 function ArticlesPage() {
@@ -14,7 +14,11 @@ function ArticlesPage() {
       try {
         const response = await axios.get('http://localhost:3000/api/articles');
         console.log(response.data); // Debugging: memastikan data diterima
-        setArticles(response.data);
+
+        const publishedArticles = response.data.filter((article) => article.status === 'published');
+
+        setArticles(publishedArticles); // Menyimpan artikel yang sudah difilter ke state
+        console.log(publishedArticles); // Debugging: memastikan filter berjalan
       } catch (error) {
         console.error('Error fetching articles:', error);
       }

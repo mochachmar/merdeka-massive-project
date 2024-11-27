@@ -53,7 +53,7 @@ const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/sign-in" replace />;
   }
 
   if (!user.isVerified) {
@@ -173,8 +173,8 @@ function App() {
       <Route path="/admin/card-panduan" element={<AdminPanduan />} />
       <Route path="/admin/card-panduan/tambah-panduan" element={<TambahPanduan />} />
       <Route path="/admin/isi-panduan" element={<IsiPanduan />} />
-      <Route path="/admin/card-panduan/edit-panduan" element={<EditPanduan />} />
-      <Route path="/admin/isi-panduan/edit-isi-panduan" element={<EditIsiPanduan />} />
+      <Route path="/admin/card-panduan/edit-panduan/:id" element={<EditPanduan />} />
+      <Route path="/admin/isi-panduan/edit-isi-panduan:id" element={<EditIsiPanduan />} />
 
       {/* Route Tentang Kami */}
       <Route path="/tentang-kami" element={<Tentangkami />} />
@@ -231,7 +231,7 @@ function App() {
         }
       />
 
-      {/* <Route path="*" element={<Navigate to="/sign-in" replace />} /> */}
+      <Route path="*" element={<Navigate to="/sign-in" replace />} />
     </Routes>
   );
 }

@@ -15,22 +15,16 @@ const articlesController = {
   getArticleById: async (req, res) => {
     try {
       const article = await getArticleById(req.params.id);
-      if (article) {
-        res.json(article);
-      } else {
-        res.status(404).send('Article not found');
-      }
+      if (!article) return res.status(404).send('Article not found');
+      res.json(article);
     } catch (error) {
-      console.error('Error fetching article by ID:', error.message);
+      console.error('Error fetching article:', error.message);
       res.status(500).send('Server Error');
     }
   },
 
   createArticle: async (req, res) => {
     try {
-      console.log('Request body:', req.body);
-      console.log('Uploaded file:', req.file);
-
       const { title, short_description, long_description, publish_date, status, created_by } = req.body;
       const thumbnail_image = req.file ? req.file.filename : null;
 
@@ -53,7 +47,7 @@ const articlesController = {
 
   updateArticle: async (req, res) => {
     try {
-      const { title, short_description, long_description, publish_date, status } = req.body;
+      const { title, short_description, long_description, publish_date, status, created_by } = req.body;
       const articleId = req.params.id;
 
       const existingArticle = await getArticleById(articleId);
@@ -75,6 +69,7 @@ const articlesController = {
         long_description,
         publish_date,
         status,
+        created_by,
       });
 
       if (success) {
