@@ -64,9 +64,11 @@ function AdminPanduan() {
     } catch (error) {
       console.error('Error deleting guide:', error.response?.data || error.message);
       alert('Gagal menghapus panduan. ' + (error.response?.data?.message || error.message));
-    } finally {
-      setLoading(false); // Matikan loading
     }
+  };
+
+  const handleSync = () => {
+    window.location.reload(); // Muat ulang halaman
   };
 
   return (
@@ -76,9 +78,17 @@ function AdminPanduan() {
         <div className="flex-1 p-6">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-2xl font-semibold text-gray-800">Daftar Panduan</h1>
-            <Link to="/admin/card-panduan/tambah-panduan" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-              Tambah Panduan
-            </Link>
+            <div className="flex space-x-4">
+              {/* Sync Button */}
+              <button onClick={handleSync} className="flex items-center bg-yellow-500 text-white px-5 py-2 rounded-lg hover:bg-yellow-600">
+                <i className="fas fa-sync-alt mr-2"></i> {/* Font Awesome refresh icon */}↻ Sync
+              </button>
+
+              {/* Add Guide Button */}
+              <Link to="/admin/card-panduan/tambah-panduan" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                Tambah Panduan
+              </Link>
+            </div>
           </div>
           <div className="bg-white shadow-md rounded-lg overflow-hidden">
             <table className="min-w-full table-auto">
@@ -93,7 +103,7 @@ function AdminPanduan() {
               </thead>
               <tbody>
                 {guides.map((item, index) => (
-                  <tr key={item.id} className="border-b hover:bg-gray-100">
+                  <tr key={item.guide_id} className="border-b hover:bg-gray-100">
                     <td className="px-4 py-2 text-center font-medium text-gray-700">{index + 1}</td>
                     <td className="px-4 py-2 text-gray-700">{item.title}</td>
                     <td className="px-4 py-2">

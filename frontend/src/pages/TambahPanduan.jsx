@@ -44,8 +44,9 @@ function TambahPanduan() {
     }
 
     setErrorMessage(''); // Reset pesan error
-    setIsLoading(true); // Aktifkan loading state
     setStatus(submitStatus); // Set status sesuai tombol yang diklik
+
+    navigate('/admin/card-panduan');
 
     const formData = new FormData();
     formData.append('title', judul);
@@ -58,7 +59,6 @@ function TambahPanduan() {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       console.log('Respon dari server:', response.data);
-      navigate('/admin/card-panduan');
     } catch (error) {
       console.error('Gagal mengirim data panduan:', error);
       setErrorMessage(error.response?.data?.message || 'Terjadi kesalahan. Silakan coba lagi.');
