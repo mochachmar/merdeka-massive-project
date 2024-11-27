@@ -5,6 +5,7 @@ import lockIcon from '../assets/lock-icon.svg';
 import userIcon from '../assets/user-icon.svg';
 import otherIcon from '../assets/menu-icon.svg';
 import deleteIcon from '../assets/delete-icon.svg';
+import settingsIcon from '../assets/edit.svg'; // Replace with actual path to the icon
 
 const OtherSettingAdmin = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -107,7 +108,13 @@ const OtherSettingAdmin = () => {
                 <td className="p-3 border-b">Admin2</td>
                 <td className="p-3 border-b">Admin2@gmail.com</td>
                 <td className="p-3 border-b">Sarah Isnaini Alnauri</td>
-                <td className="p-3 border-b">
+                <td className="p-3 border-b flex items-center space-x-2">
+                  {/* Settings Icon */}
+                  <Link to="/admin/form-other-edit-setting-admin" className="hover:bg-gray-200 p-2 rounded transition-all duration-300">
+                    <img src={settingsIcon} alt="settings" className="w-5 h-5" />
+                  </Link>
+
+                  {/* Delete Icon */}
                   <button onClick={() => handleDeleteClick('Admin2')} className="hover:bg-gray-200 p-2 rounded transition-all duration-300">
                     <img src={deleteIcon} alt="delete" className="w-5 h-5" />
                   </button>

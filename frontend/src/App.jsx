@@ -32,6 +32,7 @@ import PersonalSettingAdmin from './pages/PersonalSettingAdmin';
 import PasswordSettingAdmin from './pages/PasswordSettingAdmin';
 import OtherSettingAdmin from './pages/OtherSettingAdmin';
 import FormOtherSettingAdmin from './pages/FormOtherSettingAdmin';
+import FormOtherEditSettingAdmin from './pages/FormOtherEditSettingAdmin';
 import ArticlesPage from './pages/ArticlesPage';
 import ArticlesPageLogin from './pages/ArticlesPageLogin';
 import Article from './pages/Article';
@@ -165,6 +166,7 @@ function App() {
       <Route path="/admin/password-setting" element={<PasswordSettingAdmin />} />
       <Route path="/admin/other-setting" element={<OtherSettingAdmin />} />
       <Route path="/admin/form-other-setting" element={<FormOtherSettingAdmin />} />
+      <Route path="/admin/form-other-edit-setting-admin" element={<FormOtherEditSettingAdmin />} />
 
       {/* Route Panduan */}
       <Route path="/admin/card-panduan" element={<AdminPanduan />} />
