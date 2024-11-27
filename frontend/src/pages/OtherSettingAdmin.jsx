@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import kembaliIcon from '../assets/settings-icon.svg'; // Add the kembali icon
+import kembaliIcon from '../assets/settings-icon.svg';
 import lockIcon from '../assets/lock-icon.svg';
 import userIcon from '../assets/user-icon.svg';
 import otherIcon from '../assets/menu-icon.svg';
 import deleteIcon from '../assets/delete-icon.svg';
+import settingsIcon from '../assets/edit.svg'; // Replace with actual path to the icon
 
 const OtherSettingAdmin = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const navigate = useNavigate();
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   const handleDeleteClick = (user) => {
     setSelectedUser(user);
@@ -18,7 +24,6 @@ const OtherSettingAdmin = () => {
 
   const confirmDelete = () => {
     console.log(`User ${selectedUser} has been deleted.`);
-
     setShowDeletePopup(false);
     setSelectedUser(null);
   };
@@ -29,48 +34,57 @@ const OtherSettingAdmin = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row w-full min-h-screen">
-      <div className="w-full md:w-1/4 bg-gray-100 p-5">
+    <div className="flex h-screen w-full overflow-hidden">
+      {/* Hamburger Menu */}
+      <button onClick={toggleSidebar} className="lg:hidden p-4 z-30 fixed top-0 left-0" aria-label="Toggle Sidebar">
+        {isSidebarOpen ? (
+          // Icon Close
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        ) : (
+          // Icon Hamburger
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        )}
+      </button>
+
+      {/* Sidebar */}
+      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:relative lg:w-1/4 w-3/4 bg-gray-100 p-5 h-full transition-transform duration-300 ease-in-out z-20`}>
         <div className="flex flex-col space-y-4">
           <Link to="/admin" className="flex items-center space-x-2">
             <img src={kembaliIcon} alt="Kembali Icon" className="w-5 h-5" />
             <h2 className="text-lg font-bold">Pengaturan</h2>
           </Link>
-          {/* Pribadi */}
+
           <Link to="/admin/personal-setting" className="hover:bg-gray-200 transition-all duration-300 p-3 rounded cursor-pointer flex items-center">
             <img src={userIcon} alt="user" className="inline-block w-5 h-5 mr-2" />
             Pribadi
           </Link>
 
-          {/* Kata Sandi */}
           <Link to="/admin/password-setting" className="hover:bg-gray-200 transition-all duration-300 p-3 rounded cursor-pointer flex items-center">
             <img src={lockIcon} alt="lock" className="inline-block w-5 h-5 mr-2" />
             Kata Sandi
           </Link>
 
-          {/* Lainnya */}
           <Link to="/admin/other-setting" className="hover:bg-gray-200 transition-all duration-300 p-3 rounded-md bg-white cursor-pointer flex items-center">
             <img src={otherIcon} alt="others" className="inline-block w-5 h-5 mr-2" />
             Lainnya
           </Link>
         </div>
-      </div>
+      </aside>
 
       {/* Main Content */}
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-8 overflow-y-auto h-full lg:ml-0">
         <h2 className="text-2xl font-bold mb-6">Lainnya</h2>
 
         {/* Add User and Cancel Buttons */}
         <div className="flex flex-wrap space-x-4 mb-4">
-          {/* Batal Button */}
-          <button
-            onClick={() => navigate('/admin/')} // Go back to the previous page
-            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg"
-          >
+          <button onClick={() => navigate('/admin/')} className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg">
             Kembali
           </button>
 
-          {/* Tambah User Button */}
           <Link to="/admin/form-other-setting" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-all duration-300">
             + Tambah User
           </Link>
@@ -94,7 +108,13 @@ const OtherSettingAdmin = () => {
                 <td className="p-3 border-b">Admin2</td>
                 <td className="p-3 border-b">Admin2@gmail.com</td>
                 <td className="p-3 border-b">Sarah Isnaini Alnauri</td>
-                <td className="p-3 border-b">
+                <td className="p-3 border-b flex items-center space-x-2">
+                  {/* Settings Icon */}
+                  <Link to="/admin/form-other-edit-setting" className="hover:bg-gray-200 p-2 rounded transition-all duration-300">
+                    <img src={settingsIcon} alt="settings" className="w-5 h-5" />
+                  </Link>
+
+                  {/* Delete Icon */}
                   <button onClick={() => handleDeleteClick('Admin2')} className="hover:bg-gray-200 p-2 rounded transition-all duration-300">
                     <img src={deleteIcon} alt="delete" className="w-5 h-5" />
                   </button>

@@ -25,7 +25,7 @@ export const ForgotPassword = () => {
       setError('');
     }
 
-    navigate('/forgot-password-admin-code', { state: { email } });
+    navigate('/new-password-admin', { state: { email } });
   };
 
   return (
@@ -60,7 +60,7 @@ export const ForgotPassword = () => {
 
             {/* Submit Button */}
             <button type="submit" className="w-full h-14 bg-tanamanku-2 hover:bg-tanamanku-3 active:bg-tanamanku-4 rounded-lg font-bold text-black mt-4">
-              Kirim Kode
+              Submit
             </button>
           </form>
 

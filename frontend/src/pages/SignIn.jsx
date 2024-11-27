@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../store/FetchDataWithAxios'; // Menggunakan authStore
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import closeUpGreenLeavesNature from '../assets/close-up-green-leaves-nature.png';
 import removeRedEye from '../assets/remove-red-eye.svg';
 import google from '../assets/Google.svg';
@@ -10,47 +12,42 @@ export const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+
+  const { login, isLoading } = useAuthStore(); // Ambil fungsi dan state dari authStore
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validatePasswordStrength = (password) => {
-    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]{8,}$/;
-    return strongPasswordRegex.test(password);
-  };
-
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    setError('');
-    setPasswordError('');
+    try {
+      await login(email, password); // Gunakan login dari authStore
 
-    let isValid = true;
-    if (!email) {
-      setError('Email wajib diisi.');
-      isValid = false;
-    } else if (!validateEmail(email)) {
-      setError('Format email tidak valid.');
-      isValid = false;
+      // Menampilkan toast sukses
+      Swal.fire({
+        toast: true, // Mode toast
+        position: 'top-end', // Posisi kanan atas
+        icon: 'success',
+        title: 'Berhasil masuk! Anda akan dialihkan!',
+        showConfirmButton: false, // Tidak ada tombol OK
+        timer: 2000, // Tampilkan selama 1,5 detik
+        timerProgressBar: true, // Progress bar
+      });
+
+      navigate('/splash-login'); // Navigasi ke halaman berikutnya
+    } catch (err) {
+      // Menampilkan toast error
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: err.response?.data?.message || 'Login gagal. Silakan coba lagi.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
     }
-
-    if (!password) {
-      setPasswordError('Kata sandi wajib diisi.');
-      isValid = false;
-    } else if (!validatePasswordStrength(password)) {
-      setPasswordError('Kata sandinya terlalu lemah. Silakan gunakan kombinasi huruf besar, huruf kecil, angka, dan simbol.');
-      isValid = false;
-    }
-
-    if (!isValid) return;
-    navigate('/splash-login');
   };
 
   return (
@@ -78,9 +75,6 @@ export const SignIn = () => {
           </h1>
           <p className="text-xl font-semibold text-[#000000cc] text-center mt-4">Masuk Akun Anda</p>
 
-          {/* Error Message */}
-          {error && <p className="text-red-500">{error}</p>}
-
           {/* Email Input */}
           <input className="w-full max-w-md h-14 pl-4 pr-4 py-2 border border-solid border-black rounded-md text-base" placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
@@ -95,9 +89,6 @@ export const SignIn = () => {
             />
             <img className="absolute top-1/2 right-3 transform -translate-y-1/2 w-6 h-6 cursor-pointer" alt="Toggle password visibility" src={removeRedEye} onClick={togglePasswordVisibility} />
           </div>
-
-          {/* Password Strength Error Message */}
-          {passwordError && <p className="text-red-500 text-center w-full max-w-md">{passwordError}</p>}
 
           {/* Remember Me and Forgot Password Row */}
           <div className="flex items-center justify-between w-full max-w-md mt-4">
@@ -118,16 +109,47 @@ export const SignIn = () => {
           </div>
 
           {/* Sign In Button */}
-          <button type="submit" onClick={handleSignIn} className="w-full max-w-md h-14 bg-tanamanku-2 hover:bg-tanamanku-3 active:bg-tanamanku-4 rounded-lg font-bold text-black mt-4">
-            Masuk
+          <button
+            type="submit"
+            onClick={handleSignIn}
+            className={`w-full max-w-md h-14 ${isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-tanamanku-2 hover:bg-tanamanku-3 active:bg-tanamanku-4'} rounded-lg font-bold text-black mt-4`}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Memuat...' : 'Masuk'}
           </button>
 
           {/* Google and Facebook Sign-In Buttons */}
-          <button className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-4">
+          <button
+            className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-4"
+            onClick={() => {
+              Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'info',
+                title: 'Sign in dengan Google belum tersedia.',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+              });
+            }}
+          >
             <img className="w-5 h-5" alt="Google" src={google} />
             <span className="text-[#565e6d] font-normal text-base">Masuk dengan Google</span>
           </button>
-          <button className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-2">
+          <button
+            className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-2"
+            onClick={() => {
+              Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'info',
+                title: 'Sign in dengan Facebook belum tersedia.',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+              });
+            }}
+          >
             <img className="w-5 h-5" alt="Logo fb simple" src={logoFbSimple} />
             <span className="text-[#565e6d] font-normal text-base">Masuk dengan Facebook</span>
           </button>

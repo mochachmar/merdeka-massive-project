@@ -1,17 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const AppearanceSettings = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className="flex flex-col lg:flex-row h-screen w-screen overflow-hidden">
+    <div className="flex h-screen w-screen overflow-hidden">
+      {/* Hamburger Menu */}
+      <button onClick={toggleSidebar} className="lg:hidden p-4 z-30 fixed top-0 left-0" aria-label="Toggle Sidebar">
+        {isSidebarOpen ? (
+          // Icon Close
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        ) : (
+          // Icon Hamburger
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        )}
+      </button>
+
       {/* Sidebar */}
-      <aside className="w-full lg:w-1/4 bg-green-100 p-4 sm:p-6">
+      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:relative lg:w-1/4 w-3/4 bg-green-100 p-4 sm:p-6 h-full transition-transform duration-300 ease-in-out z-20`}>
         <Link to="/beranda-login" className="flex items-center space-x-2">
-          <img
-            src="./src/assets/settings-icon.svg" // Add the icon path here
-            alt="Pengaturan Icon"
-            className="w-5 h-5"
-          />
+          <img src="./src/assets/settings-icon.svg" alt="Pengaturan Icon" className="w-5 h-5" />
           <h2 className="text-lg font-bold">Pengaturan</h2>
         </Link>
         <ul className="mt-4 space-y-4">
@@ -43,7 +60,7 @@ const AppearanceSettings = () => {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-8 overflow-y-auto h-full lg:ml-0">
         <h2 className="text-xl font-bold mb-6">Tampilan</h2>
 
         <div className="mb-4">
@@ -53,15 +70,15 @@ const AppearanceSettings = () => {
               <img src="../src/assets/light-icon.png" alt="Light Theme" className="mb-2" />
               <span>Light</span>
             </div>
-            <div className="border rounded-md p-4 flex flex-col items-center cursor-pointer opacity-100">
+            <div className="border rounded-md p-4 flex flex-col items-center cursor-pointer">
               <img src="./src/assets/dark-icon.png" alt="Dark Theme" className="mb-2" />
               <span>Dark</span>
             </div>
-            <div className="border rounded-md p-4 flex flex-col items-center cursor-pointer opacity-100">
+            <div className="border rounded-md p-4 flex flex-col items-center cursor-pointer">
               <img src="./src/assets/black-icon.png" alt="Black Theme" className="mb-2" />
               <span>Black</span>
             </div>
-            <div className="border rounded-md p-4 flex flex-col items-center cursor-pointer opacity-100">
+            <div className="border rounded-md p-4 flex flex-col items-center cursor-pointer">
               <img src="./src/assets/auto-icon.png" alt="Auto Theme" className="mb-2" />
               <span>Auto</span>
             </div>
@@ -69,10 +86,11 @@ const AppearanceSettings = () => {
         </div>
 
         <div className="mb-8">
-          <label className="block text-gray-600 mb-2">Text size</label>
+          <label className="block text-gray-600 mb-2">Ukuran Teks</label>
           <select className="border border-gray-300 rounded-md p-2 w-40">
             <option>16px</option>
-            {/* Add more font size options as needed */}
+            <option>18px</option>
+            <option>20px</option>
           </select>
         </div>
 

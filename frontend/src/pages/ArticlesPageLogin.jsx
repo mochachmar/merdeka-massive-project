@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Navbar from "../components/Navbar-Login.jsx";
-import Footer from "../components/FooterLogin";
-import Card from "../components/Card.jsx";
-import gambarBanner from "../assets/hero-section.png";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Navbar from '../components/Navbar-Login.jsx';
+import Footer from '../components/FooterLogin';
+import Card from '../components/Card.jsx';
+import gambarBanner from '../assets/hero-section.png';
 
 function ArticlesPage() {
   const [articles, setArticles] = useState([]);
@@ -12,17 +12,15 @@ function ArticlesPage() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/articles");
+        const response = await axios.get('http://localhost:3000/api/articles');
         console.log(response.data); // Debugging: memastikan data diterima
 
-        const publishedArticles = response.data.filter(
-          (article) => article.status === "published"
-        );
+        const publishedArticles = response.data.filter((article) => article.status === 'published');
 
         setArticles(publishedArticles); // Menyimpan artikel yang sudah difilter ke state
         console.log(publishedArticles); // Debugging: memastikan filter berjalan
       } catch (error) {
-        console.error("Error fetching articles:", error);
+        console.error('Error fetching articles:', error);
       }
     };
 
@@ -45,20 +43,10 @@ function ArticlesPage() {
         </h1>
       </div>
 
-      <h1 className="text-center text-4xl font-bold py-4">
-        Artikel Penyakit & Hama
-      </h1>
-      <p className="text-center text-xl font-regular">
-        Artikel Penyakit & Hama pada tanaman
-      </p>
+      <h1 className="text-center text-4xl font-bold py-4">Artikel Penyakit & Hama</h1>
+      <p className="text-center text-xl font-regular">Artikel Penyakit & Hama pada tanaman</p>
       <div className="flex flex-row flex-wrap gap-10 pt-8 mx-20 justify-center py-6">
-        {articles.length > 0 ? (
-          articles.map((article) => <Card article={article} key={article.id} />)
-        ) : (
-          <p className="text-center text-gray-700">
-            Tidak ada artikel tersedia
-          </p>
-        )}
+        {articles.length > 0 ? articles.map((article) => <Card article={article} key={article.id} />) : <p className="text-center text-gray-700">Tidak ada artikel tersedia</p>}
       </div>
       <Footer />
     </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import logo from '../assets/logo.png';
 import { SettingsOutline, PersonOutline, MenuOutline, ChevronDownOutline } from 'react-ionicons';
 
@@ -8,12 +9,13 @@ function NavbarLogin() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPerawatanDropdownOpen, setIsPerawatanDropdownOpen] = useState(false);
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
-  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false); // New state for profile dropdown
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
     setIsMobileDropdownOpen(false);
-    setIsProfileDropdownOpen(false); // Close profile dropdown when toggling menu
+    setIsProfileDropdownOpen(false);
   };
 
   const toggleDropdown = (e) => {
@@ -41,7 +43,20 @@ function NavbarLogin() {
     setIsDropdownOpen(false);
     setIsMobileDropdownOpen(false);
     setIsPerawatanDropdownOpen(false);
-    setIsProfileDropdownOpen(false); // Close profile dropdown when clicking outside
+    setIsProfileDropdownOpen(false);
+  };
+
+  const handleLogout = () => {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: 'Berhasil logout! Anda akan dialihkan!',
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+    });
+    navigate('/'); // Redirect user to the homepage or login page after logout
   };
 
   return (
@@ -83,7 +98,6 @@ function NavbarLogin() {
               )}
             </div>
 
-            {/* Perawatan Button with Dropdown */}
             <div className="relative">
               <button className="flex items-center px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded cursor-pointer focus:outline-none" onClick={togglePerawatanDropdown}>
                 Perawatan
@@ -123,9 +137,9 @@ function NavbarLogin() {
               <div className="absolute top-full right-0 mt-2 w-40 bg-white shadow-lg rounded-md border z-10">
                 <ul className="py-2">
                   <li>
-                    <Link to="/" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
+                    <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
                       Logout
-                    </Link>
+                    </button>
                   </li>
                 </ul>
               </div>
@@ -146,9 +160,9 @@ function NavbarLogin() {
               <div className="absolute top-full right-0 mt-2 w-40 bg-white shadow-lg rounded-md border z-10">
                 <ul className="py-2">
                   <li>
-                    <Link to="/" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
+                    <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
                       Logout
-                    </Link>
+                    </button>
                   </li>
                 </ul>
               </div>
@@ -161,66 +175,64 @@ function NavbarLogin() {
             <MenuOutline color={'#000000'} height="24px" width="24px" />
           </button>
         </div>
+        {/* Mobile Dropdown Menu */}
+        {isOpen && (
+          <div className="lg:hidden bg-[#E7F0DC] p-4">
+            <ul className="flex flex-col space-y-5">
+              <li>
+                <Link to="/beranda-login" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
+                  Beranda
+                </Link>
+              </li>
+              <li>
+                <button onClick={toggleMobileDropdown} className="flex justify-between w-full px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded focus:outline-none">
+                  Blog/Artikel
+                  <ChevronDownOutline color={'#000000'} height="24px" width="24px" />
+                </button>
+                {isMobileDropdownOpen && (
+                  <ul className="mt-2 space-y-2 ml-4">
+                    <li>
+                      <Link to="/panduan-login" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
+                        Tips Perawatan Tanaman
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/artikel-penyakit-tanaman-login" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
+                        Artikel Penyakit dan Hama
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              <li>
+                <button onClick={togglePerawatanDropdown} className="flex justify-between w-full px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
+                  Perawatan
+                  <ChevronDownOutline color={'#000000'} height="24px" width="24px" />
+                </button>
+                {isPerawatanDropdownOpen && (
+                  <ul className="mt-2 space-y-2 ml-4">
+                    <li>
+                      <Link to="/deteksi-penyakit" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
+                        Deteksi Penyakit
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/histori-tanaman" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
+                        History Tanaman
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              <li>
+                <Link to="/tentang-kami-login" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
+                  Tentang Kami
+                </Link>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
-
-      {/* Mobile Dropdown Menu */}
-      {isOpen && (
-        <div className="lg:hidden bg-[#E7F0DC] p-4">
-          <ul className="flex flex-col space-y-5">
-            <li>
-              <Link to="/beranda-login" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
-                Beranda
-              </Link>
-            </li>
-            <li>
-              <button onClick={toggleMobileDropdown} className="flex justify-between w-full px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded focus:outline-none">
-                Blog/Artikel
-                <ChevronDownOutline color={'#000000'} height="24px" width="24px" />
-              </button>
-              {isMobileDropdownOpen && (
-                <ul className="mt-2 space-y-2 ml-4">
-                  <li>
-                    <Link to="/panduan-login" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
-                      Tips Perawatan Tanaman
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/artikel-penyakit-tanaman-login" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
-                      Artikel Penyakit dan Hama
-                    </Link>
-                  </li>
-                </ul>
-              )}
-            </li>
-            <li>
-              {/* Dropdown Perawatan di Mobile */}
-              <button onClick={togglePerawatanDropdown} className="flex justify-between w-full px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded focus:outline-none">
-                Perawatan
-                <ChevronDownOutline color={'#000000'} height="24px" width="24px" />
-              </button>
-              {isPerawatanDropdownOpen && (
-                <ul className="mt-2 space-y-2 ml-4">
-                  <li>
-                    <Link to="/deteksi-penyakit" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
-                      Deteksi Penyakit
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/histori-tanaman" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
-                      History Tanaman
-                    </Link>
-                  </li>
-                </ul>
-              )}
-            </li>
-            <li>
-              <Link to="/tentang-kami-login" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
-                Tentang Kami
-              </Link>
-            </li>
-          </ul>
-        </div>
-      )}
     </nav>
   );
 }

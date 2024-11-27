@@ -2,12 +2,16 @@ import React, { useRef, useState } from 'react';
 import Navbar from '../components/Navbar-Login';
 import Footer from '../components/FooterLogin';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function DeteksiPenyakit() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  const [previewImage, setPreviewImage] = useState(null);
-  const [plantName, setPlantName] = useState(''); // State for detected plant name
+  const [previewImage, setPreviewImage] = useState({
+    image: null,
+    display: null,
+  });
+  const [plantName, setPlantName] = useState('');
 
   const handleUploadClick = () => {
     if (fileInputRef.current) {
@@ -19,9 +23,12 @@ function DeteksiPenyakit() {
     const file = event.target.files[0];
     if (file && file.type.startsWith('image/')) {
       console.log('File yang diunggah:', file.name);
-      const imageUrl = URL.createObjectURL(file);
-      setPreviewImage(imageUrl);
-
+      setPreviewImage((prev) => ({
+        ...prev,
+        image: file,
+        display: URL.createObjectURL(file),
+      }));
+      console.log(previewImage);
       // Simulate plant name recognition based on file name
       recognizePlant(file.name); // Call function to recognize the plant
     } else {
@@ -43,7 +50,35 @@ function DeteksiPenyakit() {
   };
 
   const handleDeteksiClick = () => {
-    navigate('/identifikasi-ai');
+    if (!previewImage.image) {
+      alert('Please upload an image.');
+      return;
+    }
+
+    const formData = new FormData();
+
+    formData.append('file', previewImage.image);
+    formData.append('plant_name', plantName);
+    formData.append('scientific_name', 'tomat');
+    formData.append('description', 'tomat');
+    formData.append('care_instructions', 'apalah');
+    formData.append('created_by', 1);
+
+    axios
+      .post('http://localhost:3000/api/upload-tanaman', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        console.log('Response:', res);
+        // Uncomment if you want to navigate to a new page
+        navigate('/identifikasi-ai');
+      })
+      .catch((error) => {
+        console.error('Error uploading the data:', error);
+        alert('Failed to upload image. Please try again.');
+      });
   };
 
   return (
@@ -70,7 +105,7 @@ function DeteksiPenyakit() {
           {/* Image Preview */}
           {previewImage && (
             <div className="mt-4">
-              <img src={previewImage} alt="Preview" className="w-full h-auto max-h-64 object-cover rounded-lg border border-gray-300" />
+              <img src={previewImage.display} alt="Preview" className="w-full h-auto max-h-64 object-cover rounded-lg border border-gray-300" />
             </div>
           )}
 

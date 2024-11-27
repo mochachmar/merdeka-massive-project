@@ -1,69 +1,101 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import closeUpGreenLeavesNature from '../assets/close-up-green-leaves-nature.png';
 import removeRedEye from '../assets/remove-red-eye.svg';
 import closeIcon from '../assets/close-icon.svg';
+import { useAuthStore } from '../store/FetchDataWithAxios'; // Using your store
 
 const NewPassword = () => {
-  const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const { resetPassword, isLoading } = useAuthStore(); // Menggunakan store untuk reset password
+  const navigate = useNavigate();
+  const { token } = useParams();
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [showModal, setShowModal] = useState(false);
 
+  // Toggle password visibility
   const toggleNewPasswordVisibility = () => setShowNewPassword(!showNewPassword);
   const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
 
+  // Password strength validator
   const validatePasswordStrength = (password) => {
     const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
     return strongPasswordRegex.test(password);
   };
 
-  const handleResetPassword = (e) => {
-    e.preventDefault();
-
+  // Handle form submission and validation
+  const handleResetPassword = () => {
     if (newPassword !== confirmPassword) {
-      setError('Kata sandi tidak cocok.');
-    } else if (!validatePasswordStrength(newPassword)) {
-      setError('Kata sandi harus minimal 8 karakter dan mengandung huruf besar, huruf kecil, angka, dan simbol.');
-    } else {
-      setError('');
-      setShowModal(true);
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Kata sandi tidak cocok.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+      return;
     }
+
+    if (!validatePasswordStrength(newPassword)) {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Kata sandi harus minimal 8 karakter dan mengandung huruf besar, huruf kecil, angka, dan simbol.',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+      return;
+    }
+
+    // Tampilkan modal konfirmasi
+    Swal.fire({
+      title: 'Konfirmasi Perubahan',
+      text: 'Apakah Anda yakin ingin mengubah kata sandi?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, Ubah',
+      cancelButtonText: 'Batal',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        submitNewPassword();
+      }
+    });
   };
 
+  // Submit new password to the backend
   const submitNewPassword = async () => {
     try {
-      const response = await fetch('/api/reset-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ password: newPassword }),
+      await resetPassword(token, newPassword); // Sertakan token sebagai parameter
+
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Kata sandi berhasil direset!',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
       });
 
-      if (response.ok) {
-        setShowModal(false);
-        navigate('/sign-in');
-      } else {
-        console.log('Server error ignored for frontend usage.');
-        setShowModal(false);
-        navigate('/sign-in');
-      }
+      navigate('/sign-in'); // Navigasi langsung
     } catch (err) {
-      console.log('Connection error ignored for frontend usage.');
-      setShowModal(false);
-      navigate('/sign-in');
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: err.response?.data?.message || 'Terjadi kesalahan saat mereset kata sandi.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
     }
   };
-
-  const handleConfirm = () => {
-    submitNewPassword();
-  };
-
-  const handleCloseModal = () => setShowModal(false);
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center bg-neutral-50">
@@ -87,8 +119,6 @@ const NewPassword = () => {
         <div className="flex flex-col items-center w-full md:w-1/2 p-6 md:p-12 lg:p-24 space-y-6">
           <h1 className="text-4xl font-bold text-black">Buat Kata Sandi Baru</h1>
           <p className="text-center text-xl font-semibold text-[#000000cc]">Kata sandi baru Anda harus unik dari yang digunakan sebelumnya.</p>
-
-          {error && <p className="text-red-500">{error}</p>}
 
           {/* New Password Input */}
           <div className="relative w-full max-w-md">
@@ -117,27 +147,14 @@ const NewPassword = () => {
           <p className="text-center text-base font-semibold text-[#5b5b5b]">Kata sandi harus berisi huruf besar, huruf kecil, angka, dan simbol.</p>
 
           {/* Reset Password Button */}
-          <button onClick={handleResetPassword} className="w-full max-w-md h-14 bg-tanamanku-2 hover:bg-tanamanku-3 active:bg-tanamanku-4 rounded-lg font-bold text-black">
-            Atur Ulang Kata Sandi
+          <button
+            onClick={handleResetPassword}
+            className="w-full max-w-md h-14 bg-tanamanku-2 hover:bg-tanamanku-3 active:bg-tanamanku-4 rounded-lg font-bold text-black"
+            disabled={isLoading} // Disable button when loading
+          >
+            {isLoading ? 'Mengatur Ulang...' : 'Atur Ulang Kata Sandi'}
           </button>
         </div>
-
-        {/* Modal Pop-up */}
-        {showModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white w-[90%] max-w-lg p-8 rounded-lg shadow-lg text-center relative">
-              <img src={closeIcon} alt="Close" onClick={handleCloseModal} className="absolute top-4 right-4 w-6 h-6 cursor-pointer" />
-              <h2 className="text-3xl font-bold mb-4">Konfirmasi Perubahan</h2>
-              <p className="text-gray-600 mb-8">Harap konfirmasikan tindakan Anda</p>
-              <button onClick={handleConfirm} className="w-full h-12 bg-black text-white font-bold rounded-md mb-4">
-                Iya
-              </button>
-              <button onClick={handleCloseModal} className="w-full h-12 border border-black text-black font-bold rounded-md">
-                Tidak
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

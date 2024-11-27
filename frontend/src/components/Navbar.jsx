@@ -87,12 +87,12 @@ function Navbar() {
                 <div className="absolute left-0 mt-2 w-60 bg-white shadow-lg rounded-md border z-10">
                   <ul className="py-2" onClick={closeDropdown}>
                     <li>
-                      <Link to="/sign-up" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
+                      <Link to="/sign-in" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
                         Deteksi Penyakit
                       </Link>
                     </li>
                     <li>
-                      <Link to="/sign-up" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
+                      <Link to="/sign-in" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
                         History Tanaman
                       </Link>
                     </li>
@@ -109,7 +109,7 @@ function Navbar() {
 
         {/* Navbar icons for desktop */}
         <div className="hidden lg:flex items-center space-x-10">
-          <Link to="/sign-up" className="text-gray-800">
+          <Link to="/sign-in" className="text-gray-800">
             <PersonOutline color="#000000" height="24px" width="24px" />
           </Link>
           <Link to="/settings" className="text-gray-800">
@@ -120,7 +120,7 @@ function Navbar() {
 
         {/* Mobile menu icon with settings and user icons */}
         <div className="lg:hidden flex items-center space-x-4">
-          <Link to="/sign-up" className="text-gray-800">
+          <Link to="/sign-in" className="text-gray-800">
             <PersonOutline color="#000000" height="24px" width="24px" />
           </Link>
           <Link to="/settings" className="text-gray-800">
@@ -170,12 +170,12 @@ function Navbar() {
               {isPerawatanDropdownOpen && (
                 <ul className="mt-2 space-y-2 ml-4">
                   <li>
-                    <Link to="/sign-up" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
+                    <Link to="/sign-in" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
                       Deteksi Penyakit
                     </Link>
                   </li>
                   <li>
-                    <Link to="/sign-up" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
+                    <Link to="/sign-in" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
                       History Tanaman
                     </Link>
                   </li>
