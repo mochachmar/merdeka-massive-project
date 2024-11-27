@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function CardPanduan({ plants = [] }) {
+function CardPanduanLogin({ plants = [] }) {
   const navigate = useNavigate();
 
   // Fungsi untuk scroll ke atas sebelum navigasi
@@ -55,4 +55,4 @@ function CardPanduan({ plants = [] }) {
   );
 }
 
-export default CardPanduan;
+export default CardPanduanLogin;
