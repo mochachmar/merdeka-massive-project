@@ -1,0 +1,41 @@
+{
+  "name": "merdeka-massive-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "backend/index.js",
+  "types": "module",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "NODE_ENV=production node backend/index.js",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mochachmar/merdeka-massive-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "module",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mochachmar/merdeka-massive-project/issues"
+  },
+  "homepage": "https://github.com/mochachmar/merdeka-massive-project#readme",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
+    "mailtrap": "^3.4.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.11.4",
+    "zustand": "^5.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
