@@ -183,3 +183,13 @@ export const deleteGuides = (req, res) => {
     res.status(200).json({ message: 'Guide deleted successfully' });
   });
 };
+
+export const getGuidesCount = async (req, res) => {
+  try {
+    const guides = await Guides.getGuides();
+    res.json({ count: guides.length }); // Return the count of guides
+  } catch (error) {
+    console.error('Error fetching guides count:', error);
+    res.status(500).send('Server Error');
+  }
+};
