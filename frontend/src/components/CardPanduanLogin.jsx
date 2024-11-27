@@ -20,12 +20,8 @@ function CardPanduan({ plants = [] }) {
           <div key={index} className="m-4">
             <div className="w-80 h-96 bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 duration-300 border" style={{ borderColor: '#91A079', borderWidth: '1px' }}>
               {/* Menampilkan gambar thumbnail */}
-              <img
-                className="w-full h-40 object-cover"
-                src={`http://localhost:3000/images/${plant.thumbnail_image}`}
-                // src={imageUrl}
-                alt={plant.title || 'Plant'}
-              />
+              <img className="w-full h-40 object-cover" src={imageUrl} alt={plant.title || 'Plant'} />
+
               <div className="p-6 flex flex-col justify-between">
                 <h2 className="text-xl font-semibold text-black text-center">{plant.title || 'Unknown Plant'}</h2>
                 <p className="mt-2 text-gray-600 text-sm h-20 overflow-hidden">{plant.short_description || 'No care instructions available.'}</p>

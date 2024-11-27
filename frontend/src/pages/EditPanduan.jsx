@@ -36,8 +36,6 @@ function EditPanduan() {
     } catch (err) {
       console.error('Error fetching guide:', err);
       setError('Gagal memuat data panduan. Silakan coba lagi.');
-    } finally {
-      setLoading(false); // Ensure loading stops after fetch
     }
   };
 
