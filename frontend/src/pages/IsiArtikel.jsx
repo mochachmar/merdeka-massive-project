@@ -93,7 +93,7 @@ function IsiArtikel() {
                       <img src={`http://localhost:3000/uploads/${item.thumbnail_image}`} alt={item.title} className="h-12 w-20 object-cover rounded-md" />
                     </td>
                     <td className="px-4 py-2 text-center">
-                      <span className={`px-3 py-1 rounded-full text-white font-semibold ${item.status === 'published' ? 'bg-green-500' : 'bg-yellow-500'}`}>{item.status}</span>
+                      <span className={`px-3 py-1 rounded-full text-white font-semibold ${item.status === 'Published' ? 'bg-green-500' : 'bg-yellow-500'}`}>{item.status}</span>
                     </td>
                     <td className="px-4 py-2 text-center">
                       <button onClick={() => handleEditIsiArtikel(item._id)} className="bg-yellow-500 text-white px-2 py-1 rounded mr-2 hover:bg-yellow-600">

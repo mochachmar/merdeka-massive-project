@@ -122,10 +122,10 @@ function TambahPanduan() {
 
             {/* Tombol Submit */}
             <div className="flex justify-end space-x-4">
-              <button onClick={() => handleSubmit('draft')} className={`px-4 py-2 rounded-md ${status === 'draft' ? 'bg-yellow-600' : 'bg-yellow-500'} text-white`}>
+              <button onClick={() => handleSubmit('Draft')} className={`px-4 py-2 rounded-md ${status === 'Draft' ? 'bg-yellow-600' : 'bg-yellow-500'} text-white`}>
                 Draft
               </button>
-              <button onClick={() => handleSubmit('published')} className={`px-4 py-2 rounded-md ${status === 'published' ? 'bg-green-600' : 'bg-green-500'} text-white`}>
+              <button onClick={() => handleSubmit('Published')} className={`px-4 py-2 rounded-md ${status === 'Published' ? 'bg-green-600' : 'bg-green-500'} text-white`}>
                 Publikasikan
               </button>
             </div>

@@ -49,15 +49,16 @@ function AdminPanduan() {
 
     try {
       setLoading(true); // Aktifkan loading
+      navigate('/admin/card-panduan'); // Kembali ke halaman admin panduan
       console.log('Deleting guide with ID:', selectedItem.guide_id);
 
       const response = await axios.delete(`http://localhost:3000/api/guides/${selectedItem.guide_id}`);
 
+      navigate('/admin/card-panduan'); // Kembali ke halaman admin panduan
+
       if (response.status === 200) {
         // Perbarui daftar panduan setelah penghapusan
         setGuides((prevGuides) => prevGuides.filter((guide) => guide.guide_id !== selectedItem.guide_id));
-        closeModal(); // Tutup modal setelah penghapusan berhasil
-        navigate('/admin/card-panduan'); // Kembali ke halaman admin panduan
       } else {
         throw new Error('Unexpected response status: ' + response.status);
       }

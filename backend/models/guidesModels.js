@@ -2,7 +2,7 @@ import { db } from '../database/db.js';
 
 // Validasi status untuk memastikan hanya nilai yang diperbolehkan yang disimpan
 const validateStatus = (status) => {
-  const validStatuses = ['draft', 'published']; // Nilai yang valid
+  const validStatuses = ['Draft', 'Published']; // Nilai yang valid
   return validStatuses.includes(status) ? status : 'draft'; // Default ke "draft" jika tidak valid
 };
 

@@ -59,7 +59,7 @@ export const saveGuides = async (req, res) => {
     }
 
     // Default value untuk status jika tidak dikirim
-    const validStatus = ['draft', 'published'];
+    const validStatus = ['Draft', 'Published'];
     const finalStatus = validStatus.includes(status) ? status : 'draft'; // Validasi nilai status
 
     // Log final status yang akan disimpan
@@ -117,7 +117,7 @@ export const updateGuides = async (req, res) => {
         const uploadPath = path.resolve(__dirname, '../public/images', fileName);
 
         // Default value untuk status jika tidak dikirim
-        const validStatus = ['draft', 'published'];
+        const validStatus = ['Draft', 'Published'];
         const finalStatus = validStatus.includes(status) ? status : 'draft'; // Validasi nilai status
 
         if (guide.thumbnail_image && fs.existsSync(path.resolve(__dirname, '../public/images', guide.thumbnail_image))) {
