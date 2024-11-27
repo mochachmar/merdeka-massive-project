@@ -75,7 +75,7 @@ const FormOtherSettingAdmin = () => {
 
       {/* Form Content */}
       <div className="flex-1 p-8 overflow-y-auto h-full lg:ml-0">
-        <h2 className="text-2xl font-bold mb-6">Tambah Akun Admin</h2>
+        <h2 className="text-2xl font-bold mb-6">Edit Akun Admin</h2>
 
         <form className="space-y-4">
           {/* Form Fields */}
