@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import closeUpGreenLeavesNature from '../assets/close-up-green-leaves-nature.png';
 import removeRedEye from '../assets/remove-red-eye.svg';
 import { useAuthStore } from '../store/FetchDataWithAxios';
@@ -12,7 +13,6 @@ export const EmailCreate = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [localError, setLocalError] = useState('');
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -30,17 +30,64 @@ export const EmailCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLocalError('');
 
-    if (!name) return setLocalError('Nama wajib diisi.');
-    if (!email || !validateEmail(email)) return setLocalError('Format email tidak valid.');
-    if (!password || !validatePasswordStrength(password)) return setLocalError('Kata sandinya terlalu lemah. Gunakan kombinasi huruf besar, huruf kecil, angka, dan simbol.');
+    // Validasi input lokal
+    if (!name) {
+      return Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Nama wajib diisi.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+    }
+    if (!email || !validateEmail(email)) {
+      return Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Format email tidak valid.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+    }
+    if (!password || !validatePasswordStrength(password)) {
+      return Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Kata sandi terlalu lemah. Gunakan kombinasi huruf besar, huruf kecil, angka, dan simbol.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+    }
 
     try {
       await signup(email, password, name);
-      console.log('Navigasi ke /email-code');
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Akun berhasil dibuat!',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
       navigate('/email-code');
     } catch (err) {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: authError || 'Gagal membuat akun. Silakan coba lagi.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
       console.error('Error saat signup:', err);
     }
   };
@@ -69,9 +116,6 @@ export const EmailCreate = () => {
             <h1 className="text-4xl font-bold text-black">Buat Akun Anda</h1>
             <p className="mt-4 text-xl font-semibold text-[#000000cc]">Isi detail Anda untuk membuat akun baru!</p>
           </div>
-
-          {/* Error Messages */}
-          {(localError || authError) && <p className="text-red-500">{localError || authError}</p>}
 
           {/* Name Input */}
           <input className="w-full max-w-md h-14 pl-4 pr-4 py-2 border border-solid border-black rounded-md text-base" placeholder="Nama" type="text" value={name} onChange={(e) => setName(e.target.value)} />

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import closeUpGreenLeavesNature from '../assets/close-up-green-leaves-nature.png';
 import google from '../assets/Google.svg';
 import logoFbSimple from '../assets/Logo-fb-simple.svg';
-import mail from '../assets/Mail.svg';
+import Swal from 'sweetalert2';
 
 export const SignUp = () => {
   const navigate = useNavigate();
@@ -48,16 +48,40 @@ export const SignUp = () => {
             Daftar dengan Email
           </button>
 
-          {/* Button Google (non-functional) */}
-          <button className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg">
+          {/* Google and Facebook Sign-In Buttons */}
+          <button
+            className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-4"
+            onClick={() => {
+              Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'info',
+                title: 'Sign in dengan Google belum tersedia.',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+              });
+            }}
+          >
             <img className="w-5 h-5" alt="Google" src={google} />
-            <span className="text-[#565e6d] font-normal text-base">Daftar dengan Google</span>
+            <span className="text-[#565e6d] font-normal text-base">Masuk dengan Google</span>
           </button>
-
-          {/* Button Facebook (non-functional) */}
-          <button className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg">
+          <button
+            className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-2"
+            onClick={() => {
+              Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'info',
+                title: 'Sign in dengan Facebook belum tersedia.',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+              });
+            }}
+          >
             <img className="w-5 h-5" alt="Logo fb simple" src={logoFbSimple} />
-            <span className="text-[#565e6d] font-normal text-base">Daftar dengan Facebook</span>
+            <span className="text-[#565e6d] font-normal text-base">Masuk dengan Facebook</span>
           </button>
 
           {/* Login Link */}

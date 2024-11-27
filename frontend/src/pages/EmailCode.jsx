@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import { useAuthStore } from '../store/FetchDataWithAxios'; // gunakan useAuthStore dari FetchDataWithAxios.js
 import closeUpGreenLeavesNature from '../assets/close-up-green-leaves-nature.png';
-import toast from 'react-hot-toast';
 
 export const EmailCode = () => {
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ export const EmailCode = () => {
   const handleChange = (e, index) => {
     const { value } = e.target;
     const newCode = [...code];
-    newCode[index] = value.slice(-1);
+    newCode[index] = value.slice(-1); // Hanya mengambil karakter terakhir
     setCode(newCode);
 
     if (value && index < inputRefs.current.length - 1) {
@@ -44,27 +44,70 @@ export const EmailCode = () => {
   const handleVerification = async () => {
     const verificationCode = code.join('');
     if (verificationCode.length < 6) {
-      toast.error('Kode belum lengkap!');
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Kode belum lengkap!',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
       return;
     }
 
     try {
       await verifyEmail(verificationCode);
-      toast.success('Email berhasil diverifikasi');
+
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Email berhasil diverifikasi!',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+
       navigate('/sign-in');
     } catch {
-      toast.error('Gagal memverifikasi email');
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: 'Gagal memverifikasi email.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
     }
   };
 
   const handleResendCode = async () => {
     try {
       // Implementasi pengiriman ulang kode
-      toast.success('Kode verifikasi dikirim ulang');
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Kode verifikasi dikirim ulang!',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+
       setTimer(60);
       setResendEnabled(false);
     } catch (error) {
-      toast.error('Gagal mengirim ulang kode');
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: 'Gagal mengirim ulang kode.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
     }
   };
 
@@ -89,8 +132,7 @@ export const EmailCode = () => {
         {/* Form Section */}
         <div className="flex flex-col items-center w-full md:w-1/2 p-6 md:p-12 lg:p-24 space-y-6">
           <h1 className="text-4xl font-bold text-black text-center">Verifikasi Kode</h1>
-          <p className="mt-4 text-xl font-semibold text-[#000000cc] text-center">Masukkan kode verifikasi yang baru saja kami kirimkan ke alamat email Anda</p>
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          <p className="mt-4 text-xl font-semibold text-[#000000cc] text-center">Masukkan kode verifikasi yang baru saja kami kirimkan ke alamat email Anda.</p>
 
           {/* Kode Verifikasi Input */}
           <div className="flex justify-center gap-4 mt-4">

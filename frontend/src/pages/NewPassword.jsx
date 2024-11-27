@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import closeUpGreenLeavesNature from '../assets/close-up-green-leaves-nature.png';
 import removeRedEye from '../assets/remove-red-eye.svg';
 import closeIcon from '../assets/close-icon.svg';
 import { useAuthStore } from '../store/FetchDataWithAxios'; // Using your store
-import toast from 'react-hot-toast';
 
 const NewPassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const { resetPassword, isLoading, error, message } = useAuthStore(); // Menggunakan store untuk reset password
+  const { resetPassword, isLoading } = useAuthStore(); // Menggunakan store untuk reset password
   const navigate = useNavigate();
   const { token } = useParams();
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [showModal, setShowModal] = useState(false);
 
   // Toggle password visibility
   const toggleNewPasswordVisibility = () => setShowNewPassword(!showNewPassword);
@@ -28,36 +26,76 @@ const NewPassword = () => {
   };
 
   // Handle form submission and validation
-  const handleResetPassword = (e) => {
-    e.preventDefault();
-
+  const handleResetPassword = () => {
     if (newPassword !== confirmPassword) {
-      setErrorMessage('Kata sandi tidak cocok.');
-    } else if (!validatePasswordStrength(newPassword)) {
-      setErrorMessage('Kata sandi harus minimal 8 karakter dan mengandung huruf besar, huruf kecil, angka, dan simbol.');
-    } else {
-      setErrorMessage('');
-      setShowModal(true);
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Kata sandi tidak cocok.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+      return;
     }
+
+    if (!validatePasswordStrength(newPassword)) {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Kata sandi harus minimal 8 karakter dan mengandung huruf besar, huruf kecil, angka, dan simbol.',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+      return;
+    }
+
+    // Tampilkan modal konfirmasi
+    Swal.fire({
+      title: 'Konfirmasi Perubahan',
+      text: 'Apakah Anda yakin ingin mengubah kata sandi?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, Ubah',
+      cancelButtonText: 'Batal',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        submitNewPassword();
+      }
+    });
   };
 
   // Submit new password to the backend
   const submitNewPassword = async () => {
     try {
       await resetPassword(token, newPassword); // Sertakan token sebagai parameter
-      toast.success('Kata sandi berhasil direset!');
-      navigate('/sign-in'); // Navigasi langsung tanpa timeout
+
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Kata sandi berhasil direset!',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+
+      navigate('/sign-in'); // Navigasi langsung
     } catch (err) {
-      console.error('Error resetting password:', err.response?.data || err.message);
-      toast.error(err.response?.data?.message || 'Terjadi kesalahan saat mereset kata sandi');
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: err.response?.data?.message || 'Terjadi kesalahan saat mereset kata sandi.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
     }
   };
-
-  const handleConfirm = () => {
-    submitNewPassword(); // Submit the new password
-  };
-
-  const handleCloseModal = () => setShowModal(false);
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center bg-neutral-50">
@@ -81,9 +119,7 @@ const NewPassword = () => {
         <div className="flex flex-col items-center w-full md:w-1/2 p-6 md:p-12 lg:p-24 space-y-6">
           <h1 className="text-4xl font-bold text-black">Buat Kata Sandi Baru</h1>
           <p className="text-center text-xl font-semibold text-[#000000cc]">Kata sandi baru Anda harus unik dari yang digunakan sebelumnya.</p>
-          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-          {error && <p className="text-red-500">{error}</p>} {/* Display error from store */}
-          {message && <p className="text-green-500">{message}</p>} {/* Display success message */}
+
           {/* New Password Input */}
           <div className="relative w-full max-w-md">
             <input
@@ -95,6 +131,7 @@ const NewPassword = () => {
             />
             <img src={removeRedEye} alt="Toggle password visibility" onClick={toggleNewPasswordVisibility} className="absolute top-1/2 right-3 transform -translate-y-1/2 w-6 h-6 cursor-pointer" />
           </div>
+
           {/* Confirm Password Input */}
           <div className="relative w-full max-w-md">
             <input
@@ -106,7 +143,9 @@ const NewPassword = () => {
             />
             <img src={removeRedEye} alt="Toggle password visibility" onClick={toggleConfirmPasswordVisibility} className="absolute top-1/2 right-3 transform -translate-y-1/2 w-6 h-6 cursor-pointer" />
           </div>
+
           <p className="text-center text-base font-semibold text-[#5b5b5b]">Kata sandi harus berisi huruf besar, huruf kecil, angka, dan simbol.</p>
+
           {/* Reset Password Button */}
           <button
             onClick={handleResetPassword}
@@ -116,23 +155,6 @@ const NewPassword = () => {
             {isLoading ? 'Mengatur Ulang...' : 'Atur Ulang Kata Sandi'}
           </button>
         </div>
-
-        {/* Modal Pop-up */}
-        {showModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white w-[90%] max-w-lg p-8 rounded-lg shadow-lg text-center relative">
-              <img src={closeIcon} alt="Close" onClick={handleCloseModal} className="absolute top-4 right-4 w-6 h-6 cursor-pointer" />
-              <h2 className="text-3xl font-bold mb-4">Konfirmasi Perubahan</h2>
-              <p className="text-gray-600 mb-8">Harap konfirmasikan tindakan Anda</p>
-              <button onClick={handleConfirm} className="w-full h-12 bg-black text-white font-bold rounded-md mb-4">
-                Iya
-              </button>
-              <button onClick={handleCloseModal} className="w-full h-12 border border-black text-black font-bold rounded-md">
-                Tidak
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

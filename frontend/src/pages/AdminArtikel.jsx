@@ -108,7 +108,7 @@ function AdminArtikel() {
                         <img src={`http://localhost:3000/uploads/${item.thumbnail_image || 'default-image.jpg'}`} alt={item.title} className="h-12 w-20 object-cover rounded-md" />
                       </td>
                       <td className="px-4 py-2 text-center">
-                        <span className={`px-3 py-1 rounded-full text-white font-semibold ${item.status === 'published' ? 'bg-green-500' : 'bg-yellow-500'}`}>{item.status === 'published' ? 'Publik' : 'Draft'}</span>
+                        <span className={`px-3 py-1 rounded-full text-white font-semibold ${item.status === 'Published' ? 'bg-green-500' : 'bg-yellow-500'}`}>{item.status === 'Published' ? 'Publik' : 'Draft'}</span>
                       </td>
                       <td className="px-4 py-2 text-center">
                         <button onClick={() => handleEditArtikel(item.article_id)} className="bg-yellow-500 text-white px-2 py-1 rounded mr-2 hover:bg-yellow-600">

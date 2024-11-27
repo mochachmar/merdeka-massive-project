@@ -1,4 +1,5 @@
 import { Navigate, Routes, Route } from 'react-router-dom';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import './App.css';
 import SignUp from './pages/SignUp';
 import EmailCreate from './pages/EmailCreate';
@@ -27,7 +28,6 @@ import EditIsiArtikel from './pages/EditIsiArtikel';
 import AppearanceSettings from './pages/AppearanceSettings';
 import OtherSettings from './pages/OtherSettings';
 import EditPanduan from './pages/EditPanduan';
-import EditIsiPanduan from './pages/EditIsiPanduan';
 import PersonalSettingAdmin from './pages/PersonalSettingAdmin';
 import PasswordSettingAdmin from './pages/PasswordSettingAdmin';
 import OtherSettingAdmin from './pages/OtherSettingAdmin';
@@ -45,28 +45,27 @@ import Panduan from './pages/Panduan';
 import PanduanLogin from './pages/Panduan-Login';
 import Tips from './pages/Tips';
 import TipsLogin from './pages/Tips-Login';
-import { Toaster } from 'react-hot-toast';
 import { useAuthStore } from './store/FetchDataWithAxios';
 
+// Modifikasi ProtectedRoute
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'warning',
+      title: 'Harus login dulu! Anda akan dialihkan!',
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+    });
+    return <Navigate to="/sign-in" replace />;
   }
 
   if (!user.isVerified) {
     return <Navigate to="/verify-email" replace />;
-  }
-
-  return children;
-};
-
-const RedirectAuthenticatedUser = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
-
-  if (isAuthenticated && user.isVerified) {
-    return <Navigate to="/" replace />;
   }
 
   return children;
@@ -79,7 +78,6 @@ function App() {
       <Route path="/create-with-email" element={<EmailCreate />} />
       <Route path="/email-code" element={<EmailCode />} />
       <Route path="/sign-in" element={<SignIn />} />
-      <Route path="/sign-in-admin" element={<SignInAdmin />} />
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/new-password" element={<NewPassword />} />
@@ -152,6 +150,7 @@ function App() {
       />
 
       {/* Route Admin */}
+      <Route path="/sign-in-admin" element={<SignInAdmin />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/forgot-password-admin" element={<ForgotPasswordAdmin />} />
       <Route path="/new-password-admin" element={<NewPasswordAdmin />} />
@@ -171,8 +170,7 @@ function App() {
       <Route path="/admin/card-panduan" element={<AdminPanduan />} />
       <Route path="/admin/card-panduan/tambah-panduan" element={<TambahPanduan />} />
       <Route path="/admin/isi-panduan" element={<IsiPanduan />} />
-      <Route path="/admin/card-panduan/edit-panduan" element={<EditPanduan />} />
-      <Route path="/admin/isi-panduan/edit-isi-panduan" element={<EditIsiPanduan />} />
+      <Route path="/admin/card-panduan/edit-panduan/:id" element={<EditPanduan />} />
 
       {/* Route Tentang Kami */}
       <Route path="/tentang-kami" element={<Tentangkami />} />
@@ -189,25 +187,25 @@ function App() {
       <Route
         path="/deteksi-penyakit"
         element={
-          <ProtectedRoute>
-            <DeteksiPenyakit />
-          </ProtectedRoute>
+          // <ProtectedRoute>
+          <DeteksiPenyakit />
+          // </ProtectedRoute>
         }
       />
       <Route
         path="/identifikasi-ai"
         element={
-          <ProtectedRoute>
-            <IdentifikasiAi />
-          </ProtectedRoute>
+          // <ProtectedRoute>
+          <IdentifikasiAi />
+          // </ProtectedRoute>
         }
       />
       <Route
         path="/histori-tanaman"
         element={
-          <ProtectedRoute>
-            <HistoryDeteksi />
-          </ProtectedRoute>
+          // <ProtectedRoute>
+          <HistoryDeteksi />
+          // </ProtectedRoute>
         }
       />
       <Route path="/panduan" element={<Panduan />} />
@@ -229,7 +227,7 @@ function App() {
         }
       />
 
-      <Route path="*" element={<Navigate to="/sign-in" replace />} />
+      {/* <Route path="*" element={<Navigate to="/sign-in" replace />} /> */}
     </Routes>
   );
 }

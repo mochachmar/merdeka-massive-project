@@ -57,11 +57,12 @@ function DeteksiPenyakit() {
 
     const formData = new FormData();
 
-    formData.append('file', previewImage.image); // Add image file
-    formData.append('plant_name', plantName); // Add recognized plant name
-    formData.append('disease_name', 'Penyakit Tanaman'); // Add disease name (example)
-    formData.append('health_status', 'healthy'); // Example health status
-    formData.append('user_id', 1); // Replace with dynamic user ID if needed
+    formData.append('file', previewImage.image);
+    formData.append('plant_name', plantName);
+    formData.append('scientific_name', 'tomat');
+    formData.append('description', 'tomat');
+    formData.append('care_instructions', 'apalah');
+    formData.append('created_by', 1);
 
     axios
       .post('http://localhost:3000/api/upload-tanaman', formData, {

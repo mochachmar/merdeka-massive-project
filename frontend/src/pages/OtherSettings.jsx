@@ -66,8 +66,8 @@ const OtherSettings = () => {
         <div className="mb-4">
           <label className="block text-gray-600 mb-1">Bahasa</label>
           <select className="border border-gray-300 rounded-md p-2 w-40">
-            <option>English</option>
             <option>Bahasa Indonesia</option>
+            <option>English</option>
             {/* Tambahkan opsi bahasa lain jika diperlukan */}
           </select>
         </div>
