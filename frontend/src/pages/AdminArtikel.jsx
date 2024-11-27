@@ -112,10 +112,10 @@ function AdminArtikel() {
                       </td>
                       <td className="px-4 py-2 text-center">
                         <button onClick={() => handleEditArtikel(item.article_id)} className="bg-yellow-500 text-white px-2 py-1 rounded mr-2 hover:bg-yellow-600">
-                          ✏️
+                          Edit
                         </button>
                         <button onClick={() => openModal(item)} className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
-                          🗑️
+                          Hapus
                         </button>
                       </td>
                     </tr>

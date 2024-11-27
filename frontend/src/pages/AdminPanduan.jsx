@@ -81,8 +81,8 @@ function AdminPanduan() {
             <h1 className="text-2xl font-semibold text-gray-800">Daftar Panduan</h1>
             <div className="flex space-x-4">
               {/* Sync Button */}
-              <button onClick={handleSync} className="flex items-center bg-yellow-500 text-white px-5 py-2 rounded-lg hover:bg-yellow-600">
-                <i className="fas fa-sync-alt mr-2"></i> {/* Font Awesome refresh icon */}↻ Sync
+              <button onClick={handleSync} className="flex items-center bg-yellow-500 text-white px-3 py-2 rounded-lg hover:bg-yellow-600">
+                <i className="fas fa-sync-alt mr-2"></i> {/* Font Awesome refresh icon */}Sync
               </button>
 
               {/* Add Guide Button */}
@@ -121,11 +121,11 @@ function AdminPanduan() {
                         }}
                         className="bg-yellow-500 text-white px-2 py-1 rounded mr-2 hover:bg-yellow-600"
                       >
-                        ✏️
+                        Edit
                       </button>
 
                       <button onClick={() => openModal(item)} className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
-                        🗑️
+                        Hapus
                       </button>
                     </td>
                   </tr>
