@@ -148,7 +148,6 @@ const IdentifikasiAI = () => {
         </div>
       </div>
 
-      {/* Footer stays at the bottom */}
       <Footer className="mt-auto" />
     </div>
   );
