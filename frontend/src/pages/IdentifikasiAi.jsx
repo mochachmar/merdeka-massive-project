@@ -41,14 +41,22 @@ const IdentifikasiAI = () => {
 
       setClassName(prediction.class_name);
       setSolution(prediction.solution);
+
+      // Kirim data hasil prediksi ke backend untuk disimpan
+      const plantId = 1; // Anda bisa mendapatkan plantId berdasarkan data pengguna atau sebelumnya
+      const userId = 1; // Sama seperti plantId, ini bisa disesuaikan
+      await axios.post(
+        "http://localhost:3000/api/save-detection", // Endpoint untuk menyimpan deteksi
+        {
+          plantId,
+          userId,
+          className: prediction.class_name,
+          solution: prediction.solution,
+        }
+      );
+      console.log("Hasil deteksi berhasil disimpan!");
     } catch (error) {
-      if (error.response) {
-        console.error("API Error Response:", error.response.data);
-      } else if (error.request) {
-        console.error("No Response from API:", error.request);
-      } else {
-        console.error("Error:", error.message);
-      }
+      console.error("Terjadi kesalahan:", error);
       setClassName("Gagal mengambil data.");
       setSolution("Gagal mengambil data. Coba lagi nanti.");
     } finally {
