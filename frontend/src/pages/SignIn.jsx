@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/FetchDataWithAxios'; // Menggunakan authStore
 import Swal from 'sweetalert2'; // Import SweetAlert2
@@ -13,6 +13,10 @@ export const SignIn = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const [loginAttempts, setLoginAttempts] = useState(0); // Menyimpan jumlah percobaan login
+  const [countdown, setCountdown] = useState(0); // Menyimpan waktu hitungan mundur
+  const [buttonEnabled, setButtonEnabled] = useState(true); // Mengatur status tombol aktif/non-aktif
+
   const { login, isLoading } = useAuthStore(); // Ambil fungsi dan state dari authStore
 
   const togglePasswordVisibility = () => {
@@ -21,22 +25,35 @@ export const SignIn = () => {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
+
+    if (countdown > 0) {
+      return; // Hentikan fungsi jika countdown masih ada
+    }
+
     try {
       await login(email, password); // Gunakan login dari authStore
 
       // Menampilkan toast sukses
       Swal.fire({
-        toast: true, // Mode toast
-        position: 'top-end', // Posisi kanan atas
+        toast: true,
+        position: 'top-end',
         icon: 'success',
         title: 'Berhasil masuk! Anda akan dialihkan!',
-        showConfirmButton: false, // Tidak ada tombol OK
-        timer: 2000, // Tampilkan selama 1,5 detik
-        timerProgressBar: true, // Progress bar
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
       });
 
-      navigate('/splash-login'); // Navigasi ke halaman berikutnya
+      navigate('/splash-login');
     } catch (err) {
+      setLoginAttempts((prev) => prev + 1); // Menambah jumlah percobaan login
+
+      // Jika percobaan login melebihi batas, aktifkan countdown
+      if (loginAttempts >= 2) {
+        setButtonEnabled(false); // Nonaktifkan tombol
+        setCountdown((prev) => prev + 30); // Tambah 30 detik untuk setiap percobaan gagal
+      }
+
       // Menampilkan toast error
       Swal.fire({
         toast: true,
@@ -50,6 +67,20 @@ export const SignIn = () => {
     }
   };
 
+  // Menangani countdown setiap detik
+  useEffect(() => {
+    let timer;
+    if (countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    } else if (countdown === 0 && loginAttempts >= 3) {
+      setButtonEnabled(true); // Mengaktifkan tombol kembali setelah countdown selesai
+    }
+
+    return () => clearInterval(timer); // Hapus interval jika komponen unmount
+  }, [countdown, loginAttempts]);
+
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center bg-neutral-50">
       {/* Background Image Fullscreen */}
@@ -57,7 +88,7 @@ export const SignIn = () => {
         className="absolute inset-0 w-full h-full bg-cover bg-center z-0"
         style={{
           backgroundImage: `url(${closeUpGreenLeavesNature})`,
-          filter: 'brightness(0.85)',
+          filter: 'brightness(0.85)', // Menambahkan filter untuk gelap pada background
         }}
       ></div>
 
@@ -112,11 +143,14 @@ export const SignIn = () => {
           <button
             type="submit"
             onClick={handleSignIn}
-            className={`w-full max-w-md h-14 ${isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-tanamanku-2 hover:bg-tanamanku-3 active:bg-tanamanku-4'} rounded-lg font-bold text-black mt-4`}
-            disabled={isLoading}
+            className={`w-full max-w-md h-14 ${buttonEnabled ? 'bg-tanamanku-2 hover:bg-tanamanku-3 active:bg-tanamanku-4' : 'bg-gray-300 cursor-not-allowed'} rounded-lg font-bold text-black mt-4`}
+            disabled={!buttonEnabled || isLoading}
           >
             {isLoading ? 'Memuat...' : 'Masuk'}
           </button>
+
+          {/* Countdown Timer */}
+          {countdown > 0 && <p className="mt-2 text-red-500">Coba lagi dalam {countdown} detik...</p>}
 
           {/* Google and Facebook Sign-In Buttons */}
           <button
@@ -136,6 +170,7 @@ export const SignIn = () => {
             <img className="w-5 h-5" alt="Google" src={google} />
             <span className="text-[#565e6d] font-normal text-base">Masuk dengan Google</span>
           </button>
+
           <button
             className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-2"
             onClick={() => {

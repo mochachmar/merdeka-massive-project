@@ -87,12 +87,12 @@ function Navbar() {
                 <div className="absolute left-0 mt-2 w-60 bg-white shadow-lg rounded-md border z-10">
                   <ul className="py-2" onClick={closeDropdown}>
                     <li>
-                      <Link to="/sign-in" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
+                      <Link to="/error-page-401" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
                         Deteksi Penyakit
                       </Link>
                     </li>
                     <li>
-                      <Link to="/sign-in" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
+                      <Link to="/error-page-401" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
                         History Tanaman
                       </Link>
                     </li>
@@ -170,12 +170,12 @@ function Navbar() {
               {isPerawatanDropdownOpen && (
                 <ul className="mt-2 space-y-2 ml-4">
                   <li>
-                    <Link to="/sign-in" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
+                    <Link to="/error-page-401" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
                       Deteksi Penyakit
                     </Link>
                   </li>
                   <li>
-                    <Link to="/sign-in" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
+                    <Link to="/error-page-401" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded" onClick={closeDropdown}>
                       History Tanaman
                     </Link>
                   </li>

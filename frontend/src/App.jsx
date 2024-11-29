@@ -1,5 +1,13 @@
 import { Navigate, Routes, Route } from 'react-router-dom';
 import './App.css';
+import ErrorPage400 from './pages/ErrorPage400';
+import ErrorPage401 from './pages/ErrorPage401';
+import ErrorPage403 from './pages/ErrorPage403';
+import ErrorPage404 from './pages/ErrorPage404';
+import ErrorPage405 from './pages/ErrorPage405';
+import ErrorPage500 from './pages/ErrorPage500';
+import ErrorPage502 from './pages/ErrorPage502';
+import ErrorPage503 from './pages/ErrorPage503';
 import SignUp from './pages/SignUp';
 import EmailCreate from './pages/EmailCreate';
 import EmailCode from './pages/EmailCode';
@@ -53,7 +61,7 @@ const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
 
   if (!isAuthenticated) {
-    return <Navigate to="/sign-in" replace />;
+    return <Navigate to="/error-page-401" replace />;
   }
 
   if (!user.isVerified) {
@@ -77,6 +85,14 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<SplashScreen />} />
+      <Route path="/error-page-400" element={<ErrorPage400 />} />
+      <Route path="/error-page-401" element={<ErrorPage401 />} />
+      <Route path="/error-page-403" element={<ErrorPage403 />} />
+      <Route path="/error-page-404" element={<ErrorPage404 />} />
+      <Route path="/error-page-405" element={<ErrorPage405 />} />
+      <Route path="/error-page-500" element={<ErrorPage500 />} />
+      <Route path="/error-page-502" element={<ErrorPage502 />} />
+      <Route path="/error-page-503" element={<ErrorPage503 />} />
       <Route path="/create-with-email" element={<EmailCreate />} />
       <Route path="/email-code" element={<EmailCode />} />
       <Route path="/sign-in" element={<SignIn />} />
@@ -231,7 +247,7 @@ function App() {
         }
       />
 
-      <Route path="*" element={<Navigate to="/sign-in" replace />} />
+      <Route path="*" element={<Navigate to="/error-page-404" replace />} />
     </Routes>
   );
 }
