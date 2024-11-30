@@ -126,7 +126,7 @@ export const ErrorPage503 = () => {
   // Hitung mundur menggunakan useEffect
   useEffect(() => {
     if (countdown === 0) {
-      navigate('/beranda'); // Arahkan ke halaman /beranda setelah countdown selesai
+      navigate('/'); // Arahkan ke halaman /beranda setelah countdown selesai
       return;
     }
 
@@ -161,8 +161,8 @@ export const ErrorPage503 = () => {
         <div className="flex flex-col items-center w-full md:w-1/2 p-6 md:p-12 lg:p-24 space-y-6">
           <div className="text-center">
             <h1 className="text-5xl font-bold text-red-600">503 - Layanan tidak tersedia</h1>
-            <p className="mt-4 text-xl font-semibold text-[#000000cc]">Layanan saat ini belum launching.</p>
-            {countdown > 0 && <p className="mt-4 text-xl font-semibold text-[#000000cc]">Coba lagi dalam {formatTime(countdown)}</p>}
+            <p className="mt-4 text-xl font-semibold text-[#000000cc]">Layanan saat ini belum tersedia.</p>
+            {countdown > 0 && <p className="mt-4 text-xl font-semibold text-[#000000cc]">Coba lagi dalam {formatTime(countdown)}...</p>}
           </div>
         </div>
       </div>
