@@ -46,11 +46,13 @@ export const useAuthStore = create((set) => ({
     try {
       await axios.post(`${API_URL}/splash-login`);
       set({ user: null, isAuthenticated: false, error: null, isLoading: false });
+      await checkAuth(); // Tambahkan pengecekan ulang autentikasi
     } catch (error) {
       set({ error: 'Error logging out', isLoading: false });
       throw error;
     }
   },
+
   verifyEmail: async (code) => {
     set({ isLoading: true, error: null });
     try {

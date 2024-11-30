@@ -1,5 +1,6 @@
 import { Navigate, Routes, Route } from 'react-router-dom';
 import './App.css';
+import PropTypes from 'prop-types';
 import ErrorPage400 from './pages/ErrorPage400';
 import ErrorPage401 from './pages/ErrorPage401';
 import ErrorPage403 from './pages/ErrorPage403';
@@ -54,7 +55,6 @@ import Panduan from './pages/Panduan';
 import PanduanLogin from './pages/Panduan-Login';
 import Tips from './pages/Tips';
 import TipsLogin from './pages/Tips-Login';
-import { Toaster } from 'react-hot-toast';
 import { useAuthStore } from './store/FetchDataWithAxios';
 
 const ProtectedRoute = ({ children }) => {
@@ -64,21 +64,29 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/error-page-401" replace />;
   }
 
-  if (!user.isVerified) {
+  if (!user?.isVerified) {
     return <Navigate to="/verify-email" replace />;
   }
 
   return children;
 };
 
+ProtectedRoute.propTypes = {
+  children: PropTypes.node.isRequired, // Validasi children harus ada
+};
+
 const RedirectAuthenticatedUser = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
 
-  if (isAuthenticated && user.isVerified) {
-    return <Navigate to="/" replace />;
+  if (isAuthenticated && user?.isVerified) {
+    return <Navigate to="/splash-login" replace />;
   }
 
   return children;
+};
+
+RedirectAuthenticatedUser.propTypes = {
+  children: PropTypes.node.isRequired, // Validasi children harus ada
 };
 
 function App() {
@@ -93,13 +101,62 @@ function App() {
       <Route path="/error-page-500" element={<ErrorPage500 />} />
       <Route path="/error-page-502" element={<ErrorPage502 />} />
       <Route path="/error-page-503" element={<ErrorPage503 />} />
-      <Route path="/create-with-email" element={<EmailCreate />} />
-      <Route path="/email-code" element={<EmailCode />} />
-      <Route path="/sign-in" element={<SignIn />} />
-      <Route path="/sign-in-admin" element={<SignInAdmin />} />
-      <Route path="/sign-up" element={<SignUp />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/new-password" element={<NewPassword />} />
+      <Route
+        path="/create-with-email"
+        element={
+          <RedirectAuthenticatedUser>
+            <EmailCreate />
+          </RedirectAuthenticatedUser>
+        }
+      />
+      <Route
+        path="/email-code"
+        element={
+          <RedirectAuthenticatedUser>
+            <EmailCode />
+          </RedirectAuthenticatedUser>
+        }
+      />
+      <Route
+        path="/sign-in"
+        element={
+          <RedirectAuthenticatedUser>
+            <SignIn />
+          </RedirectAuthenticatedUser>
+        }
+      />
+      <Route
+        path="/sign-in-admin"
+        element={
+          <RedirectAuthenticatedUser>
+            <SignInAdmin />
+          </RedirectAuthenticatedUser>
+        }
+      />
+      <Route
+        path="/sign-up"
+        element={
+          <RedirectAuthenticatedUser>
+            <SignUp />
+          </RedirectAuthenticatedUser>
+        }
+      />
+      <Route
+        path="/forgot-password"
+        element={
+          <RedirectAuthenticatedUser>
+            <ForgotPassword />
+          </RedirectAuthenticatedUser>
+        }
+      />
+      <Route
+        path="/new-password"
+        element={
+          <RedirectAuthenticatedUser>
+            <NewPassword />
+          </RedirectAuthenticatedUser>
+        }
+      />
       <Route path="/beranda" element={<Beranda />} />
       <Route path="/artikel-penyakit-tanaman" element={<ArticlesPage />} />
       <Route
