@@ -99,3 +99,4 @@ pip-delete-this-directory.txt
 
 # Docker volumes
 .dockerignore
+frontend/node_modules.zip
