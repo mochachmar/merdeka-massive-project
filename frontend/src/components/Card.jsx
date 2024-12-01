@@ -11,7 +11,7 @@ function Card({ article }) {
 
   return (
     <>
-      <Link className="w-[346px] rounded-lg overflow-hidden shadow-lg border-2" key={article.id} to={`/article-login/${article.article_id}`}>
+      <Link className="w-[346px] rounded-lg overflow-hidden shadow-lg border-2" key={article.id} to={`/article/${article.article_id}`}>
         <img src={`http://localhost:3000/uploads/${article.thumbnail_image}`} alt={article.title} className="w-full h-40 object-cover" />
         <div className="p-4 bg-white">
           <p className="text-gray-600 text-sm">{formattedDate || 'Tanggal tidak tersedia'}</p>
