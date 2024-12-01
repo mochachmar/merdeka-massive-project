@@ -21,168 +21,132 @@ export const getGuides = async (req, res) => {
 // Mengambil data guide berdasarkan guide_id
 export const getGuidesById = async (req, res) => {
   try {
-    Guides.getGuideById(req.params.id, (err, guide) => {
-      if (err) {
-        console.error('Error fetching guide:', err);
-        return res.status(500).send('Server Error');
-      }
+    const guideId = req.params.id;
+    const guide = await Guides.getGuideById(guideId); // Panggil fungsi di model
 
-      if (guide) {
-        res.json(guide);
-      } else {
-        res.status(404).send('Guide not found');
-      }
-    });
+    if (!guide) {
+      return res.status(404).send('Guide not found');
+    }
+
+    res.json(guide); // Kirimkan data panduan
   } catch (error) {
-    console.error('Error in getGuidesById:', error);
+    console.error('Error in getGuidesById:', error.message);
     res.status(500).send('Server Error');
   }
 };
 
+
 // Menyimpan data guide baru
 export const saveGuides = async (req, res) => {
   try {
-    // Mengambil input dari form
+    console.log('Request Body:', req.body);
+    console.log('Request File:', req.file);
+
     const { title, short_description, status } = req.body;
+    const thumbnail_image = req.file ? req.file.originalname : null;
 
-    // Log untuk debugging status
-    console.log('Status yang diterima dari request:', status);
-
-    // Menangani file thumbnail image jika ada
-    const thumbnail_image = req.files?.thumbnail_image ? req.files.thumbnail_image[0].originalname : null;
-
-    // Validasi input wajib (title, short_description, dan thumbnail_image)
     if (!title || !short_description || !thumbnail_image) {
       return res.status(400).json({
         msg: 'Title, short description, and thumbnail image are required',
       });
     }
 
-    // Default value untuk status jika tidak dikirim
     const validStatus = ['Draft', 'Published'];
-    const finalStatus = validStatus.includes(status) ? status : 'draft'; // Validasi nilai status
+    const finalStatus = validStatus.includes(status) ? status : 'Draft';
 
-    // Log final status yang akan disimpan
-    console.log('Status yang akan disimpan ke database:', finalStatus);
-
-    // Menyusun data yang akan disimpan
     const guideData = {
       title,
       short_description,
       thumbnail_image,
       long_description: null,
       tips_and_tricks: null,
-      status: finalStatus, // Status valid
+      status: finalStatus,
     };
 
-    // Menyimpan data guide ke database
-    Guides.createGuide(guideData, (err) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send('Server Error');
-      }
-      res.status(201).json({ msg: 'Guide Created Successfully' });
-    });
+    await Guides.createGuide(guideData); // Simpan data ke database
+    res.status(201).json({ msg: 'Guide Created Successfully' });
   } catch (error) {
-    console.error(error);
+    console.error('Error in saveGuides:', error.message);
     res.status(500).send('Server Error');
   }
 };
 
+
+// Update guide
 // Update guide
 export const updateGuides = async (req, res) => {
   try {
     const guideId = req.params.id;
     const { title, short_description, long_description, tips_and_tricks, status } = req.body;
 
-    Guides.getGuideById(guideId, async (err, guide) => {
-      if (err) {
-        console.error('Error fetching guide for update:', err);
-        return res.status(500).send('Server Error');
+    // Fetch guide data
+    const guide = await Guides.getGuideById(guideId);
+    if (!guide) {
+      return res.status(404).json({ msg: 'Guide not found' });
+    }
+
+    let fileName = guide.thumbnail_image;
+
+    // Handle file upload
+    if (req.file) {
+      fileName = req.file.filename;
+      const uploadPath = path.resolve(__dirname, '../public/images', fileName);
+
+      // Delete old image if exists
+      if (guide.thumbnail_image && fs.existsSync(path.resolve(__dirname, '../public/images', guide.thumbnail_image))) {
+        fs.unlinkSync(path.resolve(__dirname, '../public/images', guide.thumbnail_image));
       }
 
-      if (!guide) {
-        return res.status(404).json({ msg: 'Guide not found' });
+      try {
+        await fs.promises.rename(req.file.path, uploadPath);
+      } catch (err) {
+        console.error('Error moving uploaded image:', err);
+        return res.status(500).json({ msg: 'Error processing image upload' });
       }
+    }
 
-      let fileName = guide.thumbnail_image;
+    // Update data
+    const updateData = {
+      title: title || guide.title,
+      short_description: short_description || guide.short_description,
+      long_description: long_description || guide.long_description,
+      tips_and_tricks: tips_and_tricks || guide.tips_and_tricks,
+      status: status || guide.status,
+      thumbnail_image: fileName,
+    };
 
-      if (req.files?.thumbnail_image) {
-        const file = req.files.thumbnail_image[0];
-        const ext = path.extname(file.originalname).toLowerCase();
-        const baseName = path.basename(file.originalname, ext);
-        const sanitizedBaseName = baseName.replace(/[^a-zA-Z0-9]/g, '_');
-
-        fileName = `${sanitizedBaseName}${ext}`;
-        const uploadPath = path.resolve(__dirname, '../public/images', fileName);
-
-        // Default value untuk status jika tidak dikirim
-        const validStatus = ['Draft', 'Published'];
-        const finalStatus = validStatus.includes(status) ? status : 'draft'; // Validasi nilai status
-
-        if (guide.thumbnail_image && fs.existsSync(path.resolve(__dirname, '../public/images', guide.thumbnail_image))) {
-          fs.unlinkSync(path.resolve(__dirname, '../public/images', guide.thumbnail_image));
-        }
-
-        try {
-          await fs.promises.rename(file.path, uploadPath);
-          console.log('Thumbnail image successfully moved!');
-        } catch (err) {
-          console.error('Error moving thumbnail image:', err);
-          return res.status(500).json({ msg: 'Error moving thumbnail image' });
-        }
-      }
-
-      const updateData = {
-        title: title || '', // Default ke string kosong jika undefined
-        short_description: short_description || '', // Default ke string kosong jika undefined
-        long_description: long_description || null, // Default ke null jika undefined
-        tips_and_tricks: tips_and_tricks || null, // Default ke null jika undefined
-        status: status || '', // Default ke "draft" jika undefined
-        thumbnail_image: fileName, // Gunakan null jika tidak ada gambar
-      };
-
-      Guides.updateGuide(guideId, updateData, (err, result) => {
-        if (err) {
-          console.error('Error updating guide:', err);
-          return res.status(500).send('Error updating guide');
-        }
-
-        if (result.affectedRows === 0) {
-          return res.status(400).json({
-            msg: 'No rows affected, guide may not have been updated.',
-          });
-        }
-
-        res.status(200).json({ msg: 'Guide updated successfully' });
-      });
-    });
+    const result = await Guides.updateGuide(guideId, updateData);
+    if (result.affectedRows > 0) {
+      res.status(200).json({ msg: 'Guide updated successfully' });
+    } else {
+      res.status(400).json({ msg: 'No changes made' });
+    }
   } catch (error) {
-    console.error('Error in updateGuides:', error);
-    return res.status(500).json({ msg: 'Error updating guide' });
+    console.error('Error in updateGuides:', error.message);
+    res.status(500).json({ msg: 'Server Error' });
   }
 };
 
+
+
+
 // Menghapus guide
-export const deleteGuides = (req, res) => {
-  const guideId = req.params.id; // Ambil ID dari parameter URL
+export const deleteGuides = async (req, res) => {
+  try {
+    const guideId = req.params.id;
 
-  const query = 'DELETE FROM guides WHERE guide_id = ?';
-
-  db.execute(query, [guideId], (err, result) => {
-    if (err) {
-      console.error('Error deleting guide:', err);
-      return res.status(500).json({ message: 'Failed to delete guide' });
-    }
-
+    const result = await db.execute('DELETE FROM guides WHERE guide_id = ?', [guideId]);
     if (result.affectedRows === 0) {
-      // Jika tidak ada baris yang dihapus
       return res.status(404).json({ message: 'Guide not found' });
     }
 
     res.status(200).json({ message: 'Guide deleted successfully' });
-  });
+  } catch (err) {
+    console.error('Error deleting guide:', err);
+    res.status(500).json({ message: 'Failed to delete guide' });
+  }
 };
+
 
 export const getGuidesCount = async (req, res) => {
   try {

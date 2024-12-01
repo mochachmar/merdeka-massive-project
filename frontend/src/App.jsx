@@ -30,7 +30,6 @@ import PasswordSetting from './pages/PasswordSetting';
 import TambahArtikel from './pages/TambahArtikel';
 import TambahPanduan from './pages/TambahPanduan';
 import IsiArtikel from './pages/IsiArtikel';
-import IsiPanduan from './pages/IsiPanduan';
 import EditArtikel from './pages/EditArtikel';
 import EditIsiArtikel from './pages/EditIsiArtikel';
 import AppearanceSettings from './pages/AppearanceSettings';
@@ -245,7 +244,6 @@ function App() {
       {/* Route Panduan */}
       <Route path="/admin/card-panduan" element={<AdminPanduan />} />
       <Route path="/admin/card-panduan/tambah-panduan" element={<TambahPanduan />} />
-      <Route path="/admin/isi-panduan" element={<IsiPanduan />} />
       <Route path="/admin/card-panduan/edit-panduan/:id" element={<EditPanduan />} />
       <Route path="/admin/isi-panduan/edit-isi-panduan:id" element={<EditIsiPanduan />} />
 
@@ -294,9 +292,9 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route path="/tips" element={<Tips />} />
+      <Route path="/tips/:id" element={<Tips />} />
       <Route
-        path="/tips-login"
+        path="/tips-login/:id"
         element={
           <ProtectedRoute>
             <TipsLogin />
@@ -304,7 +302,7 @@ function App() {
         }
       />
 
-      <Route path="*" element={<Navigate to="/error-page-404" replace />} />
+      {/* <Route path="*" element={<Navigate to="/error-page-404" replace />} /> */}
     </Routes>
   );
 }

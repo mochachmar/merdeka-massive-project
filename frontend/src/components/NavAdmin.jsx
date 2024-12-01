@@ -64,11 +64,6 @@ export default function NavbarAdmin({ children }) {
                     Card Panduan
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink to="/admin/isi-panduan" className={({ isActive }) => `block px-4 py-2 rounded ${isActive ? 'bg-[#C5D9A4] text-gray-900 font-semibold' : 'text-gray-800 hover:bg-[#C5D9A4]'}`} onClick={() => setIsOpen(false)}>
-                    Isi Panduan
-                  </NavLink>
-                </li>
               </ul>
             )}
           </li>

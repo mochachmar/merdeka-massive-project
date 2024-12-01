@@ -1,9 +1,9 @@
 import { db } from '../database/db.js';
 
-// Validasi status untuk memastikan hanya nilai yang diperbolehkan yang disimpan
+// Validasi status
 const validateStatus = (status) => {
-  const validStatuses = ['Draft', 'Published']; // Nilai yang valid
-  return validStatuses.includes(status) ? status : 'draft'; // Default ke "draft" jika tidak valid
+  const validStatuses = ['Draft', 'Published'];
+  return validStatuses.includes(status) ? status : 'draft';
 };
 
 // Validasi data input
@@ -24,8 +24,14 @@ const createGuide = async (guideData) => {
       INSERT INTO guides (title, thumbnail_image, short_description, long_description, tips_and_tricks, status)
       VALUES (?, ?, ?, ?, ?, ?)
     `;
-
-    const [result] = await db.execute(query, [title, thumbnail_image, short_description, long_description, tips_and_tricks, validateStatus(status)]);
+    const [result] = await db.execute(query, [
+      title,
+      thumbnail_image,
+      short_description,
+      long_description,  // No need to assign null here
+      tips_and_tricks,  // No need to assign null here
+      validateStatus(status),
+    ]);
 
     return result;
   } catch (error) {
@@ -34,11 +40,12 @@ const createGuide = async (guideData) => {
   }
 };
 
+
 // Mendapatkan semua guides
 const getGuides = async () => {
   const query = 'SELECT * FROM guides';
   try {
-    const [rows] = await db.execute(query); // Use await with promises
+    const [rows] = await db.execute(query);
     return rows;
   } catch (error) {
     console.error('Error fetching guides:', error.message);
@@ -47,25 +54,38 @@ const getGuides = async () => {
 };
 
 // Mendapatkan guide berdasarkan ID
-const getGuideById = (guideId, callback) => {
-  const query = 'SELECT * FROM guides WHERE guide_id = ?';
-  db.execute(query, [guideId], callback);
+const getGuideById = async (guideId) => {
+  const query = 'SELECT * FROM guides WHERE guide_id = ?'; // Pastikan SELECT mencakup semua kolom
+  try {
+    const [rows] = await db.execute(query, [guideId]);
+    return rows[0]; // Ambil data panduan tunggal
+  } catch (error) {
+    console.error('Error fetching guide by ID:', error.message);
+    throw error;
+  }
 };
 
+
+// Update guide
 const updateGuide = async (guideId, guideData) => {
   try {
     validateInput(guideData);
 
-    const { title = '', thumbnail_image = '', short_description = '', long_description = null, tips_and_tricks = null, status = 'draft' } = guideData;
-
-    const validatedStatus = validateStatus(status);
+    const { title, thumbnail_image, short_description, long_description, tips_and_tricks, status } = guideData;
     const query = `
       UPDATE guides
       SET title = ?, thumbnail_image = ?, short_description = ?, long_description = ?, tips_and_tricks = ?, status = ?
       WHERE guide_id = ?
     `;
-
-    const [result] = await db.execute(query, [title, thumbnail_image || null, short_description || null, long_description || null, tips_and_tricks || null, validatedStatus, guideId]);
+    const [result] = await db.execute(query, [
+      title,
+      thumbnail_image || null,
+      short_description || null,
+      long_description || null,
+      tips_and_tricks || null,
+      validateStatus(status),
+      guideId,
+    ]);
 
     return result;
   } catch (error) {
@@ -74,23 +94,16 @@ const updateGuide = async (guideId, guideData) => {
   }
 };
 
-// Menghapus guide berdasarkan ID
-const deleteGuide = (guideId, callback) => {
-  const query = 'SELECT * FROM guides WHERE guide_id = ?';
-  db.execute(query, [guideId], (err, result) => {
-    if (err) {
-      console.error('Error fetching guide for deletion:', err.message);
-      return callback(err, null);
-    }
-
-    if (result.length === 0) {
-      return callback(null, { message: 'Guide not found' });
-    }
-
-    // Hapus guide jika ditemukan
-    const deleteQuery = 'DELETE FROM guides WHERE guide_id = ?';
-    db.execute(deleteQuery, [guideId], callback);
-  });
+// Menghapus guide
+const deleteGuide = async (guideId) => {
+  try {
+    const query = 'DELETE FROM guides WHERE guide_id = ?';
+    const [result] = await db.execute(query, [guideId]);
+    return result;
+  } catch (error) {
+    console.error('Error deleting guide:', error.message);
+    throw error;
+  }
 };
 
 export default {
