@@ -37,7 +37,7 @@ function Beranda() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Fitur TanamanKu</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-            <div onClick={() => navigate('/error-page-401')} className="cursor-pointer bg-[#6D7E5E] p-6 rounded-lg shadow-md">
+            <div onClick={() => navigate('/sign-in')} className="cursor-pointer bg-[#6D7E5E] p-6 rounded-lg shadow-md">
               <img src={iconDetek} alt="AI Detection" className="mx-auto mb-4 w-12 h-12" />
               <p className="text-sm text-white text-left">
                 AI kami mampu mendeteksi berbagai penyakit dan hama yang dapat menyerang tanaman Anda. Cukup unggah foto tanaman, dan sistem kami akan memberikan diagnosis serta langkah-langkah perawatan.

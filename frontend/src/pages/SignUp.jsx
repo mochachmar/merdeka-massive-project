@@ -64,7 +64,7 @@ export const SignUp = () => {
             }}
           >
             <img className="w-5 h-5" alt="Google" src={google} />
-            <span className="text-[#565e6d] font-normal text-base">Masuk dengan Google</span>
+            <span className="text-[#565e6d] font-normal text-base">Daftar dengan Google</span>
           </button>
           <button
             className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-2"
@@ -81,7 +81,7 @@ export const SignUp = () => {
             }}
           >
             <img className="w-5 h-5" alt="Logo fb simple" src={logoFbSimple} />
-            <span className="text-[#565e6d] font-normal text-base">Masuk dengan Facebook</span>
+            <span className="text-[#565e6d] font-normal text-base">Daftar dengan Facebook</span>
           </button>
 
           {/* Login Link */}
