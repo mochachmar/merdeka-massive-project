@@ -13,8 +13,10 @@ function EditArtikel() {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
+  const [content, setContent] = useState('');
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState('');
+  const [errorMessage, setErrorMessage] = useState(''); // State untuk pesan error
 
   // Fungsi untuk mengambil data artikel berdasarkan ID
   const fetchArticle = async () => {
@@ -51,15 +53,22 @@ function EditArtikel() {
   };
 
   const handleSubmit = (status) => {
+    // Validasi input
+    if (!title || !date || !description || !content) {
+      setErrorMessage('Semua data harus diisi.');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('title', title);
-    formData.append('publish_date', publishDate);
+    formData.append('publish_date', date);
     formData.append('short_description', description);
+    formData.append('long_description', content);
     formData.append('status', status);
 
     // Menambahkan gambar jika ada
     if (image instanceof File) {
-      formData.append('image', image); // Mengirimkan file gambar
+      formData.append('image', image);
     }
 
     // Mengirimkan data artikel melalui PUT request
@@ -86,12 +95,26 @@ function EditArtikel() {
           <div className="bg-white shadow-md rounded-lg p-6">
             <h2 className="text-2xl font-semibold mb-6 text-gray-800">Edit Artikel</h2>
 
+            {/* Pesan Error */}
+            {errorMessage && (
+              <div className="mb-2 p-4  text-red-700 ">
+                {errorMessage}
+              </div>
+            )}
+
             {/* Input Judul Artikel */}
             <div className="mb-4">
               <label htmlFor="title" className="block font-semibold mb-2 text-gray-700">
                 Judul Artikel
               </label>
-              <input id="title" type="text" className="w-full p-2 border border-green-500 rounded-md" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Judul Artikel" />
+              <input
+                id="title"
+                type="text"
+                className="w-full p-2 border border-green-500 rounded-md"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Judul Artikel"
+              />
             </div>
 
             {/* Input Tanggal Publikasi */}
@@ -99,7 +122,13 @@ function EditArtikel() {
               <label htmlFor="date" className="block font-semibold mb-2 text-gray-700">
                 Tanggal Publikasi
               </label>
-              <input id="publishDate" type="date" className="w-full p-2 border border-green-500 rounded-md" value={publishDate} onChange={(e) => setDate(e.target.value)} />
+              <input
+                id="publishDate"
+                type="date"
+                className="w-full p-2 border border-green-500 rounded-md"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
             </div>
 
             {/* Input Deskripsi */}
@@ -107,7 +136,27 @@ function EditArtikel() {
               <label htmlFor="description" className="block font-semibold mb-2 text-gray-700">
                 Deskripsi
               </label>
-              <textarea id="description" className="w-full p-2 border border-green-500 rounded-md" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Deskripsi Artikel" />
+              <textarea
+                id="description"
+                className="w-full p-2 border border-green-500 rounded-md"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Deskripsi Artikel"
+              />
+            </div>
+
+            {/* Input Isi Artikel */}
+            <div className="mb-4">
+              <label htmlFor="content" className="block font-semibold mb-2 text-gray-700">
+                Isi Artikel
+              </label>
+              <textarea
+                id="content"
+                className="w-full p-2 border border-green-500 rounded-md"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="Isi Artikel"
+              />
             </div>
 
             {/* Input Gambar */}
@@ -129,10 +178,16 @@ function EditArtikel() {
 
             {/* Tombol Submit */}
             <div className="flex space-x-4">
-              <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" onClick={() => handleSubmit('published')}>
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                onClick={() => handleSubmit('published')}
+              >
                 Terbitkan
               </button>
-              <button className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600" onClick={() => handleSubmit('draft')}>
+              <button
+                className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
+                onClick={() => handleSubmit('draft')}
+              >
                 Simpan Sebagai Draft
               </button>
             </div>

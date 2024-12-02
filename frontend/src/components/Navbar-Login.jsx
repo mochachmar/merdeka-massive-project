@@ -84,12 +84,19 @@ function NavbarLogin() {
                 <div className="absolute left-0 mt-2 w-60 bg-white shadow-lg rounded-md border z-10">
                   <ul className="py-2" onClick={closeDropdown}>
                     <li>
-                      <Link to="/panduan-login" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
+                      <Link
+                        to="/panduan-login"
+                        className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded"
+                      >
                         Tips Perawatan Tanaman
                       </Link>
                     </li>
+                    <hr className="border-t border-gray-400 my-1" />
                     <li>
-                      <Link to="/artikel-penyakit-tanaman-login" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
+                      <Link
+                        to="/artikel-penyakit-tanaman-login"
+                        className="block px-8 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded flex items-center justify-center whitespace-nowrap"
+                      >
                         Artikel Penyakit dan Hama
                       </Link>
                     </li>
@@ -104,16 +111,26 @@ function NavbarLogin() {
                 <ChevronDownOutline color={'#000000'} height="24px" width="24px" className="ml-2" />
               </button>
               {isPerawatanDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-60 bg-white shadow-lg rounded-md border z-10">
+                <div className="absolute left-0 mt-2 w-58 bg-white shadow-lg rounded-md border z-10">
                   <ul className="py-2" onClick={closeDropdown}>
-                    <li>
-                      <Link to="/deteksi-penyakit" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
-                        Deteksi Penyakit
+                    <li className="flex justify-center">
+                      <Link
+                        to="/deteksi-penyakit"
+                        className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded text-center flex items-center"
+                      >
+                        <span>Deteksi</span>
+                        <span className="ml-1">Penyakit</span>
                       </Link>
                     </li>
-                    <li>
-                      <Link to="/histori-tanaman" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
-                        History Tanaman
+
+                    <hr className="border-t border-gray-400 my-1" />
+                    <li className="flex justify-center">
+                      <Link
+                        to="/histori-tanaman"
+                        className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded text-center flex items-center"
+                      >
+                        <span>Histori</span>
+                        <span className="ml-1">Tanaman</span>
                       </Link>
                     </li>
                   </ul>

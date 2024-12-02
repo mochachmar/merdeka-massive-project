@@ -19,13 +19,13 @@ export default function NavbarAdmin({ children }) {
       {/* Sidebar */}
       <nav className={`fixed top-0 left-0 h-full w-64 bg-[#E7F0DC] p-6 shadow-lg z-20 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform`}>
         <div className="flex items-center justify-center mb-8">
-          <NavLink to="/admin" className={({ isActive }) => `block px-4 py-2 rounded ${isActive ? 'bg-[#C5D9A4] text-gray-900 font-semibold' : 'text-gray-800 hover:bg-[#C5D9A4]'}`} onClick={() => setIsOpen(false)}>
+          <NavLink to="/admin" className={({ isActive }) => `block px-4 py-2 rounded ${isActive ? ' text-gray-900 font-semibold' : 'text-gray-800 hover:bg-[#C5D9A4]'}`} onClick={() => setIsOpen(false)}>
             <img src={Logo} alt="Logo" className="h-10" />
           </NavLink>
         </div>
         <ul className="flex flex-col space-y-5">
           <li>
-            <NavLink to="/admin" className={({ isActive }) => `flex items-center px-4 py-3 rounded ${isActive ? 'bg-[#C5D9A4] text-gray-900 font-semibold' : 'text-gray-800 hover:bg-[#C5D9A4]'}`} onClick={() => setIsOpen(false)}>
+            <NavLink to="/admin" className={({ isActive }) => `flex items-center px-4 py-3 rounded ${isActive ? ' text-gray-900 font-semibold' : 'text-gray-800 hover:bg-[#C5D9A4]'}`} onClick={() => setIsOpen(false)}>
               <img src={DashboardLogo} alt="Dashboard" className="h-6 w-6 mr-2" />
               <span>Dashboard</span>
             </NavLink>
@@ -41,11 +41,6 @@ export default function NavbarAdmin({ children }) {
                 <li>
                   <NavLink to="/admin/card-artikel" className={({ isActive }) => `block px-4 py-2 rounded ${isActive ? 'bg-[#C5D9A4] text-gray-900 font-semibold' : 'text-gray-800 hover:bg-[#C5D9A4]'}`} onClick={() => setIsOpen(false)}>
                     Card Artikel
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/admin/isi-artikel" className={({ isActive }) => `block px-4 py-2 rounded ${isActive ? 'bg-[#C5D9A4] text-gray-900 font-semibold' : 'text-gray-800 hover:bg-[#C5D9A4]'}`} onClick={() => setIsOpen(false)}>
-                    Isi Artikel
                   </NavLink>
                 </li>
               </ul>
