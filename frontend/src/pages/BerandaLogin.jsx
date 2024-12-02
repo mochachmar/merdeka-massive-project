@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react"; // Import necessary hooks
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/FooterLogin";
+import NavbarLogin from "../components/Navbar-Login"; // Import NavbarLogin
+import Footer from "../components/FooterLogin"; // Use FooterLogin
+import Card from "../components/Card"; // Import Card component
 import homeImage from "../assets/home.jpg";
 import iconDetek from "../assets/ikondetek.png";
 import iconUnduh from "../assets/ikonunduh.svg";
 import iconGrow from "../assets/ikongrow.svg";
 import tentangKamiImage from "../assets/tentangkami.jpg";
-import NavbarLogin from "../components/Navbar-Login";
 
 function BerandaLogin() {
   const navigate = useNavigate();
@@ -131,9 +132,8 @@ function BerandaLogin() {
               {loading ? (
                 <p className="text-center text-gray-900">Loading articles...</p>
               ) : (
-                // Limit the articles to the first 3 items
                 articles.slice(0, 3).map((article) => (
-                  <Card key={article.id} article={article} /> // Pass the article data to the Card component
+                  <Card key={article.id} article={article} />
                 ))
               )}
             </div>
