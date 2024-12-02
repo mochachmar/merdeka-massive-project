@@ -1,4 +1,4 @@
-<h1 align="center">Sahabat Tani Group</h1>
+<h1 align="center">TanamanKu by Sahabat Tani Group</h1>
 <p align="center">This repository serves as a open-sources code about how we develop TanamanKu, an app to detect diseases in hydroponic plants 🪴.</p>
 
 <div align="center">
