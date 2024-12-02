@@ -120,7 +120,7 @@ function CardDummy({ article }) {
         <div className="p-4 bg-white">
           <p className="text-gray-600 text-sm">{formattedDate || 'Tanggal tidak tersedia'}</p>
           <h2 className="font-bold text-lg text-gray-800">{article.title}</h2>
-          <p className="text-gray-700 text-sm">{article.long_description}</p>
+          <p className="text-gray-700 text-sm">{article.short_description}</p>
           {article.author && <p className="text-gray-600 text-sm mt-1">By {article.author}</p>}
         </div>
       </Link>
