@@ -16,28 +16,12 @@ const validateInput = (guideData) => {
 
 // Menyimpan guide baru
 const createGuide = async (guideData) => {
-  try {
-    validateInput(guideData);
-    const { title, thumbnail_image, short_description, long_description = null, tips_and_tricks = null, status } = guideData;
-
-    const query = `
-      INSERT INTO guides (title, thumbnail_image, short_description, long_description, tips_and_tricks, status)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `;
-    const [result] = await db.execute(query, [
-      title,
-      thumbnail_image,
-      short_description,
-      long_description,  // No need to assign null here
-      tips_and_tricks,  // No need to assign null here
-      validateStatus(status),
-    ]);
-
-    return result;
-  } catch (error) {
-    console.error('Error creating guide:', error.message);
-    throw error;
-  }
+  const { title, thumbnail_image, short_description, long_description = '', tips_and_tricks = '', status } = guideData;
+  const query = `
+    INSERT INTO guides (title, thumbnail_image, short_description, long_description, tips_and_tricks, status)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+  return await db.execute(query, [title, thumbnail_image, short_description, long_description, tips_and_tricks, status]);
 };
 
 
@@ -68,30 +52,15 @@ const getGuideById = async (guideId) => {
 
 // Update guide
 const updateGuide = async (guideId, guideData) => {
-  try {
-    validateInput(guideData);
-
-    const { title, thumbnail_image, short_description, long_description, tips_and_tricks, status } = guideData;
-    const query = `
-      UPDATE guides
-      SET title = ?, thumbnail_image = ?, short_description = ?, long_description = ?, tips_and_tricks = ?, status = ?
-      WHERE guide_id = ?
-    `;
-    const [result] = await db.execute(query, [
-      title,
-      thumbnail_image || null,
-      short_description || null,
-      long_description || null,
-      tips_and_tricks || null,
-      validateStatus(status),
-      guideId,
-    ]);
-
-    return result;
-  } catch (error) {
-    console.error('Error in updateGuide:', error.message);
-    throw error;
-  }
+  const { title, thumbnail_image, short_description, long_description = '', tips_and_tricks = '', status } = guideData;
+  const query = `
+    UPDATE guides
+    SET title = ?, thumbnail_image = ?, short_description = ?, long_description = ?, tips_and_tricks = ?, status = ?
+    WHERE guide_id = ?
+  `;
+  const [result] = await db.execute(query, [title, thumbnail_image, short_description, long_description, tips_and_tricks, status, guideId]);
+  
+  return result; // Pastikan result dikembalikan agar dapat diakses di controller
 };
 
 // Menghapus guide
