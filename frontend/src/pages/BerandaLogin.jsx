@@ -132,9 +132,10 @@ function BerandaLogin() {
               {loading ? (
                 <p className="text-center text-gray-900">Loading articles...</p>
               ) : (
-                articles.slice(0, 3).map((article) => (
-                  <Card key={article.id} article={article} />
-                ))
+                articles
+                  .filter((article) => article.status === "published") // Hanya tampilkan artikel "published"
+                  .slice(0, 3)
+                  .map((article) => <Card key={article.id} article={article} />)
               )}
             </div>
           </div>

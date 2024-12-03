@@ -15,6 +15,7 @@ function EditArtikel() {
   const [description, setDescription] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null);
+  const [publisher, setPublisher] = useState("");
   const [imageName, setImageName] = useState('');
   const [errorMessage, setErrorMessage] = useState(''); // State untuk pesan error
 
@@ -63,6 +64,7 @@ function EditArtikel() {
     formData.append('title', title);
     formData.append('publish_date', date);
     formData.append('short_description', description);
+    formData.append('created_by' , publisher)
     formData.append('long_description', content);
     formData.append('status', status);
 
@@ -128,6 +130,24 @@ function EditArtikel() {
                 className="w-full p-2 border border-green-500 rounded-md"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+              />
+            </div>
+
+            {/* Input Penerbit */}
+            <div className="mb-4">
+              <label
+                htmlFor="publisher"
+                className="block font-semibold mb-2 text-gray-700"
+              >
+                Penerbit
+              </label>
+              <input
+                id="publisher"
+                type="text"
+                className="w-full p-2 border border-green-500 rounded-md"
+                value={publisher}
+                onChange={(e) => setPublisher(e.target.value)}
+                placeholder="Penerbit Artikel"
               />
             </div>
 

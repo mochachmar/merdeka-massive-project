@@ -15,6 +15,7 @@ function TambahArtikel() {
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
+  const [publisher, setPublisher] = useState("");
   const [status, setStatus] = useState('');
 
   // Fungsi untuk menangani perubahan input gambar
@@ -39,6 +40,7 @@ function TambahArtikel() {
     formData.append('short_description', description);
     formData.append('long_description', content);
     formData.append('publish_date', date);
+    formData.append('created_by' , publisher)
     formData.append('status', submitStatus);
     if (image) formData.append('thumbnail_image', image);
 
@@ -75,6 +77,24 @@ function TambahArtikel() {
                 Tanggal Publikasi
               </label>
               <input id="date" type="date" className="w-full p-2 border border-green-500 rounded-md" value={date} onChange={(e) => setDate(e.target.value)} />
+            </div>
+
+            {/* Input Penerbit */}
+            <div className="mb-4">
+              <label
+                htmlFor="publisher"
+                className="block font-semibold mb-2 text-gray-700"
+              >
+                Penerbit
+              </label>
+              <input
+                id="publisher"
+                type="text"
+                className="w-full p-2 border border-green-500 rounded-md"
+                value={publisher}
+                onChange={(e) => setPublisher(e.target.value)}
+                placeholder="Penerbit Artikel"
+              />
             </div>
 
             {/* Input Deskripsi Singkat */}

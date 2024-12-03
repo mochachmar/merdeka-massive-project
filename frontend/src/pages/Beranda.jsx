@@ -132,10 +132,10 @@ function Beranda() {
               {loading ? (
                 <p className="text-center text-gray-900">Loading articles...</p>
               ) : (
-                // Limit the articles to the first 3 items
-                articles.slice(0, 3).map((article) => (
-                  <Card key={article.id} article={article} /> // Pass the article data to the Card component
-                ))
+                articles
+                  .filter((article) => article.status === "published") // Hanya tampilkan artikel "published"
+                  .slice(0, 3)
+                  .map((article) => <Card key={article.id} article={article} />)
               )}
             </div>
           </div>
