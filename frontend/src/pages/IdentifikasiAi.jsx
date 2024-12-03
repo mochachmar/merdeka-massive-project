@@ -160,7 +160,7 @@ const IdentifikasiAI = () => {
             <p>
               {predictions.length > 0
                 ? predictions[0].class_label
-                : "Klik tombol Identifikasi untuk melihat spesifikasi tanaman."}
+                : "Memuat..."}
             </p>
           </div>
 
@@ -175,9 +175,7 @@ const IdentifikasiAI = () => {
               Penilaian Kesehatan/Penyakit
             </h3>
             <ReactMarkdown>
-              {predictions.length > 0
-                ? predictions[0].solution
-                : "Klik tombol Identifikasi untuk melihat hasil analisis kesehatan tanaman."}
+              {predictions.length > 0 ? predictions[0].solution : "Memuat..."}
             </ReactMarkdown>
           </div>
         </div>
