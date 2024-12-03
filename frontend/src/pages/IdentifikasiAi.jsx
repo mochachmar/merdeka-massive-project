@@ -15,12 +15,22 @@ const IdentifikasiAI = () => {
 
   useEffect(() => {
     const detectPlant = async () => {
-      if (!location.state?.imageFile) return;
+      if (!location.state?.imageFile) {
+        console.log("No image file found in location state");
+        return;
+      }
 
+      console.log("Starting plant detection process...");
       setLoading(true);
+
       const formData = new FormData();
       formData.append("image", location.state.imageFile);
       formData.append("plant_type", location.state.plantType);
+
+      console.log("Sending prediction request with:", {
+        imageFile: location.state.imageFile.name,
+        plantType: location.state.plantType,
+      });
 
       try {
         const response = await axios.post(
@@ -33,16 +43,23 @@ const IdentifikasiAI = () => {
           }
         );
 
+        console.log("Prediction API response received successfully");
+
         // Mengambil data prediksi dari respons API
         const predictionData = response.data.detail.predictions;
+        console.log("Prediction data:", predictionData);
         setPredictions(predictionData);
 
         // Mengambil gambar hasil prediksi (jika tersedia)
         setImage(response.data.detail.image);
+        console.log("Image data received and set");
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Error in plant detection:", error);
+        console.error("Detailed error message:", error.message);
+        console.error("Error response:", error.response?.data);
         alert("Gagal mengambil data prediksi. Silakan coba lagi.");
       } finally {
+        console.log("Plant detection process completed");
         setLoading(false);
       }
     };
@@ -51,7 +68,14 @@ const IdentifikasiAI = () => {
   }, [location.state]);
 
   return (
-    <div className="flex flex-col min-h-screen w-full m-0 p-0">
+    <div className="flex flex-col min-h-screen w-full m-0 p-0 relative">
+      {/* Loading Overlay */}
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-600"></div>
+        </div>
+      )}
+
       <Navbar />
 
       <div className="flex-grow relative mt-4 mx-auto w-full max-w-4xl px-4">
@@ -121,18 +145,9 @@ const IdentifikasiAI = () => {
           )}
         </div>
 
-        <div className="flex justify-center mb-6">
-          <button
-            disabled={loading}
-            className="bg-[#45543D] text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-[#5a6b4a]"
-          >
-            {loading ? "Memuat..." : "Identifikasi"}
-          </button>
-        </div>
-
-        {/* Bagian spesifikasi dan penilaian lama dipertahankan */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4">
-          <div className="bg-transparent bg-opacity-50 border border-[#45543D] shadow-lg rounded-lg p-4">
+        {/* Bagian spesifikasi dan penilaian */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 mb-12">
+          <div className="bg-transparent bg-opacity-50 border border-[#45543D] shadow-lg rounded-lg p-4 h-fit">
             <h3 className="text-lg font-bold mb-2 text-center flex items-center justify-center">
               <LeafOutline
                 className="mr-2"

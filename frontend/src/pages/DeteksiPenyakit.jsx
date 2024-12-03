@@ -7,6 +7,11 @@ import { useNavigate } from "react-router-dom";
 const plantsData = [
   { name: "Tomat", key: "tomato" },
   { name: "Mentimun", key: "cucumber" },
+  { name: "Selada", key: "lettuce" },
+  { name: "Bayam", key: "spinach" },
+  { name: "Cabai", key: "chili" },
+  { name: "Stroberi", key: "strawberry" },
+  { name: "Melon", key: "melon" },
 ];
 
 function DeteksiPenyakit() {

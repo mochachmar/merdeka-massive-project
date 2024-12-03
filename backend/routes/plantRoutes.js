@@ -1,15 +1,27 @@
 import express from "express";
 import {
   uploadPlant,
-  saveDetection,
-  getDetections,
+  savePlantHealthHistory,
+  singleUpload,
+  getUserPlantHealthHistory,
 } from "../controllers/plantController.js";
-import uploadMiddleware from "../middleware/uploadMiddleware.js";
+import { singleUpload } from "../middleware/uploadMiddleware.js";
 
 const router = express.Router();
 
-router.post("/upload-tanaman", uploadMiddleware, uploadPlant);
-router.post("/save-detection", saveDetection);
-router.get("/detections", getDetections);
+router.post("/upload-image", singleUpload, (req, res) => {
+  if (req.file) {
+    res.json({
+      message: "Image uploaded successfully",
+      filePath: req.file.path,
+    });
+  } else {
+    res.status(400).json({ message: "Upload failed" });
+  }
+});
+
+router.post("/upload-plant", singleUpload, uploadPlant);
+router.post("/save-plant-health-history", singleUpload, savePlantHealthHistory);
+router.get("/plant-health-history/:userId", getUserPlantHealthHistory);
 
 export default router;
