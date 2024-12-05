@@ -14,7 +14,7 @@ const plantsData = [
   { name: "Melon", key: "melon" },
 ];
 const dataURLtoFile = (dataurl, filename) => {
-  const arr = dataurl.split(',');
+  const arr = dataurl.split(",");
   const mime = arr[0].match(/:(.*?);/)[1];
   const bstr = atob(arr[1]);
   let n = bstr.length;
@@ -42,15 +42,14 @@ function DeteksiPenyakit() {
   const handleCapture = () => {
     const imageSrc = webcamRef.current.getScreenshot(); // Mendapatkan Base64 dari kamera
     const imageFile = dataURLtoFile(imageSrc, "capture.jpg"); // Konversi Base64 ke file
-  
+
     setPreviewImage({
       image: imageFile, // File yang akan dikirimkan
       display: URL.createObjectURL(imageFile), // URL untuk ditampilkan di <img>
     });
-  
+
     setIsCameraOpen(false); // Menutup kamera
   };
-  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -131,7 +130,7 @@ function DeteksiPenyakit() {
       },
     });
   };
-  
+
   return (
     <div className="flex flex-col min-h-screen w-full">
       <Navbar />
@@ -167,7 +166,7 @@ function DeteksiPenyakit() {
                 className="w-full h-auto max-h-64 object-cover rounded-lg border border-gray-300"
               />
               <button
-                className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg"
+                className="mt-4 px-4 py-2  bg-[#6D7E5E] text-white rounded-lg"
                 onClick={handleCapture}
               >
                 Ambil Foto
@@ -204,18 +203,19 @@ function DeteksiPenyakit() {
               className="flex items-center px-4 py-2 border border-gray-400 text-gray-700 rounded-lg hover:bg-gray-100"
               onClick={handleUploadClick}
             >
-              Unggah Foto
+              <span className="text-xl mr-2">+</span>Unggah Foto
             </button>
 
             <button
-              className="flex items-center px-4 py-2 border border-green-600 text-green-700 rounded-lg hover:bg-green-100"
+              className="flex items-center px-4 py-2 border border-gray-400 text-gray-700 rounded-lg hover:bg-green-100"
               onClick={() => setIsCameraOpen(true)}
             >
-              Ambil Foto dari Kamera
+              <span className="text-xl mr-2">+</span>Potret
             </button>
-
+          </div>
+          <div className="flex justify-end mt-8">
             <button
-              className={`w-full max-w-28 bg-green-600 text-white font-semibold py-2 border border-green-700 rounded-lg ${
+              className={`w-full max-w-28  bg-[#6D7E5E] text-white font-semibold py-2 border border-green-700 rounded-lg ${
                 loading ? "opacity-50" : ""
               }`}
               onClick={handleDeteksiClick}
