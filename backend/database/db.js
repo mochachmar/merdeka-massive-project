@@ -10,12 +10,20 @@ const db = mysql2.createPool({
 
 async function testConnection() {
 	try {
-		await db.getConnection()
-		console.log("Berhasil terhubung ke database !");
-	} catch (e) {
-		console.error("Gagal terhubung ke database !", e);
-	} 
-}
+	  console.log("Testing MySQL connection...");
+	  const connection = await db.getConnection();
+	  console.log("Successfully connected to MySQL database!");
+	  connection.release();
+	} catch (error) {
+	  console.error("Error connecting to MySQL database:");
+	  console.error("Host:", process.env.DB_HOST || "localhost");
+	  console.error("User:", process.env.DB_USER || "root");
+	  console.error("Database:", process.env.DB_NAME || "tanamanku_massive_project");
+	  console.error("Port:", process.env.DB_PORT || 3306);
+	  console.error(error);
+	}
+  }
+  
 
 async function query(command, values) {
 	try {

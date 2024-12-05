@@ -6,6 +6,7 @@ export const addPlantHistory = async (req, res) => {
 
     // Ambil `photo_url` dari file upload jika ada
     const photo_url = req.file ? req.file.path : null;
+    console.log('Photo URL:', photo_url);
     console.log('File:', req.file); // Debugging file
     console.log('Body:', req.body); // Debugging body data
 
