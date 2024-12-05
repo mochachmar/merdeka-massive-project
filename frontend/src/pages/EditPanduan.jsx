@@ -11,6 +11,7 @@ function EditPanduan() {
 
   // State
   const [title, setTitle] = useState('');
+  const [shortDescription, setShortDescription] = useState('');
   const [longDescription, setLongDescription] = useState('');
   const [tipsAndTricks, setTipsAndTricks] = useState('');
   const [image, setImage] = useState(null);
@@ -23,18 +24,28 @@ function EditPanduan() {
   // Fetch guide data
   useEffect(() => {
     let isMounted = true;
-
+  
     const fetchGuide = async () => {
       try {
         setLoading(true);
         const response = await axios.get(`http://localhost:3000/api/guides/${id}`);
         const guide = response.data;
-
+  
         setTitle(guide.title);
+        setShortDescription(guide.short_description);
         setLongDescription(guide.long_description);
         setTipsAndTricks(guide.tips_and_tricks);
         setImageName(guide.thumbnail_image || '');
         setPreview(guide.thumbnail_image ? `http://localhost:3000/images/${guide.thumbnail_image}` : '');
+  
+        // Log state after updating
+        console.log('Fetched Guide:', guide);
+        console.log('Updated States:', {
+          title,
+          shortDescription,
+          longDescription,
+          tipsAndTricks,
+        });
       } catch (err) {
         console.error('Error fetching guide:', err);
         setError('Gagal memuat data panduan. Silakan coba lagi.');
@@ -42,14 +53,14 @@ function EditPanduan() {
         setLoading(false);
       }
     };
-
+  
     if (id) fetchGuide();
-
+  
     return () => {
       isMounted = false;
     };
   }, [id]);
-
+  
   // Handle image upload
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -80,6 +91,7 @@ function EditPanduan() {
 
     const formData = new FormData();
     formData.append('title', title);
+    formData.append('short_description', shortDescription);
     formData.append('long_description', longDescription);
     formData.append('tips_and_tricks', tipsAndTricks);
     formData.append('status', status);
@@ -125,10 +137,17 @@ function EditPanduan() {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="longDescription" className="block font-semibold mb-2 text-gray-700">
-                Deskripsi Panduan
+              <label htmlFor="title" className="block font-semibold mb-2 text-gray-700">
+                Deskripsi Singkat
               </label>
-              <textarea id="long_description" className="w-full p-2 border border-green-500 rounded-md" value={longDescription} onChange={(e) => setLongDescription(e.target.value)} placeholder="Deskripsi" />
+              <input id="short_description" type="text" className="w-full p-2 border border-green-500 rounded-md" value={shortDescription} onChange={(e) => setShortDescription(e.target.value)} placeholder="Deskripsi singkat" />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="longDescription" className="block font-semibold mb-2 text-gray-700">
+                Pengertian
+              </label>
+              <textarea id="long_description" className="w-full p-2 border border-green-500 rounded-md" value={longDescription} onChange={(e) => setLongDescription(e.target.value)} placeholder="pengertian" />
             </div>
 
             <div className="mb-4">

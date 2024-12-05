@@ -11,6 +11,8 @@ function TambahPanduan() {
   // State untuk menyimpan data form
   const [judul, setJudul] = useState('');
   const [deskripsiSingkat, setDeskripsiSingkat] = useState('');
+  const [pengertian, setPengertian] = useState('');
+  const [tipsAndTricks, setTipsAndTricks] = useState('');
   const [gambarThumbnail, setGambarThumbnail] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
   const [status, setStatus] = useState('draft'); // Default status adalah "draft"
@@ -38,7 +40,7 @@ function TambahPanduan() {
 
   // Fungsi submit untuk draft atau publikasi
   const handleSubmit = async (submitStatus) => {
-    if (!judul || !deskripsiSingkat || !gambarThumbnail) {
+    if (!judul || !deskripsiSingkat || !pengertian || !tipsAndTricks || !gambarThumbnail) {
       setErrorMessage('Semua field wajib diisi!');
       return;
     }
@@ -51,6 +53,8 @@ function TambahPanduan() {
     const formData = new FormData();
     formData.append('title', judul);
     formData.append('short_description', deskripsiSingkat);
+    formData.append('long_description', pengertian);
+    formData.append('tips_and_tricks', tipsAndTricks);
     formData.append('status', submitStatus);
     formData.append('thumbnail_image', gambarThumbnail);
 
@@ -91,6 +95,22 @@ function TambahPanduan() {
                 Deskripsi Singkat
               </label>
               <textarea id="deskripsi_singkat" className="w-full p-2 border border-green-500 rounded-md" value={deskripsiSingkat} onChange={(e) => setDeskripsiSingkat(e.target.value)} placeholder="Deskripsi Singkat Panduan" />
+            </div>
+
+            {/* Input pengertian */}
+            <div className="mb-4">
+              <label htmlFor="pengertian" className="block font-semibold mb-2 text-gray-700">
+                Pengertian
+              </label>
+              <textarea id="pengertian" className="w-full p-2 border border-green-500 rounded-md" value={pengertian} onChange={(e) => setPengertian(e.target.value)} placeholder=" Pengertian Panduan" />
+            </div>
+
+          {/* Input tips and tricks */}
+          <div className="mb-4">
+              <label htmlFor="tips_and_tricks" className="block font-semibold mb-2 text-gray-700">
+                Tips dan Tricks
+              </label>
+              <textarea id="tips_and_tricks" className="w-full p-2 border border-green-500 rounded-md" value={tipsAndTricks} onChange={(e) => setTipsAndTricks(e.target.value)} placeholder=" tips dan tricks Panduan" />
             </div>
 
             {/* Input Gambar */}

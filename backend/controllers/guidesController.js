@@ -39,15 +39,13 @@ export const getGuidesById = async (req, res) => {
 // Menyimpan data guide baru
 export const saveGuides = async (req, res) => {
   try {
-    console.log('Request Body:', req.body);
-    console.log('Request File:', req.file);
+    const { title, short_description, long_description, tips_and_tricks, status } = req.body;
+    const thumbnail_image = req.file ? req.file.filename : null;
 
-    const { title, short_description, status } = req.body;
-    const thumbnail_image = req.file ? req.file.originalname : null;
-
-    if (!title || !short_description || !thumbnail_image) {
+    // Validasi input
+    if (!title || !short_description || !long_description || !tips_and_tricks || !thumbnail_image) {
       return res.status(400).json({
-        msg: 'Title, short description, and thumbnail image are required',
+        msg: 'Semua field wajib diisi!',
       });
     }
 
@@ -57,19 +55,22 @@ export const saveGuides = async (req, res) => {
     const guideData = {
       title,
       short_description,
+      long_description, // Ambil dari req.body
+      tips_and_tricks,  // Ambil dari req.body
       thumbnail_image,
-      long_description: null,
-      tips_and_tricks: null,
       status: finalStatus,
     };
 
-    await Guides.createGuide(guideData); // Simpan data ke database
-    res.status(201).json({ msg: 'Guide Created Successfully' });
+    // Simpan data ke database
+    await Guides.createGuide(guideData);
+
+    res.status(201).json({ msg: 'Guide berhasil dibuat' });
   } catch (error) {
-    console.error('Error in saveGuides:', error.message);
-    res.status(500).send('Server Error');
+    console.error('Error di saveGuides:', error.message);
+    res.status(500).json({ msg: 'Terjadi kesalahan pada server' });
   }
 };
+
 
 
 // Update guide
@@ -79,10 +80,9 @@ export const updateGuides = async (req, res) => {
     const guideId = req.params.id;
     const { title, short_description, long_description, tips_and_tricks, status } = req.body;
 
-    // Fetch guide data
     const guide = await Guides.getGuideById(guideId);
     if (!guide) {
-      return res.status(404).json({ msg: 'Guide not found' });
+      return res.status(404).json({ msg: 'Guide tidak ditemukan' });
     }
 
     let fileName = guide.thumbnail_image;
@@ -92,17 +92,12 @@ export const updateGuides = async (req, res) => {
       fileName = req.file.filename;
       const uploadPath = path.resolve(__dirname, '../public/images', fileName);
 
-      // Delete old image if exists
+      // Hapus gambar lama jika ada
       if (guide.thumbnail_image && fs.existsSync(path.resolve(__dirname, '../public/images', guide.thumbnail_image))) {
         fs.unlinkSync(path.resolve(__dirname, '../public/images', guide.thumbnail_image));
       }
 
-      try {
-        await fs.promises.rename(req.file.path, uploadPath);
-      } catch (err) {
-        console.error('Error moving uploaded image:', err);
-        return res.status(500).json({ msg: 'Error processing image upload' });
-      }
+      await fs.promises.rename(req.file.path, uploadPath);
     }
 
     // Update data
@@ -116,18 +111,21 @@ export const updateGuides = async (req, res) => {
     };
 
     const result = await Guides.updateGuide(guideId, updateData);
-    if (result.affectedRows > 0) {
-      res.status(200).json({ msg: 'Guide updated successfully' });
+
+    // Log untuk melihat hasil update
+    console.log(result);
+
+    // Menyediakan feedback yang tepat berdasarkan affectedRows
+    if (result && result.affectedRows > 0) {
+      res.status(200).json({ msg: 'Guide berhasil diperbarui' });
     } else {
-      res.status(400).json({ msg: 'No changes made' });
+      res.status(400).json({ msg: 'Tidak ada perubahan yang dilakukan pada panduan.' });
     }
   } catch (error) {
-    console.error('Error in updateGuides:', error.message);
-    res.status(500).json({ msg: 'Server Error' });
+    console.error('Error di updateGuides:', error.message);
+    res.status(500).json({ msg: 'Terjadi kesalahan pada server' });
   }
 };
-
-
 
 
 // Menghapus guide
