@@ -29,9 +29,9 @@ function EditArtikel() {
         setLoading(true);
         const response = await axios.get(`http://localhost:3000/api/articles/${id}`);
         const article = response.data;
-
+  
         setTitle(article.title);
-        setDate(article.publish_date);
+        setDate(article.publish_date ? article.publish_date.slice(0, 10) : ''); // Ensure correct date format
         setDescription(article.short_description);
         setContent(article.long_description);
         setPublisher(article.created_by || '');
@@ -44,9 +44,9 @@ function EditArtikel() {
         setLoading(false);
       }
     };
-
+  
     if (id) fetchArticle();
-  }, [id]);
+  }, [id]);  
 
   // Handle image upload
   const handleImageUpload = (e) => {
