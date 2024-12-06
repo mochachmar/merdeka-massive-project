@@ -6,6 +6,7 @@ export const addPlantHistory = async (req, res) => {
 
     // Ambil `photo_url` dari file upload jika ada
     const photo_url = req.file ? req.file.path : null;
+    console.log('Photo URL:', photo_url);
     console.log('File:', req.file); // Debugging file
     console.log('Body:', req.body); // Debugging body data
 
@@ -24,9 +25,9 @@ export const addPlantHistory = async (req, res) => {
       created_by,
     });
 
-    res.status(201).json({ message: 'Plant history added successfully!', plantId });
+    res.status(201).json({ message: 'Plant added successfully!', plantId });
   } catch (error) {
-    console.error('Error adding plant history:', error);
+    console.error('Error adding plant:', error);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 };

@@ -16,7 +16,7 @@ export const insertPlant = async (data) => {
     const [result] = await db.query(query, values); // Asumsi Anda menggunakan mysql2
     return result.insertId; // Mengembalikan ID dari record yang baru saja diinsert
   } catch (error) {
-    console.error('Error inserting plant history:', error);
+    console.error('Error inserting plant:', error);
     throw error; // Lempar error agar dapat ditangani oleh pemanggil fungsi
   }
 };
