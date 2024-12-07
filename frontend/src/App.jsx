@@ -302,7 +302,7 @@ function App() {
         }
       />
 
-      {/* <Route path="*" element={<Navigate to="/error-page-404" replace />} /> */}
+      <Route path="*" element={<Navigate to="/error-page-404" replace />} />
     </Routes>
   );
 }
