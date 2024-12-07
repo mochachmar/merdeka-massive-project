@@ -109,13 +109,13 @@ function Navbar() {
                 <div className="absolute left-0 mt-2 w-58 bg-white shadow-lg rounded-md border z-10">
                   <ul className="py-2">
                     <li>
-                      <Link to="/deteksi-penyakit" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
+                      <Link to="/sign-in" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
                         Deteksi Penyakit
                       </Link>
                     </li>
                     <hr className="border-t border-gray-400 my-1" />
                     <li>
-                      <Link to="/histori-tanaman" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
+                      <Link to="/sign-in" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
                         Histori Tanaman
                       </Link>
                     </li>
@@ -135,20 +135,12 @@ function Navbar() {
           <Link to="/sign-in" className="text-gray-800">
             <PersonOutline color="#000000" height="24px" width="24px" />
           </Link>
-          <Link to="/settings" className="text-gray-800">
-            {/* Ini gw ilangin dulu gambar settingnnya */}
-            {/* <SettingsOutline color="#000000" height="24px" width="24px" /> */}
-          </Link>
         </div>
 
         {/* Mobile menu icon with settings and user icons */}
         <div className="lg:hidden flex items-center space-x-4">
           <Link to="/sign-in" className="text-gray-800">
             <PersonOutline color="#000000" height="24px" width="24px" />
-          </Link>
-          <Link to="/settings" className="text-gray-800">
-            {/* Ini gw ilangin dulu gambar settingnnya */}
-            {/* <SettingsOutline color="#000000" height="24px" width="24px" /> */}
           </Link>
           <button className="text-gray-800 focus:outline-none" onClick={toggleMenu}>
             <MenuOutline color={'#000000'} height="24px" width="24px" />
