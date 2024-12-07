@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import { SettingsOutline, PersonOutline, MenuOutline, ChevronDownOutline } from 'react-ionicons';
@@ -9,6 +9,9 @@ function Navbar() {
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
   const [isPerawatanDropdownOpen, setIsPerawatanDropdownOpen] = useState(false); // State untuk dropdown Perawatan
 
+  const dropdownRef = useRef(null);
+  const perawatanDropdownRef = useRef(null);
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
     setIsMobileDropdownOpen(false); // Close mobile dropdown when toggling menu
@@ -16,17 +19,17 @@ function Navbar() {
 
   const toggleDropdown = (e) => {
     e.preventDefault();
-    setIsDropdownOpen(!isDropdownOpen);
+    setIsDropdownOpen((prev) => !prev);
   };
 
   const toggleMobileDropdown = (e) => {
     e.preventDefault();
-    setIsMobileDropdownOpen(!isMobileDropdownOpen);
+    setIsMobileDropdownOpen((prev) => !prev);
   };
 
   const togglePerawatanDropdown = (e) => {
     e.preventDefault();
-    setIsPerawatanDropdownOpen(!isPerawatanDropdownOpen); // Toggle dropdown Perawatan
+    setIsPerawatanDropdownOpen((prev) => !prev);
   };
 
   const closeDropdown = (e) => {
@@ -35,6 +38,24 @@ function Navbar() {
     setIsMobileDropdownOpen(false);
     setIsPerawatanDropdownOpen(false); // Tutup dropdown Perawatan
   };
+
+  // Tutup dropdown ketika klik di luar elemen
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+      if (perawatanDropdownRef.current && !perawatanDropdownRef.current.contains(event.target)) {
+        setIsPerawatanDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="bg-[#E7F0DC] shadow-md">
@@ -54,28 +75,22 @@ function Navbar() {
             <Link to="/beranda" className="block px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
               Beranda
             </Link>
-            <div className="relative">
-              <button className="flex items-center px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded cursor-pointer focus:outline-none" onClick={toggleDropdown}>
+            <div className="relative" ref={dropdownRef}>
+              <button onClick={toggleDropdown} className="flex items-center px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
                 Blog/Artikel
-                <ChevronDownOutline color={'#000000'} height="24px" width="24px" className="ml-2" />
+                <ChevronDownOutline height="24px" width="24px" className="ml-2" />
               </button>
               {isDropdownOpen && (
                 <div className="absolute left-0 mt-2 w-60 bg-white shadow-lg rounded-md border z-10">
-                  <ul className="py-2" onClick={closeDropdown}>
+                  <ul className="py-2">
                     <li>
-                      <Link
-                        to="/panduan"
-                        className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded"
-                      >
+                      <Link to="/panduan" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
                         Tips Perawatan Tanaman
                       </Link>
                     </li>
                     <hr className="border-t border-gray-400 my-1" />
                     <li>
-                      <Link
-                        to="/artikel-penyakit-tanaman"
-                        className="block px-8 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded flex items-center justify-center whitespace-nowrap"
-                      >
+                      <Link to="/artikel-penyakit-tanaman" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
                         Artikel Penyakit dan Hama
                       </Link>
                     </li>
@@ -85,32 +100,23 @@ function Navbar() {
             </div>
 
             {/* Dropdown Perawatan */}
-            <div className="relative">
-              <button className="flex items-center px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded cursor-pointer focus:outline-none" onClick={togglePerawatanDropdown}>
+            <div className="relative" ref={perawatanDropdownRef}>
+              <button onClick={togglePerawatanDropdown} className="flex items-center px-4 py-2 text-gray-800 hover:bg-[#C5D9A4] rounded">
                 Perawatan
-                <ChevronDownOutline color={'#000000'} height="24px" width="24px" className="ml-2" />
+                <ChevronDownOutline height="24px" width="24px" className="ml-2" />
               </button>
               {isPerawatanDropdownOpen && (
                 <div className="absolute left-0 mt-2 w-58 bg-white shadow-lg rounded-md border z-10">
-                  <ul className="py-2" onClick={closeDropdown}>
-                    <li className="flex justify-center">
-                      <Link
-                        to="/sign-in"
-                        className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded text-center flex items-center"
-                      >
-                        <span>Deteksi</span>
-                        <span className="ml-1">Penyakit</span>
+                  <ul className="py-2">
+                    <li>
+                      <Link to="/deteksi-penyakit" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
+                        Deteksi Penyakit
                       </Link>
                     </li>
-
                     <hr className="border-t border-gray-400 my-1" />
-                    <li className="flex justify-center">
-                      <Link
-                        to="/sign-in"
-                        className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded text-center flex items-center"
-                      >
-                        <span>Histori</span>
-                        <span className="ml-1">Tanaman</span>
+                    <li>
+                      <Link to="/histori-tanaman" className="block px-4 py-2 text-gray-800 hover:bg-[#E7F0DC] rounded">
+                        Histori Tanaman
                       </Link>
                     </li>
                   </ul>
