@@ -29,7 +29,7 @@ const HistoryDeteksi = () => {
           {/* Identification 1 */}
           <div className="flex items-center justify-center space-x-4">
             <div className="flex flex-col text-right mr-2">
-              <h2 className="text-lg font-bold">Di identifikasi</h2>
+              <h2 className="text-lg font-bold">Tomat</h2>
               <p className="text-sm text-gray-600">1 hari yang lalu</p>
             </div>
             <div className="border-l-2 border-[#565E6D] h-24 mx-4"></div>
@@ -43,7 +43,7 @@ const HistoryDeteksi = () => {
           {/* Identification 2 */}
           <div className="flex items-center justify-center space-x-4">
             <div className="flex flex-col text-right mr-2">
-              <h2 className="text-lg font-bold">Di identifikasi</h2>
+              <h2 className="text-lg font-bold">Bunga</h2>
               <p className="text-sm text-gray-600">3 hari yang lalu</p>
             </div>
             <div className="border-l-2 border-[#565E6D] h-24 mx-4"></div>
