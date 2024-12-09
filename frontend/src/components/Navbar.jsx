@@ -127,7 +127,6 @@ function Navbar() {
           <Link to="/sign-in" className="text-gray-800">
             <PersonOutline color="#000000" height="24px" width="24px" />
           </Link>
-          <Link to="/settings" className="text-gray-800"></Link>
         </div>
 
         {/* Mobile menu icon */}
@@ -135,7 +134,6 @@ function Navbar() {
           <Link to="/sign-in" className="text-gray-800">
             <PersonOutline color="#000000" height="24px" width="24px" />
           </Link>
-          <Link to="/settings" className="text-gray-800"></Link>
           <button className="text-gray-800 focus:outline-none" onClick={toggleMenu}>
             <MenuOutline color={'#000000'} height="24px" width="24px" />
           </button>
