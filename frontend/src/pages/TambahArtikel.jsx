@@ -126,7 +126,7 @@ function TambahArtikel() {
                 <div className="mt-4">
                   <p className="text-gray-700 mb-2">Pratinjau Gambar:</p>
                   <div className="relative">
-                    <img src={imagePreview} alt="Preview" className="w-full h-48 object-cover rounded-md mb-2" />
+                    <img src={imagePreview} alt="Preview" className="w-80 h-48 object-cover rounded-md mb-2" />
                     <div className="absolute top-2 right-2 flex space-x-2">
                       <button onClick={handleRemoveImage} className="bg-red-500 text-white px-2 py-1 rounded">
                         Hapus Gambar

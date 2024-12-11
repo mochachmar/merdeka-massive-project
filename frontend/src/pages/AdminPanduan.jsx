@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import FooterAdmin from '../components/FooterAdmin';
@@ -91,7 +91,7 @@ function AdminPanduan() {
 
               {/* Add Guide Button */}
               <Link to="/admin/card-panduan/tambah-panduan" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                Tambah Panduan
+                Tambah
               </Link>
             </div>
           </div>
@@ -99,7 +99,7 @@ function AdminPanduan() {
             <table className="min-w-full table-auto">
               <thead className="bg-green-200">
                 <tr>
-                  <th className="px-4 py-2 text-left text-gray-800 font-semibold">#</th>
+                  <th className="px-4 py-2 text-left text-gray-800 font-semibol">No</th>
                   <th className="px-4 py-2 text-left text-gray-800 font-semibold">Judul Panduan</th>
                   <th className="px-4 py-2 text-left text-gray-800 font-semibold">Gambar Utama</th>
                   <th className="px-4 py-2 text-center text-gray-800 font-semibold">Status</th>
@@ -115,7 +115,7 @@ function AdminPanduan() {
                       <img src={`http://localhost:3000/images/${item.thumbnail_image}`} alt={item.title} className="h-12 w-20 object-cover rounded-md" />
                     </td>
                     <td className="px-4 py-2 text-center">
-                      <span className={`px-3 py-1 rounded-full text-white font-semibold ${item.status === 'Publik' ? 'bg-green-500' : 'bg-yellow-500'}`}>{item.status}</span>
+                      <span className={`px-3 py-1 rounded-full text-white font-semibold ${item.status === 'Publik' ? 'bg-blue-400' : 'bg-green-500'}`}>{item.status}</span>
                     </td>
                     <td className="px-4 py-2 text-center">
                       <button

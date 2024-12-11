@@ -74,7 +74,7 @@ function AdminArtikel() {
           <div className="flex justify-between items-center mb-4 flex-wrap">
             <h1 className="text-2xl font-semibold text-gray-800 w-full md:w-auto">Daftar Artikel</h1>
             <Link to="/admin/card-artikel/tambah-artikel" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4 md:mt-0">
-              Tambah Artikel
+              Tambah 
             </Link>
           </div>
 
@@ -108,7 +108,7 @@ function AdminArtikel() {
                         <img src={`http://localhost:3000/uploads/${item.thumbnail_image || 'default-image.jpg'}`} alt={item.title} className="h-12 w-20 object-cover rounded-md" />
                       </td>
                       <td className="px-4 py-2 text-center">
-                        <span className={`px-3 py-1 rounded-full text-white font-semibold ${item.status === 'published' ? 'bg-green-500' : 'bg-yellow-500'}`}>{item.status === 'published' ? 'Publik' : 'Draft'}</span>
+                        <span className={`px-3 py-1 rounded-full text-white font-semibold ${item.status === 'published' ? 'bg-green-500' : 'bg-blue-400'}`}>{item.status === 'published' ? 'Publik' : 'Draft'}</span>
                       </td>
                       <td className="px-4 py-2 text-center">
                         <button onClick={() => handleEditArtikel(item.article_id)} className="bg-yellow-500 text-white px-2 py-1 rounded mr-2 hover:bg-yellow-600">

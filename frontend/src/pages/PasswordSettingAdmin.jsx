@@ -39,24 +39,24 @@ const PasswordSettingAdmin = () => {
       </button>
 
       {/* Sidebar */}
-      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:relative lg:w-1/4 w-3/4 bg-gray-100 p-5 h-full transition-transform duration-300 ease-in-out z-20`}>
+      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:relative lg:w-1/4 w-3/4 bg-[#E7F0DC] p-5 h-full transition-transform duration-300 ease-in-out z-20`}>
         <div className="flex flex-col space-y-4">
           <Link to="/admin" className="flex items-center space-x-2">
             <img src={kembaliIcon} alt="Kembali Icon" className="w-5 h-5" />
             <h2 className="text-lg font-bold">Pengaturan</h2>
           </Link>
 
-          <Link to="/admin/personal-setting" className="hover:bg-gray-200 transition-all duration-300 p-3 rounded cursor-pointer">
+          <Link to="/admin/personal-setting" className="hover:bg-[#C5D9A4] transition-all duration-300 p-3 rounded cursor-pointer">
             <img src={userIcon} alt="user" className="inline-block w-5 h-5 mr-2" />
             Pribadi
           </Link>
 
-          <Link to="/admin/password-setting" className="hover:bg-gray-200 transition-all duration-300 p-3 rounded-md bg-white cursor-pointer">
+          <Link to="/admin/password-setting" className="hover:bg-[#C5D9A4] transition-all duration-300 p-3 rounded-md bg-white cursor-pointer  border border-[#6D7E5E]">
             <img src={lockIcon} alt="lock" className="inline-block w-5 h-5 mr-2" />
             Kata Sandi
           </Link>
 
-          <Link to="/admin/other-setting" className="hover:bg-gray-200 transition-all duration-300 p-3 rounded cursor-pointer">
+          <Link to="/admin/other-setting" className="hover:bg-[#C5D9A4] transition-all duration-300 p-3 rounded cursor-pointer">
             <img src={otherIcon} alt="others" className="inline-block w-5 h-5 mr-2" />
             Lainnya
           </Link>
@@ -88,11 +88,11 @@ const PasswordSettingAdmin = () => {
               <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-lg" />
             </div>
 
-            <div className="flex justify-between mt-6">
+            <div className="flex justify-end space-x-4">
               <button type="button" onClick={() => navigate('/admin')} className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg">
                 Batal
               </button>
-              <button type="button" onClick={handleSaveChanges} className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg">
+              <button type="button" onClick={handleSaveChanges} className="px-4 py-2 bg-[#6D7E5E] text-white rounded-lg border border-[#C4C8AD] hover:bg-[#91A079]">
                 Simpan Perubahan
               </button>
             </div>

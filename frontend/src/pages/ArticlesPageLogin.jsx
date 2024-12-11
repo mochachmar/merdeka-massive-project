@@ -37,7 +37,7 @@ function ArticlesPage() {
             className="relative bg-cover bg-center h-72 flex items-center justify-center"
             style={{ backgroundImage: `url(${gambarBanner})` }}
           >
-            <div className="absolute inset-0 bg-black opacity-50 backdrop-blur-lg"></div>
+            <div className="absolute inset-0  opacity-50 "></div>
             <h1 className="text-white text-center text-3xl font-semibold relative z-10">
               Temukan artikel dan perawatan untuk <br />
               meningkatkan kualitas tanaman anda!
