@@ -13,10 +13,12 @@ const OtherSettings = () => {
       {/* Hamburger Menu */}
       <button onClick={toggleSidebar} className={`lg:hidden p-4 z-30 fixed top-0 ${isSidebarOpen ? 'right-0' : 'left-0'} transition-all duration-300`} aria-label="Toggle Sidebar">
         {isSidebarOpen ? (
+          // Icon Close
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         ) : (
+          // Icon Hamburger
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
           </svg>
@@ -24,32 +26,32 @@ const OtherSettings = () => {
       </button>
 
       {/* Sidebar */}
-      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:relative lg:w-1/4 w-3/4 bg-green-100 p-4 sm:p-6 h-full transition-transform duration-300 ease-in-out z-20`}>
+      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:relative lg:w-1/4 w-3/4 bg-[#E7F0DC] p-4 sm:p-6 h-full transition-transform duration-300 ease-in-out z-20`}>
         <Link to="/beranda-login" className="flex items-center space-x-2">
           <img src="./src/assets/settings-icon.svg" alt="Pengaturan Icon" className="w-5 h-5" />
           <h2 className="text-lg font-bold">Pengaturan</h2>
         </Link>
         <ul className="mt-4 space-y-4">
           <li>
-            <Link to="/personal-setting" className="flex items-center space-x-2 p-2 rounded-md hover:bg-green-200 transition duration-300 ease-in-out cursor-pointer">
+            <Link to="/personal-setting" className="flex items-center space-x-2 p-2 rounded-md hover:bg-[#C5D9A4] transition duration-300 ease-in-out cursor-pointer">
               <img src="./src/assets/user-icon.svg" alt="Pribadi Icon" className="w-5 h-5" />
               <span>Pribadi</span>
             </Link>
           </li>
           <li>
-            <Link to="/password-setting" className="flex items-center space-x-2 p-2 rounded-md hover:bg-green-200 transition duration-300 ease-in-out cursor-pointer">
+            <Link to="/password-setting" className="flex items-center space-x-2 p-2 rounded-md hover:bg-[#C5D9A4] transition duration-300 ease-in-out cursor-pointer">
               <img src="./src/assets/lock-icon.svg" alt="Kata Sandi Icon" className="w-5 h-5" />
               <span>Kata Sandi</span>
             </Link>
           </li>
           <li>
-            <Link to="/appearance-setting" className="flex items-center space-x-2 p-2 rounded-md hover:bg-green-200 transition duration-300 ease-in-out cursor-pointer">
+            <Link to="/appearance-setting" className="flex items-center space-x-2 p-2 rounded-md hover:bg-[#C5D9A4] transition duration-300 ease-in-out cursor-pointer">
               <img src="./src/assets/paint-icon.svg" alt="Tampilan Icon" className="w-5 h-5" />
               <span>Tampilan</span>
             </Link>
           </li>
           <li>
-            <Link to="/other-setting" className="flex items-center space-x-2 p-2 rounded-md bg-white hover:bg-green-200 transition duration-300 ease-in-out cursor-pointer">
+            <Link to="/other-setting" className="flex items-center space-x-2 p-2 rounded-md bg-white hover:bg-[#C5D9A4] transition duration-300 ease-in-out cursor-pointer border border-[#6D7E5E]">
               <img src="./src/assets/menu-icon.svg" alt="Lainnya Icon" className="w-5 h-5" />
               <span>Lainnya</span>
             </Link>
@@ -74,7 +76,9 @@ const OtherSettings = () => {
 
         <div className="flex justify-end space-x-4">
           <button className="border border-gray-300 text-gray-700 rounded-md px-4 py-2">Batal</button>
-          <button className="bg-green-500 text-white rounded-md px-4 py-2">Simpan Perubahan</button>
+          <button type="submit" className="bg-[#6D7E5E] text-white rounded-md px-4 py-2 border border-[#C4C8AD] hover:bg-[#91A079]">
+            Simpan Perubahan
+          </button>
         </div>
       </div>
     </div>

@@ -36,7 +36,7 @@ const OtherSettingAdmin = () => {
   return (
     <div className="flex h-screen w-full overflow-hidden">
       {/* Hamburger Menu */}
-      <button onClick={toggleSidebar} className="lg:hidden p-4 z-30 fixed top-0 left-0" aria-label="Toggle Sidebar">
+      <button onClick={toggleSidebar} className={`lg:hidden p-4 z-30 fixed top-0 ${isSidebarOpen ? 'right-0' : 'left-0'} transition-all duration-300`} aria-label="Toggle Sidebar">
         {isSidebarOpen ? (
           // Icon Close
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
@@ -51,24 +51,24 @@ const OtherSettingAdmin = () => {
       </button>
 
       {/* Sidebar */}
-      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:relative lg:w-1/4 w-3/4 bg-gray-100 p-5 h-full transition-transform duration-300 ease-in-out z-20`}>
+      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:relative lg:w-1/4 w-3/4 bg-[#E7F0DC] p-5 h-full transition-transform duration-300 ease-in-out z-20`}>
         <div className="flex flex-col space-y-4">
           <Link to="/admin" className="flex items-center space-x-2">
             <img src={kembaliIcon} alt="Kembali Icon" className="w-5 h-5" />
             <h2 className="text-lg font-bold">Pengaturan</h2>
           </Link>
 
-          <Link to="/admin/personal-setting" className="hover:bg-gray-200 transition-all duration-300 p-3 rounded cursor-pointer flex items-center">
+          <Link to="/admin/personal-setting" className="hover:bg-[#C5D9A4] transition-all duration-300 p-3 rounded cursor-pointer flex items-center ">
             <img src={userIcon} alt="user" className="inline-block w-5 h-5 mr-2" />
             Pribadi
           </Link>
 
-          <Link to="/admin/password-setting" className="hover:bg-gray-200 transition-all duration-300 p-3 rounded cursor-pointer flex items-center">
+          <Link to="/admin/password-setting" className="hover:bg-[#C5D9A4]  transition-all duration-300 p-3 rounded cursor-pointer flex items-center">
             <img src={lockIcon} alt="lock" className="inline-block w-5 h-5 mr-2" />
             Kata Sandi
           </Link>
 
-          <Link to="/admin/other-setting" className="hover:bg-gray-200 transition-all duration-300 p-3 rounded-md bg-white cursor-pointer flex items-center">
+          <Link to="/admin/other-setting" className="hover:bg-[#C5D9A4]  transition-all duration-300 p-3 rounded-md bg-white cursor-pointer flex items-center  border border-[#6D7E5E]">
             <img src={otherIcon} alt="others" className="inline-block w-5 h-5 mr-2" />
             Lainnya
           </Link>
@@ -85,7 +85,7 @@ const OtherSettingAdmin = () => {
             Kembali
           </button>
 
-          <Link to="/admin/form-other-setting" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-all duration-300">
+          <Link to="/admin/form-other-setting" className="bg-[#6D7E5E] text-white px-4 py-2 rounded  transition-all duration-300 hover:bg-[#91A079]">
             + Tambah User
           </Link>
         </div>

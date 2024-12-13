@@ -37,7 +37,7 @@ function BerandaLogin() {
       {/* Hero Section */}
       <section className="relative">
         <img src={homeImage} alt="Tanaman Hidroponik" className="w-full h-96 object-cover" />
-        <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-end">
+        <div className="absolute inset-0 bg-opacity-30 flex items-center justify-end">
           <div className="text-left text-white p-6 md:px-16 lg:px-32">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Solusi Perawatan</h1>
             <h2 className="text-4xl md:text-5xl font-semibold mb-4">Tanaman Hidroponik</h2>
