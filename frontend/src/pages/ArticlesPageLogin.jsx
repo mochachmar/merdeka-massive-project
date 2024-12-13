@@ -33,10 +33,7 @@ function ArticlesPage() {
         <div className="text-center py-4">Loading...</div> // Menampilkan loading
       ) : (
         <>
-          <div
-            className="relative bg-cover bg-center h-72 flex items-center justify-center"
-            style={{ backgroundImage: `url(${gambarBanner})` }}
-          >
+          <div className="relative bg-cover bg-center h-72 flex items-center justify-center" style={{ backgroundImage: `url(${gambarBanner})` }}>
             <div className="absolute inset-0  opacity-50 "></div>
             <h1 className="text-white text-center text-3xl font-semibold relative z-10">
               Temukan artikel dan perawatan untuk <br />
@@ -47,13 +44,13 @@ function ArticlesPage() {
           <h1 className="text-center text-4xl font-bold py-4">Artikel Penyakit & Hama</h1>
           <p className="text-center text-xl font-regular">Artikel Penyakit & Hama pada tanaman</p>
           <div className="flex flex-row flex-wrap gap-10 pt-8 mx-20 justify-center py-6">
-            {articles.length > 0 ? articles.map((article) => (
-              <Card article={article} key={article.id} />
-            )) : <p className="text-center text-gray-700">Tidak ada artikel tersedia</p>}
+            {articles.length > 0 ? articles.map((article) => <Card article={article} key={article.id} />) : <p className="text-center text-gray-700">Tidak ada artikel tersedia</p>}
           </div>
         </>
       )}
-      <Footer />
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }

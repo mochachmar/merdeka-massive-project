@@ -48,7 +48,9 @@ function ArticlesPage() {
       <div className="flex flex-row flex-wrap gap-10 pt-8 mx-20 justify-center py-6">
         {articles.length > 0 ? articles.map((article) => <Card article={article} key={article.id} />) : <p className="text-center text-gray-700">Tidak ada artikel tersedia</p>}
       </div>
-      <Footer />
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }
