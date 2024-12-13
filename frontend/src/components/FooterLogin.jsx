@@ -31,7 +31,7 @@ const Footer = () => {
             </Link>
           </li>
           <li>
-            <Link to="/identifikasi-ai" className="hover:text-gray-600">
+            <Link to="/deteksi-penyakit" className="hover:text-gray-600">
               Perawatan
             </Link>
           </li>

@@ -83,11 +83,6 @@ const Tentangkami = () => {
               TanamanKu adalah platform inovatif berbasis AI yang dirancang untuk membantu Anda merawat tanaman hidroponik dengan lebih mudah dan efektif. Mulai dari deteksi penyakit hingga panduan perawatan, TanamanKu memberikan solusi
               cerdas yang dapat diakses di mana saja.
             </p>
-
-            <div className="flex justify-end gap-4">
-              <button className="bg-[#6D7E5E] text-white py-2 px-6 rounded-md hover:bg-[#5c6b52] transition duration-300">Daftar</button>
-              <button className="border border-[#45543D] text-black py-2 px-6 rounded-md hover:bg-gray-200 transition duration-300">Masuk</button>
-            </div>
           </div>
         </div>
       </main>
