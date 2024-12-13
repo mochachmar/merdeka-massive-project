@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link, useLocation } from "react-router-dom";
 import "../index.css";
@@ -22,14 +22,16 @@ const IdentifikasiAI = () => {
   const [loading, setLoading] = useState(false);
   const location = useLocation();
 
+  const detectCalled = useRef(false);
+  const uploadCalled = useRef(false);
+
   useEffect(() => {
     const detectPlant = async () => {
-      if (!location.state?.imageFile) {
-        console.log("No image file found in location state");
+      if (!location.state?.imageFile || detectCalled.current) {
         return;
       }
 
-      console.log("Starting plant detection process...");
+      detectCalled.current = true; // Tandai proses sudah dijalankan
       setLoading(true);
 
       const formData = new FormData();
@@ -38,38 +40,38 @@ const IdentifikasiAI = () => {
 
       try {
         const response = await axios.post(
-          "https://application-2c.1ojgx14h1gp0.jp-tok.codeengine.appdomain.cloud/api/v1/predict",
+          "https://tanamanku-api.1ojgx14h1gp0.jp-tok.codeengine.appdomain.cloud/api/v1/predict",
           formData,
           {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
+            headers: { "Content-Type": "multipart/form-data" },
           }
         );
-
         console.log("Prediction API response received successfully");
-        const predictionData = response.data.detail.predictions;
-        setPredictions(predictionData);
+        setPredictions(response.data.detail.predictions);
         setImage(response.data.detail.image);
       } catch (error) {
         console.error("Error in plant detection:", error);
         alert("Gagal mengambil data prediksi. Silakan coba lagi.");
       } finally {
-        console.log("Plant detection process completed");
         setLoading(false);
       }
     };
 
     detectPlant();
-  }, [location.state]); // Trigger when location.state changes
-
+  }, [location.state]);
   // Second useEffect: Upload plant data after prediction
+
   useEffect(() => {
     const uploadPlantData = async () => {
-      if (!location.state?.imageFile || predictions.length === 0) {
-        console.log("No image file or predictions available");
+      if (
+        !location.state?.imageFile ||
+        predictions.length === 0 ||
+        uploadCalled.current
+      ) {
         return;
       }
+
+      uploadCalled.current = true; // Tandai proses sudah dijalanka
 
       const formData = new FormData();
       formData.append("file", location.state.imageFile);
@@ -106,12 +108,8 @@ const IdentifikasiAI = () => {
       }
     };
 
-    // Run upload only if predictions are available
-    if (predictions.length > 0) {
-      uploadPlantData();
-    }
-  }, [predictions, location.state]); // Trigger upload when predictions change
-
+    uploadPlantData();
+  }, [predictions, location.state]);
   return (
     <div className="flex flex-col min-h-screen w-full m-0 p-0 relative">
       {/* Loading Overlay */}
