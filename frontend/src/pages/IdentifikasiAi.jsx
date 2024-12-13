@@ -6,6 +6,7 @@ import { ArrowBackOutline, LeafOutline, ScanOutline } from 'react-ionicons';
 import Navbar from '../components/Navbar-Login';
 import Footer from '../components/FooterLogin';
 import ReactMarkdown from 'react-markdown';
+
 const plantsData = {
   tomato: { name: 'Tomat', scientificName: 'Solanum lycopersicum' },
   cucumber: { name: 'Mentimun', scientificName: 'Cucumis sativus' },
@@ -37,10 +38,15 @@ const IdentifikasiAI = () => {
       formData.append('plant_type', location.state.plantType);
 
       try {
-        const response = await axios.post('https://application-2c.1ojgx14h1gp0.jp-tok.codeengine.appdomain.cloud/api/v1/predict', formData, {
+        const response = await axios({
+          method: 'post',
+          url: 'https://tanamanku-api.1ojgx14h1gp0.jp-tok.codeengine.appdomain.cloud/api/v1/predict/',
+          data: formData,
           headers: {
             'Content-Type': 'multipart/form-data',
+            Accept: 'application/json',
           },
+          withCredentials: false, // ubah menjadi false untuk API eksternal
         });
 
         console.log('Prediction API response received successfully');
@@ -51,19 +57,17 @@ const IdentifikasiAI = () => {
         console.error('Error in plant detection:', error);
         alert('Gagal mengambil data prediksi. Silakan coba lagi.');
       } finally {
-        console.log('Plant detection process completed');
         setLoading(false);
       }
     };
 
     detectPlant();
-  }, [location.state]); // Trigger when location.state changes
+  }, [location.state]);
 
-  // Second useEffect: Upload plant data after prediction
+  // Untuk upload ke backend lokal
   useEffect(() => {
     const uploadPlantData = async () => {
       if (!location.state?.imageFile || predictions.length === 0) {
-        console.log('No image file or predictions available');
         return;
       }
 
@@ -76,24 +80,27 @@ const IdentifikasiAI = () => {
       formData.append('created_by', '1');
 
       try {
-        const response = await axios.post('http://localhost:3000/api/upload-tanaman', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
+        await axios({
+          method: 'post',
+          url: 'http://localhost:8080/api/upload-tanaman',
+          data: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          withCredentials: true, // tetap true untuk backend lokal
         });
-        console.log('Plant data uploaded successfully:', response.data);
       } catch (error) {
-        console.error('Error uploading plant data:', error.response?.data || error.message);
+        console.error('Error uploading plant data:', error);
       }
     };
 
-    // Run upload only if predictions are available
     if (predictions.length > 0) {
       uploadPlantData();
     }
-  }, [predictions, location.state]); // Trigger upload when predictions change
+  }, [predictions, location.state]);
 
   return (
     <div className="flex flex-col min-h-screen w-full m-0 p-0 relative">
-      {/* Loading Overlay */}
       {loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-600"></div>
@@ -113,17 +120,14 @@ const IdentifikasiAI = () => {
           </Link>
         </div>
 
-        {/* Tampilan Hasil Prediksi */}
         {image && predictions.length > 0 && (
           <div className="mb-6">
             <h2 className="text-2xl font-semibold mb-4 text-center">Hasil Deteksi</h2>
             <div className="flex flex-col md:flex-row gap-6">
-              {/* Gambar Prediksi */}
               <div className="flex-1">
                 <img src={`data:image/png;base64,${image}`} alt="Hasil Prediksi" className="w-full object-contain rounded-lg border" />
               </div>
 
-              {/* Prediksi Detail */}
               <div className="flex-1">
                 {predictions.map((prediction, index) => (
                   <div key={index} className="bg-transparent bg-opacity-50 border border-[#45543D] shadow-lg rounded-lg p-4 mb-4">
@@ -136,10 +140,8 @@ const IdentifikasiAI = () => {
           </div>
         )}
 
-        {/* Tampilan sebelumnya tetap dipertahankan */}
         <div className="flex justify-center mb-4">{location.state?.imageFile && <img src={URL.createObjectURL(location.state.imageFile)} alt="Uploaded Plant" className="mb-4 min-w-56 max-h-56 h-auto mx-4" />}</div>
 
-        {/* Bagian spesifikasi dan penilaian */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 mb-12">
           <div className="bg-transparent bg-opacity-50 border border-[#45543D] shadow-lg rounded-lg p-4 h-fit">
             <h3 className="text-lg font-bold mb-2 text-center flex items-center justify-center">
