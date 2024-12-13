@@ -1,6 +1,8 @@
+// IdentifikasiAi.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import '../index.css';
 import { ArrowBackOutline, LeafOutline, ScanOutline } from 'react-ionicons';
 import Navbar from '../components/Navbar-Login';
@@ -55,7 +57,11 @@ const IdentifikasiAI = () => {
         setImage(response.data.detail.image);
       } catch (error) {
         console.error('Error in plant detection:', error);
-        alert('Gagal mengambil data prediksi. Silakan coba lagi.');
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Gagal mengambil data prediksi. Silakan coba lagi.',
+        });
       } finally {
         setLoading(false);
       }
@@ -71,26 +77,57 @@ const IdentifikasiAI = () => {
         return;
       }
 
+      // Mapping hasil prediksi ke health_status dan disease_name
+      let health_status = 'healthy'; // Default
+      let disease_name = 'None'; // Default
+
+      // Contoh mapping berdasarkan confidence atau logic tertentu
+      const topPrediction = predictions[0];
+      if (topPrediction.confidence < 0.5) {
+        health_status = 'unhealthy';
+        disease_name = topPrediction.class_label || 'Unknown';
+      } else {
+        health_status = 'healthy';
+        disease_name = 'None';
+      }
+
       const formData = new FormData();
       formData.append('file', location.state.imageFile);
       formData.append('plant_name', location.state.plantType);
       formData.append('scientific_name', plantsData[location.state.plantType]?.scientificName || 'Scientific name not found');
-      formData.append('description', predictions[0].class_name || 'tanaman ini blablablabal');
-      formData.append('care_intructions', predictions[0]?.solution || 'rawat dan sirami tiap hari');
-      formData.append('created_by', '1');
+      formData.append('description', topPrediction.class_label || 'No description');
+      formData.append('care_instructions', topPrediction.solution || 'No care instructions'); // Perbaikan di sini
+      formData.append('health_status', health_status);
+      formData.append('disease_name', disease_name);
+      formData.append('created_by', '2'); // Ganti dengan user_id yang sesuai
 
       try {
-        await axios({
+        const response = await axios({
           method: 'post',
-          url: 'http://localhost:8080/api/upload-tanaman',
+          url: 'http://localhost:3000/api/upload-tanaman',
           data: formData,
           headers: {
             'Content-Type': 'multipart/form-data',
           },
           withCredentials: true, // tetap true untuk backend lokal
         });
+        console.log('Response:', response.data);
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: 'Deteksi dan penyimpanan berhasil!',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        });
       } catch (error) {
         console.error('Error uploading plant data:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal!',
+          text: 'Gagal menyimpan data. Coba lagi.',
+        });
       }
     };
 
@@ -116,7 +153,7 @@ const IdentifikasiAI = () => {
             Kembali
           </Link>
           <Link to="/histori-tanaman" className="text-black font-semibold text-sm mr-4">
-            Tanaman Saya
+            Riwayat deteksi
           </Link>
         </div>
 

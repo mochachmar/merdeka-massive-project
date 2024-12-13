@@ -20,3 +20,35 @@ export const insertPlant = async (data) => {
     throw error; // Lempar error agar dapat ditangani oleh pemanggil fungsi
   }
 };
+
+export const getPlantHistory = async () => {
+  const query = `
+    SELECT 
+      plant_id,
+      plant_name,
+      photo_url,
+      createdAt,
+      description,
+      care_instructions
+    FROM Plant
+    ORDER BY createdAt DESC
+  `;
+
+  try {
+    const [rows] = await db.query(query);
+    return rows;
+  } catch (error) {
+    console.error('Error fetching plant history:', error);
+    throw error;
+  }
+};
+
+export const deleteAllPlants = async () => {
+  const query = `DELETE FROM Plant`;
+  try {
+    await db.query(query);
+  } catch (error) {
+    console.error('Error deleting all plants:', error);
+    throw error;
+  }
+};

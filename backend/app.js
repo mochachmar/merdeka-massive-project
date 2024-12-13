@@ -110,7 +110,7 @@ app.delete('/api/articles/:id', (req, res) => {
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-const PORT = 8080;
+const PORT = 3000;
 app.listen(PORT, () => {
   testConnection();
   console.log('Server sedang berjalan di PORT:', PORT);

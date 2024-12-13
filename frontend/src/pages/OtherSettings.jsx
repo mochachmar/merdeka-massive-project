@@ -1,11 +1,57 @@
+// OtherSettings.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import { deleteAllPlantHistory } from '../services/plantService.js'; // Pastikan Anda memiliki fungsi ini
+
+const MySwal = withReactContent(Swal);
 
 const OtherSettings = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleDeleteAllHistory = async () => {
+    const result = await MySwal.fire({
+      title: 'Apakah Anda yakin?',
+      text: 'Apakah anda yakin untuk menghapus semua riwayat identifikasi tanaman?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Ya, hapus semua!',
+      cancelButtonText: 'Batal',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await deleteAllPlantHistory();
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: 'Berhasil menghapus semua riwayat identifikasi tanaman!',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        });
+        // Optional: Refresh data atau redirect
+      } catch (error) {
+        console.error('Error deleting plant history:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal!',
+          text: error.response?.data?.message || 'Terjadi kesalahan saat menghapus semua riwayat identifikasi tanaman!.',
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+    }
   };
 
   return (
@@ -72,7 +118,9 @@ const OtherSettings = () => {
           </select>
         </div>
 
-        <button className="bg-red-100 text-red-500 rounded-md px-4 py-2 mb-8">Hapus Riwayat Tanaman</button>
+        <button onClick={handleDeleteAllHistory} className="bg-red-100 text-red-500 rounded-md px-4 py-2 mb-8">
+          Hapus Riwayat Tanaman
+        </button>
 
         <div className="flex justify-end space-x-4">
           <button className="border border-gray-300 text-gray-700 rounded-md px-4 py-2">Batal</button>
