@@ -1,5 +1,5 @@
 // IdentifikasiAi.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2'; // Import SweetAlert2
@@ -24,15 +24,16 @@ const IdentifikasiAI = () => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
+  const detectCalled = useRef(false);
+  const uploadCalled = useRef(false);
 
   useEffect(() => {
     const detectPlant = async () => {
-      if (!location.state?.imageFile) {
-        console.log('No image file found in location state');
+      if (!location.state?.imageFile || detectCalled.current) {
         return;
       }
 
-      console.log('Starting plant detection process...');
+      detectCalled.current = true; // Tandai proses sudah dijalankan
       setLoading(true);
 
       const formData = new FormData();
@@ -52,8 +53,7 @@ const IdentifikasiAI = () => {
         });
 
         console.log('Prediction API response received successfully');
-        const predictionData = response.data.detail.predictions;
-        setPredictions(predictionData);
+        setPredictions(response.data.detail.predictions);
         setImage(response.data.detail.image);
       } catch (error) {
         console.error('Error in plant detection:', error);
@@ -73,7 +73,7 @@ const IdentifikasiAI = () => {
   // Untuk upload ke backend lokal
   useEffect(() => {
     const uploadPlantData = async () => {
-      if (!location.state?.imageFile || predictions.length === 0) {
+      if (!location.state?.imageFile || predictions.length === 0 || uploadCalled.current) {
         return;
       }
 
@@ -90,6 +90,8 @@ const IdentifikasiAI = () => {
         health_status = 'healthy';
         disease_name = 'None';
       }
+
+      uploadCalled.current = true;
 
       const formData = new FormData();
       formData.append('file', location.state.imageFile);
@@ -131,9 +133,7 @@ const IdentifikasiAI = () => {
       }
     };
 
-    if (predictions.length > 0) {
-      uploadPlantData();
-    }
+    uploadPlantData();
   }, [predictions, location.state]);
 
   return (
@@ -153,7 +153,7 @@ const IdentifikasiAI = () => {
             Kembali
           </Link>
           <Link to="/histori-tanaman" className="text-black font-semibold text-sm mr-4">
-            Riwayat deteksi
+            Riwayat Deteksi Tanaman
           </Link>
         </div>
 
