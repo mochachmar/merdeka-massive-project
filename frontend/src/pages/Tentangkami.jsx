@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 const Tentangkami = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navbar at the top */}
@@ -32,7 +35,7 @@ const Tentangkami = () => {
           {/* Content Sections with Alternating Layout */}
           <div className="space-y-12">
             {/* First Row */}
-            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16 p-6 rounded-lg shadow bg-gray-50">
+            <div className="flex flex-col-reverse lg:flex-row items-center gap-8 lg:gap-16 p-6 rounded-lg shadow bg-gray-50">
               <div className="w-full lg:w-1/2">
                 <img src="./src/assets/ttgkami.jpg" alt="Tentang Kami 1" className="w-full h-auto object-cover rounded-lg transition-transform duration-300 hover:scale-105" />
               </div>
@@ -85,8 +88,12 @@ const Tentangkami = () => {
             </p>
 
             <div className="flex justify-end gap-4">
-              <button className="bg-[#6D7E5E] text-white py-2 px-6 rounded-md hover:bg-[#5c6b52] transition duration-300">Daftar</button>
-              <button className="border border-[#45543D] text-black py-2 px-6 rounded-md hover:bg-gray-200 transition duration-300">Masuk</button>
+              <button onClick={() => navigate('/sign-up')} className="bg-[#6D7E5E] text-white py-2 px-6 rounded-md hover:bg-[#5c6b52] transition duration-300">
+                Daftar
+              </button>
+              <button onClick={() => navigate('/sign-in')} className="border border-[#45543D] text-black py-2 px-6 rounded-md hover:bg-gray-200 transition duration-300">
+                Masuk
+              </button>
             </div>
           </div>
         </div>
