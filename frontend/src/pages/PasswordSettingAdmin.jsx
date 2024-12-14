@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+// PasswordSettingAdmin.jsx
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import lockIcon from '../assets/lock-icon.svg';
 import userIcon from '../assets/user-icon.svg';
 import otherIcon from '../assets/menu-icon.svg';
 import kembaliIcon from '../assets/settings-icon.svg';
+import { useAuthStore } from '../store/FetchDataWithAxios'; // Import Zustand store
+import Swal from 'sweetalert2'; // Import SweetAlert2
+import axios from 'axios'; // Import Axios
+
+const API_URL = import.meta.env.MODE === 'development' ? 'http://localhost:3000/api/auth' : '/api/auth';
 
 const PasswordSettingAdmin = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -12,9 +18,63 @@ const PasswordSettingAdmin = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSaveChanges = () => {
-    console.log('Password updated');
-    navigate('/admin');
+  const { admin, isAdminAuthenticated, checkAuthAdmin, changeAdminPassword } = useAuthStore();
+
+  useEffect(() => {
+    // Jika admin belum terautentikasi, cek autentikasi
+    if (!isAdminAuthenticated) {
+      checkAuthAdmin();
+    }
+  }, [isAdminAuthenticated, checkAuthAdmin]);
+
+  useEffect(() => {
+    if (admin) {
+      // Jika diperlukan, Anda bisa mengatur state tambahan di sini
+    }
+  }, [admin]);
+
+  const handleSaveChanges = async (e) => {
+    e.preventDefault();
+
+    // Validasi input
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Peringatan',
+        text: 'Semua kolom wajib diisi!',
+      });
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: 'Kata sandi baru dan konfirmasi tidak cocok!',
+      });
+      return;
+    }
+
+    try {
+      // Panggil fungsi di Zustand store untuk mengganti kata sandi
+      const response = await changeAdminPassword(oldPassword, newPassword, confirmPassword);
+      if (response.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil',
+          text: 'Kata sandi berhasil diperbarui!',
+          timer: 2000,
+          showConfirmButton: false,
+        });
+        navigate('/admin');
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: error.message || 'Terjadi kesalahan saat memperbarui kata sandi.',
+      });
+    }
   };
 
   const toggleSidebar = () => {
@@ -66,33 +126,33 @@ const PasswordSettingAdmin = () => {
       {/* Content */}
       <div className="flex-1 p-6 overflow-y-auto h-full lg:ml-0">
         <div className="bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-xl font-bold mb-4">Kata sandi</h2>
+          <h2 className="text-xl font-bold mb-4">Kata Sandi</h2>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSaveChanges}>
             <div>
               <label htmlFor="oldPassword" className="block text-sm font-medium">
                 Kata Sandi Lama
               </label>
-              <input type="password" id="oldPassword" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-lg" />
+              <input type="password" id="oldPassword" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-lg" required />
             </div>
             <div>
               <label htmlFor="newPassword" className="block text-sm font-medium">
                 Kata Sandi Baru
               </label>
-              <input type="password" id="newPassword" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-lg" />
+              <input type="password" id="newPassword" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-lg" required />
             </div>
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium">
                 Konfirmasi Kata Sandi
               </label>
-              <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-lg" />
+              <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-lg" required />
             </div>
 
             <div className="flex justify-end space-x-4">
               <button type="button" onClick={() => navigate('/admin')} className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg">
                 Batal
               </button>
-              <button type="button" onClick={handleSaveChanges} className="px-4 py-2 bg-[#6D7E5E] text-white rounded-lg border border-[#C4C8AD] hover:bg-[#91A079]">
+              <button type="submit" className="px-4 py-2 bg-[#6D7E5E] text-white rounded-lg border border-[#C4C8AD] hover:bg-[#91A079]">
                 Simpan Perubahan
               </button>
             </div>

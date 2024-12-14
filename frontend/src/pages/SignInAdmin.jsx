@@ -1,10 +1,15 @@
+// SignInAdmin.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Tambahkan axios
 import closeUpGreenLeavesNature from '../assets/close-up-green-leaves-nature.png';
 import removeRedEye from '../assets/remove-red-eye.svg';
+import { useAuthStore } from '../store/FetchDataWithAxios';
+import Swal from 'sweetalert2';
 
 export const SignInAdmin = () => {
   const navigate = useNavigate();
+  const { loginAdmin } = useAuthStore(); // Ambil fungsi loginAdmin dari store
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -25,14 +30,14 @@ export const SignInAdmin = () => {
     return strongPasswordRegex.test(password);
   };
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
 
     // Reset errors
     setError('');
     setPasswordError('');
 
-    // Validasi email dan password bersamaan
+    // Validasi email dan password
     let isValid = true;
 
     if (!email) {
@@ -53,8 +58,32 @@ export const SignInAdmin = () => {
 
     if (!isValid) return; // Hentikan proses jika validasi gagal
 
-    // Lanjutkan ke halaman splash login setelah validasi berhasil
-    navigate('/admin'); // Sesuaikan rute tujuan setelah login
+    // Kirim permintaan login admin ke backend
+    try {
+      await loginAdmin(email, password); // Panggil fungsi loginAdmin dari store
+      // Show SweetAlert success
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Berhasil masuk! Anda akan dialihkan!',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+      navigate('/splash-login-admin'); // Arahkan ke SplashScreenAdmin sebelum dashboard
+    } catch (err) {
+      // Show SweetAlert error
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: err.response?.data?.message || 'Login gagal. Silakan coba lagi.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+    }
   };
 
   return (

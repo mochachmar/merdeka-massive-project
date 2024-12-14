@@ -1,7 +1,10 @@
+// auth.controller.js
 import { sendVerificationEmail, sendWelcomeEmail, sendPasswordResetEmail, sendResetSuccessEmail } from '../mailtrap/emails.js';
 import { User } from '../models/user.model.js';
+import { Admin } from '../models/admin.model.js';
 import bcryptjs from 'bcryptjs';
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken'; // Ditambahkan
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie.js';
 
 export const signup = async (req, res) => {
@@ -34,7 +37,7 @@ export const signup = async (req, res) => {
     // Fetch the created user
     const newUser = await User.findById(userId);
 
-    // Generate JWT and set cookie
+    // Generate JWT dan set cookie
     generateTokenAndSetCookie(res, newUser.id);
 
     await sendVerificationEmail(newUser.email, verificationToken);
@@ -106,20 +109,19 @@ export const login = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Gagal login! Mohon periksa email dan password Anda!' });
     }
 
-    // Generate JWT and set cookie
-    generateTokenAndSetCookie(res, user.id);
+    // Generate JWT dan set cookie untuk pengguna biasa
+    generateTokenAndSetCookie(res, user.id, 'user');
 
-    // Update the lastLogin timestamp using the correct update method
+    // Update lastLogin timestamp
     const updateData = { lastLogin: new Date() };
-    await User.update(user.id, updateData); // Use User.update instead of updateOne
+    await User.update(user.id, updateData);
 
-    // Send response with user data, excluding the password
     res.status(200).json({
       success: true,
       message: 'Berhasil login!',
       user: {
-        ...user, // Return the user object with updated data
-        password: undefined, // Hide password
+        ...user,
+        password: undefined, // Sembunyikan password
       },
     });
   } catch (error) {
@@ -129,7 +131,41 @@ export const login = async (req, res) => {
 };
 
 export const loginAdmin = async (req, res) => {
-  res.send('login Admin route');
+  const { email, password } = req.body;
+  try {
+    // Validasi input
+    if (!email || !password) {
+      return res.status(400).json({ success: false, message: 'Email dan kata sandi wajib diisi!' });
+    }
+
+    // Cari admin berdasarkan email
+    const admin = await Admin.findByEmail(email);
+    if (!admin) {
+      return res.status(400).json({ success: false, message: 'Gagal login! Email atau kata sandi salah.' });
+    }
+
+    // Verifikasi kata sandi
+    const isPasswordValid = await bcryptjs.compare(password, admin.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ success: false, message: 'Gagal login! Email atau kata sandi salah.' });
+    }
+
+    // Generate JWT dan set cookie untuk admin
+    generateTokenAndSetCookie(res, admin.admin_id, 'admin');
+
+    res.status(200).json({
+      success: true,
+      message: 'Berhasil login sebagai admin!',
+      admin: {
+        id: admin.admin_id,
+        email: admin.email,
+        username: admin.username,
+      },
+    });
+  } catch (error) {
+    console.error('Gagal login admin:', error);
+    res.status(500).json({ success: false, message: 'Terjadi kesalahan server!' });
+  }
 };
 
 export const logout = async (req, res) => {
@@ -138,8 +174,16 @@ export const logout = async (req, res) => {
 };
 
 export const logoutAdmin = async (req, res) => {
-  res.send('logout admin route');
+  try {
+    res.clearCookie('adminToken');
+    res.status(200).json({ success: true, message: 'Berhasil logout dari akun admin!' });
+  } catch (error) {
+    console.error('Gagal logout admin:', error);
+    res.status(500).json({ success: false, message: 'Terjadi kesalahan saat logout admin.' });
+  }
 };
+
+// Fungsi lainnya tetap sama...
 
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
@@ -159,7 +203,7 @@ export const forgotPassword = async (req, res) => {
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpiresAt = resetPasswordExpiresAt; // Set the expiration time
 
-    // Save user with updated reset password token and expiration
+    // Save user dengan updated reset password token dan expiration
     await User.update(user.id, {
       resetPasswordToken: resetToken,
       resetPasswordExpiresAt: new Date(resetPasswordExpiresAt),
@@ -167,7 +211,7 @@ export const forgotPassword = async (req, res) => {
 
     console.log('Token reset password di update:', resetToken, resetPasswordExpiresAt);
 
-    // Send password reset email with the reset token URL
+    // Send password reset email dengan reset token URL
     await sendPasswordResetEmail(user.email, `${process.env.CLIENT_URL}new-password/${resetToken}`);
 
     res.status(200).json({ success: true, message: 'Link reset password berhasil dikirim di email Anda!' });
@@ -306,5 +350,141 @@ export const updatePassword = async (req, res) => {
   } catch (error) {
     console.error('Gagal mengubah password:', error);
     res.status(500).json({ success: false, message: 'Terjadi kesalahan saat mengubah password.' });
+  }
+};
+
+export const createAdmin = async (req, res) => {
+  const { email, username, password } = req.body;
+  try {
+    if (!email || !username || !password) {
+      throw new Error('Semua field wajib diisi');
+    }
+
+    // Cek apakah admin sudah ada
+    const adminAlreadyExists = await Admin.findByEmail(email);
+    if (adminAlreadyExists) {
+      return res.status(400).json({ success: false, message: 'Admin sudah ada' });
+    }
+
+    // Hash password
+    const hashedPassword = await bcryptjs.hash(password, 10);
+
+    // Buat admin baru
+    const adminId = await Admin.create({
+      email,
+      username,
+      password: hashedPassword,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Admin berhasil dibuat!',
+      admin: {
+        id: adminId,
+        email,
+        username,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const updatePersonalSettingAdmin = async (req, res) => {
+  const { email, username } = req.body;
+  const adminId = req.adminId; // Diambil dari middleware verifyAdminToken
+
+  try {
+    if (!email || !username) {
+      return res.status(400).json({ success: false, message: 'Email dan Nama wajib diisi!' });
+    }
+
+    // Periksa apakah email sudah digunakan oleh admin lain
+    const existingAdmin = await Admin.findByEmail(email);
+    if (existingAdmin && existingAdmin.admin_id !== adminId) {
+      return res.status(400).json({ success: false, message: 'Email sudah digunakan oleh admin lain!' });
+    }
+
+    // Update data admin
+    await Admin.update(adminId, { email, username });
+
+    res.status(200).json({ success: true, message: 'Informasi pribadi berhasil diperbarui!' });
+  } catch (error) {
+    console.error('Gagal memperbarui informasi pribadi admin:', error);
+    res.status(500).json({ success: false, message: 'Terjadi kesalahan saat memperbarui informasi pribadi.' });
+  }
+};
+
+export const deleteAdminAccount = async (req, res) => {
+  const adminId = req.adminId; // Diambil dari middleware verifyAdminToken
+
+  try {
+    // Hapus akun admin
+    await Admin.delete(adminId);
+
+    // Clear cookie adminToken
+    res.clearCookie('adminToken');
+
+    res.status(200).json({ success: true, message: 'Akun admin berhasil dihapus!' });
+  } catch (error) {
+    console.error('Gagal menghapus akun admin:', error);
+    res.status(500).json({ success: false, message: 'Terjadi kesalahan saat menghapus akun admin.' });
+  }
+};
+
+export const checkAuthAdmin = async (req, res) => {
+  try {
+    const admin = await Admin.findById(req.adminId);
+    if (!admin) {
+      return res.status(400).json({ success: false, message: 'Akun admin tidak ditemukan!' });
+    }
+
+    // Exclude the password field before sending the response
+    const { password, ...adminWithoutPassword } = admin;
+
+    res.status(200).json({ success: true, user: { ...adminWithoutPassword, role: 'admin' } });
+  } catch (error) {
+    console.log('Terjadi error saat pengecekan autentikasi admin! ', error);
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const changeAdminPassword = async (req, res) => {
+  const { oldPassword, newPassword, confirmPassword } = req.body;
+  const adminId = req.adminId; // Diambil dari middleware verifyAdminToken
+
+  try {
+    // Validasi input
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      return res.status(400).json({ success: false, message: 'Semua kolom wajib diisi!' });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ success: false, message: 'Kata sandi baru dan konfirmasi tidak cocok!' });
+    }
+
+    // Cari admin berdasarkan ID
+    const admin = await Admin.findById(adminId);
+    if (!admin) {
+      return res.status(404).json({ success: false, message: 'Admin tidak ditemukan!' });
+    }
+
+    // Verifikasi kata sandi lama menggunakan bcryptjs
+    const isMatch = await bcryptjs.compare(oldPassword, admin.password);
+    if (!isMatch) {
+      return res.status(400).json({ success: false, message: 'Kata sandi lama salah!' });
+    }
+
+    // Hash kata sandi baru menggunakan bcryptjs
+    const salt = await bcryptjs.genSalt(10);
+    const hashedPassword = await bcryptjs.hash(newPassword, salt);
+
+    // Update kata sandi admin
+    await Admin.update(adminId, { password: hashedPassword });
+
+    res.status(200).json({ success: true, message: 'Kata sandi berhasil diperbarui!' });
+  } catch (error) {
+    console.error('Gagal mengganti kata sandi admin:', error);
+    res.status(500).json({ success: false, message: 'Terjadi kesalahan saat mengganti kata sandi.' });
   }
 };

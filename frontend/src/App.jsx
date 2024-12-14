@@ -19,7 +19,9 @@ import NewPassword from './pages/NewPassword';
 import NewPasswordAdmin from './pages/NewPasswordAdmin';
 import Beranda from './pages/Beranda';
 import SplashScreen from './pages/SplashScreen';
+import SplashScreenAdmin from './pages/SplashScreenAdmin';
 import SplashScreenLogin from './pages/SplashScreenLogin';
+import SplashScreenLoginAdmin from './pages/SplashScreenLoginAdmin';
 import BerandaLogin from './pages/BerandaLogin';
 import SignInAdmin from './pages/SignInAdmin';
 import Admin from './pages/Admin';
@@ -55,6 +57,8 @@ import PanduanLogin from './pages/Panduan-Login';
 import Tips from './pages/Tips';
 import TipsLogin from './pages/Tips-Login';
 import { useAuthStore } from './store/FetchDataWithAxios';
+import ProtectedAdminRoute from './store/ProtectedAdminRoute'; // Import ProtectedAdminRoute
+import RedirectAuthenticatedAdmin from './store/RedirectAuthenticatedAdmin'; // Import RedirectAuthenticatedAdmin
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
@@ -92,6 +96,15 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<SplashScreen />} />
+      <Route path="/splash-admin" element={<SplashScreenAdmin />} />
+      <Route
+        path="/splash-login-admin"
+        element={
+          <ProtectedAdminRoute>
+            <SplashScreenLoginAdmin />
+          </ProtectedAdminRoute>
+        }
+      />
       <Route path="/error-page-400" element={<ErrorPage400 />} />
       <Route path="/error-page-401" element={<ErrorPage401 />} />
       <Route path="/error-page-403" element={<ErrorPage403 />} />
@@ -127,9 +140,9 @@ function App() {
       <Route
         path="/sign-in-admin"
         element={
-          <RedirectAuthenticatedUser>
+          <RedirectAuthenticatedAdmin>
             <SignInAdmin />
-          </RedirectAuthenticatedUser>
+          </RedirectAuthenticatedAdmin>
         }
       />
       <Route
@@ -225,27 +238,132 @@ function App() {
       />
 
       {/* Route Admin */}
-      <Route path="/admin" element={<Admin />} />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedAdminRoute>
+            <Admin />
+          </ProtectedAdminRoute>
+        }
+      />
       <Route path="/forgot-password-admin" element={<ForgotPasswordAdmin />} />
       <Route path="/new-password-admin" element={<NewPasswordAdmin />} />
 
       {/* Route Artikel */}
-      <Route path="/admin/card-artikel" element={<AdminArtikel />} />
-      <Route path="/admin/card-artikel/tambah-artikel" element={<TambahArtikel />} />
-      <Route path="/admin/isi-artikel" element={<IsiArtikel />} />
-      <Route path="/admin/card-artikel/edit-artikel/:id" element={<EditArtikel />} />
-      <Route path="/admin/isi-artikel/edit-isi-artikel/:id" element={<EditIsiArtikel />} />
-      <Route path="/admin/personal-setting" element={<PersonalSettingAdmin />} />
-      <Route path="/admin/password-setting" element={<PasswordSettingAdmin />} />
-      <Route path="/admin/other-setting" element={<OtherSettingAdmin />} />
-      <Route path="/admin/form-other-setting" element={<FormOtherSettingAdmin />} />
-      <Route path="/admin/form-other-edit-setting" element={<FormOtherEditSettingAdmin />} />
+      <Route
+        path="/admin/card-artikel"
+        element={
+          <ProtectedAdminRoute>
+            <AdminArtikel />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/card-artikel/tambah-artikel"
+        element={
+          <ProtectedAdminRoute>
+            <TambahArtikel />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/isi-artikel"
+        element={
+          <ProtectedAdminRoute>
+            <IsiArtikel />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/card-artikel/edit-artikel/:id"
+        element={
+          <ProtectedAdminRoute>
+            <EditArtikel />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/isi-artikel/edit-isi-artikel/:id"
+        element={
+          <ProtectedAdminRoute>
+            <EditIsiArtikel />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/personal-setting"
+        element={
+          <ProtectedAdminRoute>
+            <PersonalSettingAdmin />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/password-setting"
+        element={
+          <ProtectedAdminRoute>
+            <PasswordSettingAdmin />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/other-setting"
+        element={
+          <ProtectedAdminRoute>
+            <OtherSettingAdmin />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/form-other-setting"
+        element={
+          <ProtectedAdminRoute>
+            <FormOtherSettingAdmin />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/form-other-edit-setting"
+        element={
+          <ProtectedAdminRoute>
+            <FormOtherEditSettingAdmin />
+          </ProtectedAdminRoute>
+        }
+      />
 
       {/* Route Panduan */}
-      <Route path="/admin/card-panduan" element={<AdminPanduan />} />
-      <Route path="/admin/card-panduan/tambah-panduan" element={<TambahPanduan />} />
-      <Route path="/admin/card-panduan/edit-panduan/:id" element={<EditPanduan />} />
-      <Route path="/admin/isi-panduan/edit-isi-panduan:id" element={<EditIsiPanduan />} />
+      <Route
+        path="/admin/card-panduan"
+        element={
+          <ProtectedAdminRoute>
+            <AdminPanduan />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/card-panduan/tambah-panduan"
+        element={
+          <ProtectedAdminRoute>
+            <TambahPanduan />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/card-panduan/edit-panduan/:id"
+        element={
+          <ProtectedAdminRoute>
+            <EditPanduan />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/isi-panduan/edit-isi-panduan:id"
+        element={
+          <ProtectedAdminRoute>
+            <EditIsiPanduan />
+          </ProtectedAdminRoute>
+        }
+      />
 
       {/* Route Tentang Kami */}
       <Route path="/tentang-kami" element={<Tentangkami />} />
