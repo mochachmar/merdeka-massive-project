@@ -1,13 +1,19 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { useLanguage } from "../contexts/LanguageContext"; // Assuming useLanguage hook is set up
 
 function Card({ article }) {
+  const { t } = useLanguage(); // Translation function
+
   // Format tanggal ke dalam bahasa Indonesia
-  const formattedDate = new Date(article.publish_date).toLocaleDateString('id-ID', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  const formattedDate = new Date(article.publish_date).toLocaleDateString(
+    "id-ID",
+    {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }
+  );
 
   return (
     <Link
@@ -16,8 +22,8 @@ function Card({ article }) {
       to={`/article/${article.article_id}`}
       style={{
         backgroundImage: `url(http://localhost:3000/uploads/${article.thumbnail_image})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
       {/* Empty Space */}
@@ -25,10 +31,18 @@ function Card({ article }) {
 
       {/* Text Overlay Container with Backdrop Opacity */}
       <div className="bg-[#C4C8AD] bg-opacity-70 p-6 rounded-lg">
-        <p className="text-gray-900 text-sm">{formattedDate || 'Tanggal tidak tersedia'}</p>
+        <p className="text-gray-900 text-sm">
+          {formattedDate || t("dateNotAvailable")}
+        </p>{" "}
+        {/* Use translation for "Date not available" */}
         <h2 className="font-bold text-lg text-gray-950">{article.title}</h2>
         <p className="text-gray-950 text-sm">{article.short_description}</p>
-        {article.author && <p className="text-gray-800 text-sm mt-1">By {article.author}</p>}
+        {article.author && (
+          <p className="text-gray-800 text-sm mt-1">
+            {t("by")} {article.author}
+          </p>
+        )}{" "}
+        {/* Use translation for "By" */}
       </div>
     </Link>
   );

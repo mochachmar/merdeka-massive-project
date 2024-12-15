@@ -88,56 +88,58 @@
 
 // export default ErrorPage503;
 
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import closeUpGreenLeavesNature from '../assets/close-up-green-leaves-nature.png';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useLanguage } from "../contexts/LanguageContext"; // Assuming you have a language context
+import closeUpGreenLeavesNature from "../assets/close-up-green-leaves-nature.png";
 
 export const ErrorPage503 = () => {
-  // Set tanggal target (17 Desember 2024)
-  const targetDate = new Date('2024-12-17T00:00:00');
+  // Set target date for countdown (example: 17 December 2024)
+  const targetDate = new Date("2024-12-17T00:00:00");
 
-  // Fungsi untuk menghitung waktu mundur dalam detik
+  // Function to calculate the remaining countdown time in seconds
   const calculateCountdown = () => {
     const now = new Date();
-    const timeDifference = targetDate - now; // Selisih waktu dalam milidetik
-    return Math.max(timeDifference / 1000, 0); // Mengonversi ke detik dan pastikan tidak negatif
+    const timeDifference = targetDate - now; // Get time difference in milliseconds
+    return Math.max(timeDifference / 1000, 0); // Convert to seconds and ensure it's not negative
   };
 
   const [countdown, setCountdown] = useState(calculateCountdown);
 
-  const navigate = useNavigate(); // Inisialisasi useNavigate
+  const navigate = useNavigate(); // Initialize navigate function
+  const { t } = useLanguage(); // Access translation function from context
 
-  // Fungsi untuk mengonversi detik ke format yang lebih komprehensif (hari, jam, menit, detik)
+  // Function to convert countdown time (in seconds) into a more readable format (days, hours, minutes, seconds)
   const formatTime = (timeInSeconds) => {
-    const days = Math.floor(timeInSeconds / (24 * 60 * 60)); // Menghitung hari
-    const hours = Math.floor((timeInSeconds % (24 * 60 * 60)) / 3600); // Menghitung jam
-    const minutes = Math.floor((timeInSeconds % 3600) / 60); // Menghitung menit
-    const seconds = Math.floor(timeInSeconds % 60); // Menghitung detik dengan Math.floor untuk memastikan angka bulat
+    const days = Math.floor(timeInSeconds / (24 * 60 * 60)); // Calculate days
+    const hours = Math.floor((timeInSeconds % (24 * 60 * 60)) / 3600); // Calculate hours
+    const minutes = Math.floor((timeInSeconds % 3600) / 60); // Calculate minutes
+    const seconds = Math.floor(timeInSeconds % 60); // Calculate seconds
 
-    let timeString = '';
-    if (days > 0) timeString += `${days} hari `;
-    if (hours > 0) timeString += `${hours} jam `;
-    if (minutes > 0) timeString += `${minutes} menit `;
-    if (seconds >= 0) timeString += `${seconds} detik`; // Pastikan detik selalu bulat
+    let timeString = "";
+    if (days > 0) timeString += `${days} ${t("days")} `;
+    if (hours > 0) timeString += `${hours} ${t("hours")} `;
+    if (minutes > 0) timeString += `${minutes} ${t("minutes")} `;
+    if (seconds >= 0) timeString += `${seconds} ${t("seconds")}`;
 
     return timeString.trim();
   };
 
-  // Hitung mundur menggunakan useEffect
+  // Countdown logic using useEffect
   useEffect(() => {
     if (countdown === 0) {
-      navigate('/'); // Arahkan ke halaman /beranda setelah countdown selesai
+      navigate("/"); // Navigate to homepage after countdown ends
       return;
     }
 
-    // Set interval untuk mengurangi waktu mundur setiap detik
+    // Set interval to update countdown every second
     const timer = setInterval(() => {
-      setCountdown(calculateCountdown); // Perbarui countdown setiap detik
+      setCountdown(calculateCountdown); // Update countdown
     }, 1000);
 
-    // Hapus interval ketika komponen di-unmount atau ketika hitungan mundur selesai
+    // Cleanup the interval when the component unmounts or countdown ends
     return () => clearInterval(timer);
-  }, [countdown, navigate]); // Tambahkan navigate dalam dependensi
+  }, [countdown, navigate]); // Re-run when countdown or navigate changes
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center bg-neutral-50">
@@ -146,7 +148,7 @@ export const ErrorPage503 = () => {
         className="absolute inset-0 w-full h-full bg-cover bg-center z-0"
         style={{
           backgroundImage: `url(${closeUpGreenLeavesNature})`,
-          filter: 'brightness(0.85)', // Menambahkan filter untuk gelap pada background
+          filter: "brightness(0.85)", // Adding a dark filter over the background image
         }}
       ></div>
 
@@ -154,15 +156,27 @@ export const ErrorPage503 = () => {
       <div className="relative flex flex-col md:flex-row max-w-[1440px] w-full min-h-screen bg-neutral-50 items-center z-10">
         {/* Image Section */}
         <div className="hidden md:block md:w-1/2 p-10">
-          <img className="w-full object-cover max-h-[900px] rounded-lg" alt="Close up green" src={closeUpGreenLeavesNature} />
+          <img
+            className="w-full object-cover max-h-[900px] rounded-lg"
+            alt="Close up green"
+            src={closeUpGreenLeavesNature}
+          />
         </div>
 
         {/* Error Message Section */}
         <div className="flex flex-col items-center w-full md:w-1/2 p-6 md:p-12 lg:p-24 space-y-6">
           <div className="text-center">
-            <h1 className="text-5xl font-bold text-red-600">503 - Layanan tidak tersedia</h1>
-            <p className="mt-4 text-xl font-semibold text-[#000000cc]">Layanan saat ini belum tersedia.</p>
-            {countdown > 0 && <p className="mt-4 text-xl font-semibold text-[#000000cc]">Coba lagi dalam {formatTime(countdown)}...</p>}
+            <h1 className="text-5xl font-bold text-red-600">
+              {t("error503Title")}
+            </h1>
+            <p className="mt-4 text-xl font-semibold text-[#000000cc]">
+              {t("error503Message")}
+            </p>
+            {countdown > 0 && (
+              <p className="mt-4 text-xl font-semibold text-[#000000cc]">
+                {t("retryIn")} {formatTime(countdown)}...
+              </p>
+            )}
           </div>
         </div>
       </div>

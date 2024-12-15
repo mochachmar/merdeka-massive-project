@@ -1,37 +1,48 @@
-import React, { useEffect, useState } from 'react';
-import Navbar from '../components/Navbar-Login.jsx';
-import Footer from '../components/FooterLogin.jsx';
-import { Link, useParams } from 'react-router-dom';
-import Card from '../components/CardLogin.jsx';
-import arrowBack from '../assets/arrow-back.svg';
-import Author from '../assets/Author.svg';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import Navbar from "../components/Navbar-Login.jsx";
+import Footer from "../components/FooterLogin.jsx";
+import { Link, useParams } from "react-router-dom";
+import Card from "../components/CardLogin.jsx";
+import arrowBack from "../assets/arrow-back.svg";
+import Author from "../assets/Author.svg";
+import axios from "axios";
+import { useLanguage } from "../contexts/LanguageContext"; // Assuming useLanguage hook is set up
 
 function Article() {
   const { id } = useParams();
   const [article, setArticle] = useState(null);
   const [articlesList, setArticleList] = useState([]);
-  const [formatedDate, setFormatedDate] = useState('');
+  const [formatedDate, setFormatedDate] = useState("");
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage(); // Translation function
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
     async function fetchDetail() {
       try {
-        const articleResponse = await axios.get('http://localhost:3000/api/articles/' + id);
+        const articleResponse = await axios.get(
+          "http://localhost:3000/api/articles/" + id
+        );
         setArticle(articleResponse.data);
 
         const date = new Date(articleResponse.data.publish_date);
-        const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-        setFormatedDate(date.toLocaleDateString('id-ID', options));
+        const options = {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        };
+        setFormatedDate(date.toLocaleDateString("id-ID", options));
 
-        const articlesResponse = await axios.get('http://localhost:3000/api/articles');
+        const articlesResponse = await axios.get(
+          "http://localhost:3000/api/articles"
+        );
         setArticleList(articlesResponse.data);
       } catch (error) {
-        console.error('Error fetching article data:', error);
+        console.error("Error fetching article data:", error);
       } finally {
-        setLoading(false); // Mengatur loading menjadi false setelah data diterima
+        setLoading(false); // Stop loading after data is fetched
       }
     }
 
@@ -39,14 +50,16 @@ function Article() {
   }, [id]);
 
   if (loading) {
-    return <div className="text-center py-4">Loading...</div>; // Menampilkan loading
+    return <div className="text-center py-4">{t("loading")}</div>; // Use translation key for loading message
   }
 
   if (!article) {
-    return <p className="text-center text-red-500">Artikel tidak ditemukan.</p>;
+    return <p className="text-center text-red-500">{t("articleNotFound")}</p>; // Use translation key for error message
   }
 
-  const relatedArticles = articlesList.filter((item) => item.id !== parseInt(id)).slice(0, 3);
+  const relatedArticles = articlesList
+    .filter((item) => item.id !== parseInt(id))
+    .slice(0, 3);
 
   return (
     <main className="w-full min-h-screen bg-gray-100">
@@ -54,20 +67,29 @@ function Article() {
 
       <section className="hero w-full mt-8 md:mt-8">
         <div className="flex items-center mb-2 px-4 md:px-16">
-          <button onClick={() => window.history.back()} className="text-gray-700 hover:text-gray-900 flex items-center">
-            <img src={arrowBack} alt="Kembali" className="mr-2" />
-            <p className="font-medium text-xl">Kembali</p>
+          <button
+            onClick={() => window.history.back()}
+            className="text-gray-700 hover:text-gray-900 flex items-center"
+          >
+            <img src={arrowBack} alt={t("back")} className="mr-2" />
+            <p className="font-medium text-xl">{t("back")}</p>
           </button>
         </div>
 
         <div className="text-center mb-8 px-4 md:px-16">
-          <img src={`http://localhost:3000/uploads/${article.thumbnail_image}`} alt={article.title} className="mx-auto rounded-lg shadow-lg w-full h-64 md:h-96 object-cover" />
-          <h2 className="mt-4 text-3xl font-bold text-gray-800">{article.title}</h2>
+          <img
+            src={`http://localhost:3000/uploads/${article.thumbnail_image}`}
+            alt={article.title}
+            className="mx-auto rounded-lg shadow-lg w-full h-64 md:h-96 object-cover"
+          />
+          <h2 className="mt-4 text-3xl font-bold text-gray-800">
+            {article.title}
+          </h2>
         </div>
 
         <div className="flex justify-center items-center gap-x-2 mb-6 text-gray-600">
-          <img src={Author} alt="Penulis" className="h-5 w-5" />
-          <p>{article.created_by || 'Penulis Tidak Diketahui'}</p>
+          <img src={Author} alt={t("author")} className="h-5 w-5" />
+          <p>{article.created_by || t("authorUnknown")}</p>
           <span>•</span>
           <p>{formatedDate}</p>
         </div>
@@ -78,7 +100,9 @@ function Article() {
 
         <hr className="w-20 h-1 mx-auto my-10 bg-gray-300 border-0 rounded" />
 
-        <h1 className="text-black text-center font-semibold text-3xl mb-8">Berita Lainnya</h1>
+        <h1 className="text-black text-center font-semibold text-3xl mb-8">
+          {t("relatedNews")}
+        </h1>
 
         <div className="flex justify-center gap-6 flex-wrap px-4 pb-10">
           {relatedArticles.map((relatedArticle) => (
@@ -93,12 +117,16 @@ function Article() {
 }
 
 function CardDummy({ article }) {
-  const formattedDate = new Date(article.publish_date).toLocaleDateString('id-ID', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  const { t } = useLanguage(); // Use translation function for CardDummy
+  const formattedDate = new Date(article.publish_date).toLocaleDateString(
+    "id-ID",
+    {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }
+  );
 
   return (
     <Link
@@ -106,8 +134,8 @@ function CardDummy({ article }) {
       to={`/article/${article.id}`}
       style={{
         backgroundImage: `url(http://localhost:3000/uploads/${article.thumbnail_image})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
       <div className="h-40"></div>
@@ -115,7 +143,11 @@ function CardDummy({ article }) {
         <p className="text-gray-900 text-sm">{formattedDate}</p>
         <h2 className="font-bold text-lg text-gray-950">{article.title}</h2>
         <p className="text-gray-950 text-sm">{article.short_description}</p>
-        {article.author && <p className="text-gray-800 text-sm mt-1">By {article.author}</p>}
+        {article.author && (
+          <p className="text-gray-800 text-sm mt-1">
+            {t("by")} {article.author}
+          </p>
+        )}
       </div>
     </Link>
   );
