@@ -34,7 +34,7 @@ export default function NavbarAdmin({ children }) {
         toast: true,
         position: 'top-end',
         icon: 'success',
-        title: 'Berhasil logout!',
+        title: 'Berhasil logout! Anda akan dialihkan!',
         showConfirmButton: false,
         timer: 2000,
         timerProgressBar: true,
