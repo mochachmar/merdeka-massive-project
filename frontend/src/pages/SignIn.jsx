@@ -19,6 +19,9 @@ export const SignIn = () => {
 
   const { login, isLoading } = useAuthStore(); // Ambil fungsi dan state dari authStore
 
+  const TOGGLE_LIMIT = 3; // Batas percobaan login sebelum countdown
+  const COUNTDOWN_SECONDS = 30; // Durasi countdown dalam detik
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -33,6 +36,13 @@ export const SignIn = () => {
     try {
       await login(email, password); // Gunakan login dari authStore
 
+      // Reset login attempts dan countdown setelah login berhasil
+      setLoginAttempts(0);
+      setCountdown(0);
+      setButtonEnabled(true);
+      localStorage.removeItem('loginAttempts');
+      localStorage.removeItem('countdownEndTime');
+
       // Menampilkan toast sukses
       Swal.fire({
         toast: true,
@@ -46,12 +56,16 @@ export const SignIn = () => {
 
       navigate('/splash-login');
     } catch (err) {
-      setLoginAttempts((prev) => prev + 1); // Menambah jumlah percobaan login
+      const newAttempts = loginAttempts + 1;
+      setLoginAttempts(newAttempts);
+      localStorage.setItem('loginAttempts', newAttempts);
 
       // Jika percobaan login melebihi batas, aktifkan countdown
-      if (loginAttempts >= 2) {
-        setButtonEnabled(false); // Nonaktifkan tombol
-        setCountdown((prev) => prev + 30); // Tambah 30 detik untuk setiap percobaan gagal
+      if (newAttempts >= TOGGLE_LIMIT) {
+        setButtonEnabled(false);
+        const endTime = Date.now() + COUNTDOWN_SECONDS * 1000;
+        setCountdown(COUNTDOWN_SECONDS);
+        localStorage.setItem('countdownEndTime', endTime);
       }
 
       // Menampilkan toast error
@@ -67,15 +81,50 @@ export const SignIn = () => {
     }
   };
 
+  // Inisialisasi state dari localStorage saat komponen dimuat
+  useEffect(() => {
+    const storedAttempts = parseInt(localStorage.getItem('loginAttempts')) || 0;
+    const storedEndTime = parseInt(localStorage.getItem('countdownEndTime')) || null;
+
+    setLoginAttempts(storedAttempts);
+
+    if (storedEndTime) {
+      const remainingTime = Math.floor((storedEndTime - Date.now()) / 1000);
+      if (remainingTime > 0) {
+        setCountdown(remainingTime);
+        setButtonEnabled(false);
+      } else {
+        // Countdown sudah selesai
+        setCountdown(0);
+        setButtonEnabled(true);
+        localStorage.removeItem('countdownEndTime');
+        if (storedAttempts >= TOGGLE_LIMIT) {
+          localStorage.removeItem('loginAttempts');
+          setLoginAttempts(0);
+        }
+      }
+    }
+  }, []);
+
   // Menangani countdown setiap detik
   useEffect(() => {
     let timer;
     if (countdown > 0) {
       timer = setInterval(() => {
-        setCountdown((prev) => prev - 1);
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setButtonEnabled(true);
+            localStorage.removeItem('countdownEndTime');
+            if (loginAttempts >= TOGGLE_LIMIT) {
+              setLoginAttempts(0);
+              localStorage.removeItem('loginAttempts');
+            }
+            return 0;
+          }
+          return prev - 1;
+        });
       }, 1000);
-    } else if (countdown === 0 && loginAttempts >= 3) {
-      setButtonEnabled(true); // Mengaktifkan tombol kembali setelah countdown selesai
     }
 
     return () => clearInterval(timer); // Hapus interval jika komponen unmount
