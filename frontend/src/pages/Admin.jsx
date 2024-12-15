@@ -40,7 +40,7 @@ export default function Admin() {
     fetchArtikelCount();
   }, []);
 
-  const jumlahArtikel = 7;
+  const jumlahArtikel = 0;
 
   return (
     <div className="flex flex-col min-h-screen w-full">
