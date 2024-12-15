@@ -1,5 +1,8 @@
 // utils/generateTokenAndSetCookie.js
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 /**
  * Fungsi untuk menghasilkan token JWT dan mengatur cookie.

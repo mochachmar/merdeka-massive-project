@@ -18,6 +18,10 @@ export const SignUp = () => {
     navigate('/sign-in'); // Arahkan ke halaman SignIn
   };
 
+  const handleGoogleSignUp = () => {
+    window.location.href = 'http://localhost:3000/api/auth/google'; // Ganti dengan URL backend Anda
+  };
+
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center bg-neutral-50">
       {/* Background Image Fullscreen */}
@@ -49,20 +53,7 @@ export const SignUp = () => {
           </button>
 
           {/* Google and Facebook Sign-In Buttons */}
-          <button
-            className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-4"
-            onClick={() => {
-              Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: 'info',
-                title: 'Sign in dengan Google belum tersedia.',
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
-              });
-            }}
-          >
+          <button className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-4" onClick={handleGoogleSignUp}>
             <img className="w-5 h-5" alt="Google" src={google} />
             <span className="text-[#565e6d] font-normal text-base">Daftar dengan Google</span>
           </button>

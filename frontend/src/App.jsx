@@ -1,3 +1,5 @@
+// App.jsx
+import React, { useEffect } from 'react';
 import { Navigate, Routes, Route } from 'react-router-dom';
 import './App.css';
 import PropTypes from 'prop-types';
@@ -93,6 +95,15 @@ RedirectAuthenticatedUser.propTypes = {
 };
 
 function App() {
+  const setAuth = useAuthStore((state) => state.setAuth);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setAuth(token);
+    }
+  }, [setAuth]);
+
   return (
     <Routes>
       <Route path="/" element={<SplashScreen />} />
@@ -188,14 +199,8 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/splash-login"
-        element={
-          <ProtectedRoute>
-            <SplashScreenLogin />
-          </ProtectedRoute>
-        }
-      />
+      {/* Ubah rute SplashLogin menjadi publik */}
+      <Route path="/splash-login" element={<SplashScreenLogin />} />
       <Route
         path="/beranda-login"
         element={
@@ -357,7 +362,7 @@ function App() {
         }
       />
       <Route
-        path="/admin/isi-panduan/edit-isi-panduan:id"
+        path="/admin/isi-panduan/edit-isi-panduan/:id"
         element={
           <ProtectedAdminRoute>
             <EditIsiPanduan />
@@ -420,6 +425,7 @@ function App() {
         }
       />
 
+      {/* Rute 404 */}
       <Route path="*" element={<Navigate to="/error-page-404" replace />} />
     </Routes>
   );

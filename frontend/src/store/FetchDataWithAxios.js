@@ -4,8 +4,6 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.MODE === 'development' ? 'http://localhost:3000/api/auth' : '/api/auth';
 
-axios.defaults.withCredentials = true;
-
 export const useAuthStore = create((set) => ({
   // State untuk user biasa
   user: null,
@@ -26,7 +24,7 @@ export const useAuthStore = create((set) => ({
   signup: async (email, password, name) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.post(`${API_URL}/create-with-email`, { email, password, name });
+      const response = await axios.post(`${API_URL}/create-with-email`, { email, password, name }, { withCredentials: true });
       set({ user: response.data.user, isAuthenticated: true, isLoading: false });
     } catch (error) {
       set({ error: error.response?.data?.message || 'Error signing up', isLoading: false });
@@ -38,7 +36,7 @@ export const useAuthStore = create((set) => ({
   login: async (email, password) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.post(`${API_URL}/sign-in`, { email, password });
+      const response = await axios.post(`${API_URL}/sign-in`, { email, password }, { withCredentials: true });
       set({
         isAuthenticated: true,
         user: response.data.user,
@@ -51,29 +49,45 @@ export const useAuthStore = create((set) => ({
     }
   },
 
+  // Fungsi untuk setAuth dari token
+  setAuth: async (token) => {
+    set({ isLoading: true, error: null });
+    try {
+      // Simpan token di localStorage
+      localStorage.setItem('token', token);
+
+      // Atur token di header Authorization
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+      // Panggil API untuk cek autentikasi
+      const response = await axios.get(`${API_URL}/check-auth`, { withCredentials: true });
+      set({
+        isAuthenticated: true,
+        user: response.data.user,
+        isLoading: false,
+      });
+    } catch (error) {
+      set({ isAuthenticated: false, user: null, error: error.response?.data?.message || 'Error fetching user', isLoading: false });
+      // Hapus token dari localStorage dan header jika terjadi kesalahan
+      localStorage.removeItem('token');
+      delete axios.defaults.headers.common['Authorization'];
+    }
+  },
+
   // Fungsi logout user biasa
   logout: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.post(`${API_URL}/logout`);
+      const response = await axios.post(`${API_URL}/logout`, {}, { withCredentials: true });
       if (response.data.success) {
         set({ user: null, isAuthenticated: false, error: null, isLoading: false });
+        // Hapus token dari localStorage
+        localStorage.removeItem('token');
+        // Hapus Authorization header
+        delete axios.defaults.headers.common['Authorization'];
       }
     } catch (error) {
       set({ error: 'Error logging out', isLoading: false });
-      throw error;
-    }
-  },
-
-  // Fungsi verify email user
-  verifyEmail: async (code) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await axios.post(`${API_URL}/email-code`, { code });
-      set({ user: response.data.user, isAuthenticated: true, isLoading: false });
-      return response.data;
-    } catch (error) {
-      set({ error: error.response?.data?.message || 'Error verifying email', isLoading: false });
       throw error;
     }
   },
@@ -82,7 +96,7 @@ export const useAuthStore = create((set) => ({
   checkAuth: async () => {
     set({ isCheckingAuth: true, error: null });
     try {
-      const response = await axios.get(`${API_URL}/check-auth`);
+      const response = await axios.get(`${API_URL}/check-auth`, { withCredentials: true });
       set({ user: response.data.user, isAuthenticated: true, isCheckingAuth: false });
     } catch (error) {
       set({ error: null, isCheckingAuth: false, isAuthenticated: false });
@@ -93,7 +107,7 @@ export const useAuthStore = create((set) => ({
   forgotPassword: async (email) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.post(`${API_URL}/forgot-password`, { email });
+      const response = await axios.post(`${API_URL}/forgot-password`, { email }, { withCredentials: true });
       set({ message: response.data.message, isLoading: false });
     } catch (error) {
       set({
@@ -108,7 +122,7 @@ export const useAuthStore = create((set) => ({
   resetPassword: async (token, password) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.post(`${API_URL}/new-password/${token}`, { password });
+      const response = await axios.post(`${API_URL}/new-password/${token}`, { password }, { withCredentials: true });
       set({ message: response.data.message, isLoading: false });
     } catch (error) {
       set({
@@ -160,7 +174,7 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  // Fungsi checkAuth untuk admin
+  // Fungsi checkAuthAdmin
   checkAuthAdmin: async () => {
     set({ isAdminLoading: true, adminError: null });
     try {
@@ -205,6 +219,7 @@ export const useAuthStore = create((set) => ({
     }
   },
 
+  // Reset Admin State
   resetAdminState: () => {
     set({
       admin: null,

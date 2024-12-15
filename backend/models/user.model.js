@@ -10,21 +10,22 @@ const db = mysql.createPool({
 // Function to create User table
 const createUserTable = async () => {
   const query = `
-        CREATE TABLE IF NOT EXISTS Users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            email VARCHAR(255) NOT NULL UNIQUE,
-            password VARCHAR(255) NOT NULL,
-            name VARCHAR(255) NOT NULL,
-            lastLogin DATETIME DEFAULT CURRENT_TIMESTAMP,
-            isVerified BOOLEAN DEFAULT FALSE,
-            resetPasswordToken VARCHAR(255),
-            resetPasswordExpiresAt DATETIME,
-            verificationToken VARCHAR(255),
-            verificationTokenExpiresAt DATETIME,
-            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )
-    `;
+    CREATE TABLE IF NOT EXISTS Users (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      email VARCHAR(255) NOT NULL UNIQUE,
+      password VARCHAR(255),
+      name VARCHAR(255) NOT NULL,
+      googleId VARCHAR(255) UNIQUE,
+      lastLogin DATETIME DEFAULT CURRENT_TIMESTAMP,
+      isVerified BOOLEAN DEFAULT FALSE,
+      resetPasswordToken VARCHAR(255),
+      resetPasswordExpiresAt DATETIME,
+      verificationToken VARCHAR(255),
+      verificationTokenExpiresAt DATETIME,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )
+  `;
   await db.execute(query);
 };
 
@@ -32,13 +33,14 @@ const createUserTable = async () => {
 export const User = {
   create: async (userData) => {
     const query = `
-            INSERT INTO Users (email, password, name, lastLogin, isVerified, resetPasswordToken, resetPasswordExpiresAt, verificationToken, verificationTokenExpiresAt)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
+      INSERT INTO Users (email, password, name, googleId, lastLogin, isVerified, resetPasswordToken, resetPasswordExpiresAt, verificationToken, verificationTokenExpiresAt)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
     const values = [
       userData.email,
-      userData.password,
+      userData.password || null,
       userData.name,
+      userData.googleId || null,
       userData.lastLogin || new Date(),
       userData.isVerified || false,
       userData.resetPasswordToken || null,
@@ -50,15 +52,21 @@ export const User = {
     return result.insertId;
   },
 
-  findById: async (id) => {
-    const query = `SELECT * FROM Users WHERE id = ?`;
-    const [rows] = await db.execute(query, [id]);
+  findByGoogleId: async (googleId) => {
+    const query = `SELECT * FROM Users WHERE googleId = ?`;
+    const [rows] = await db.execute(query, [googleId]);
     return rows[0];
   },
 
   findByEmail: async (email) => {
-    const query = `SELECT * FROM Users WHERE LOWER(email) = LOWER(?)`; // Case insensitive query
-    const [rows] = await db.execute(query, [email.toLowerCase()]); // Ensure the email is passed in lowercase
+    const query = `SELECT * FROM Users WHERE LOWER(email) = LOWER(?)`;
+    const [rows] = await db.execute(query, [email.toLowerCase()]);
+    return rows[0];
+  },
+
+  findById: async (id) => {
+    const query = `SELECT * FROM Users WHERE id = ?`;
+    const [rows] = await db.execute(query, [id]);
     return rows[0];
   },
 
@@ -103,15 +111,33 @@ export const User = {
   },
 
   update: async (id, updateData) => {
-    const fields = [];
-    const values = [];
-    for (const key in updateData) {
-      fields.push(`${key} = ?`);
-      values.push(updateData[key]);
-    }
-    values.push(id);
-
-    const query = `UPDATE Users SET ${fields.join(', ')} WHERE id = ?`;
+    const query = `
+      UPDATE Users SET 
+        email = ?, 
+        password = ?, 
+        name = ?, 
+        googleId = ?, 
+        lastLogin = ?, 
+        isVerified = ?, 
+        resetPasswordToken = ?, 
+        resetPasswordExpiresAt = ?, 
+        verificationToken = ?, 
+        verificationTokenExpiresAt = ?
+      WHERE id = ?
+    `;
+    const values = [
+      updateData.email || null,
+      updateData.password || null,
+      updateData.name || null,
+      updateData.googleId || null,
+      updateData.lastLogin || new Date(),
+      updateData.isVerified || false,
+      updateData.resetPasswordToken || null,
+      updateData.resetPasswordExpiresAt || null,
+      updateData.verificationToken || null,
+      updateData.verificationTokenExpiresAt || null,
+      id,
+    ];
     await db.execute(query, values);
   },
 

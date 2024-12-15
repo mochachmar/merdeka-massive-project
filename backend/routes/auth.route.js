@@ -1,5 +1,6 @@
-// auth.route.js
+// routes/auth.route.js
 import express from 'express';
+import passport from 'passport';
 import {
   login,
   loginAdmin,
@@ -18,9 +19,11 @@ import {
   deleteAdminAccount,
   checkAuthAdmin,
   changeAdminPassword,
+  setPassword,
 } from '../controllers/auth.controller.js';
 import { verifyToken } from '../middleware/verifyToken.js';
 import { verifyAdminToken } from '../middleware/verifyAdminToken.js';
+import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie.js';
 
 const router = express.Router();
 
@@ -38,9 +41,27 @@ router.put('/update-name', verifyToken, updateUserName);
 router.post('/delete-account', verifyToken, deleteUserAccount);
 router.put('/update-password', verifyToken, updatePassword);
 
+// Rute inisiasi autentikasi Google
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// Rute callback Google OAuth
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/error-page-401', session: false }), (req, res) => {
+  // Setelah autentikasi berhasil, generate token dan set cookie
+  const token = generateTokenAndSetCookie(res, req.user.id);
+
+  // Redirect ke frontend dengan token sebagai query parameter
+  res.redirect(`http://localhost:5173/splash-login?token=${token}`);
+});
+
+// Rute untuk kegagalan autentikasi Google
+router.get('/google/failure', (req, res) => {
+  res.status(401).json({ success: false, message: 'Autentikasi Google gagal.' });
+});
+router.put('/set-password', verifyToken, setPassword);
+
 // Admin Routes
-router.post('/sign-in-admin', loginAdmin); // Hanya untuk login admin
-router.post('/logout-admin', verifyAdminToken, logoutAdmin); // Tambahkan rute logout admin
+router.post('/sign-in-admin', loginAdmin);
+router.post('/logout-admin', verifyAdminToken, logoutAdmin);
 router.put('/admin/update-personal-setting', verifyAdminToken, updatePersonalSettingAdmin);
 router.post('/admin/delete-account', verifyAdminToken, deleteAdminAccount);
 router.put('/admin/change-password', verifyAdminToken, changeAdminPassword);

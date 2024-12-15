@@ -1,3 +1,4 @@
+// index.js
 import express from 'express';
 import dotenv from 'dotenv';
 import { testConnection } from './database/db.js';
@@ -22,11 +23,15 @@ const corsOptions = {
 };
 
 // Middleware
-app.use(cors(corsOptions)); // Pastikan middleware ini berada di urutan atas
-app.options('*', cors(corsOptions)); // Tangani permintaan preflight
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(express.static('public'));
 app.use(cookieParser());
+
+// Passport Middleware
+import passport from './middleware/passport.js';
+app.use(passport.initialize());
 
 // Routes
 app.get('/', (req, res) => {

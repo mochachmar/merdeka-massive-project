@@ -104,6 +104,11 @@ export const login = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Gagal login! Mohon periksa email dan password Anda!' });
     }
 
+    // Cek apakah user memiliki password
+    if (!user.password) {
+      return res.status(400).json({ success: false, message: 'Akun ini dibuat menggunakan Google OAuth. Silakan login dengan Google.' });
+    }
+
     const isPasswordValid = await bcryptjs.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({ success: false, message: 'Gagal login! Mohon periksa email dan password Anda!' });
@@ -486,5 +491,25 @@ export const changeAdminPassword = async (req, res) => {
   } catch (error) {
     console.error('Gagal mengganti kata sandi admin:', error);
     res.status(500).json({ success: false, message: 'Terjadi kesalahan saat mengganti kata sandi.' });
+  }
+};
+
+export const setPassword = async (req, res) => {
+  const { password } = req.body;
+  const userId = req.userId;
+
+  try {
+    if (!password) {
+      return res.status(400).json({ success: false, message: 'Password wajib diisi!' });
+    }
+
+    const hashedPassword = await bcryptjs.hash(password, 10);
+
+    await User.update(userId, { password: hashedPassword });
+
+    res.status(200).json({ success: true, message: 'Password berhasil diatur!' });
+  } catch (error) {
+    console.error('Gagal mengatur password:', error);
+    res.status(500).json({ success: false, message: 'Terjadi kesalahan saat mengatur password.' });
   }
 };

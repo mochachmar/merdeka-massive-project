@@ -81,6 +81,10 @@ export const SignIn = () => {
     }
   };
 
+  const handleGoogleSignIn = () => {
+    window.location.href = 'http://localhost:3000/api/auth/google'; // Ganti dengan URL backend Anda
+  };
+
   // Inisialisasi state dari localStorage saat komponen dimuat
   useEffect(() => {
     const storedAttempts = parseInt(localStorage.getItem('loginAttempts')) || 0;
@@ -202,20 +206,7 @@ export const SignIn = () => {
           {countdown > 0 && <p className="mt-2 text-red-500">Coba lagi dalam {countdown} detik...</p>}
 
           {/* Google and Facebook Sign-In Buttons */}
-          <button
-            className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-4"
-            onClick={() => {
-              Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: 'info',
-                title: 'Sign in dengan Google belum tersedia.',
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
-              });
-            }}
-          >
+          <button className="flex items-center justify-center gap-2 w-full max-w-md bg-white hover:bg-[#f0f0f0] active:bg-[#e0e0e0] py-2.5 border border-[#565e6d] rounded-lg mt-4" onClick={handleGoogleSignIn}>
             <img className="w-5 h-5" alt="Google" src={google} />
             <span className="text-[#565e6d] font-normal text-base">Masuk dengan Google</span>
           </button>
