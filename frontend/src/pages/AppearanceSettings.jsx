@@ -1,12 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const AppearanceSettings = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light"); // Set the initial theme from localStorage
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  // Update the theme in localStorage and apply it to the document body
+  const changeTheme = (newTheme) => {
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
+
+  // Reset the theme to default (or remove it)
+  const resetTheme = () => {
+    setTheme("light"); // Reset theme state to "light" as default
+    localStorage.removeItem("theme"); // Remove theme from localStorage
+  };
+
+  // Apply the theme class to the body and adjust text color on theme change
+  useEffect(() => {
+    document.body.className = theme;
+  
+    // Update the color of .main-content
+    const mainContent = document.querySelector(".main-content");
+    if (mainContent) {
+      if (theme === "dark" || theme === "black") {
+        mainContent.style.color = "white"; // Set text color to white for dark or black theme
+      } else {
+        mainContent.style.color = "black"; // Set text color to black for light theme
+      }
+    }
+  
+    // Update the color of dropdown text
+    const dropdown = document.querySelector("select");
+    if (dropdown) {
+      dropdown.style.color = "black"; // Explicitly set dropdown text color to black
+    }
+  }, [theme]);
+  
+  
 
   return (
     <div className="flex h-screen w-screen overflow-hidden">
@@ -55,7 +91,7 @@ const AppearanceSettings = () => {
       <aside
         className={`${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 fixed lg:relative lg:w-1/4 w-3/4 bg-[#E7F0DC] p-4 sm:p-6 h-full transition-transform duration-300 ease-in-out z-20`}
+        } lg:translate-x-0 fixed lg:relative lg:w-1/4 w-3/4 bg-[#E7F0DC] p-4 sm:p-6 h-full transition-transform duration-300 ease-in-out z-20 text-black`}
       >
         <Link to="/beranda-login" className="flex items-center space-x-2">
           <img
@@ -123,13 +159,16 @@ const AppearanceSettings = () => {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 p-8 overflow-y-auto h-full lg:ml-0">
+      <div className="main-content flex-1 p-8 overflow-y-auto h-full lg:ml-0">
         <h2 className="text-xl font-bold mb-6">Tampilan</h2>
 
         <div className="mb-4">
-          <label className="block text-gray-600 mb-2">Tema</label>
+          <label className="block mb-2">Tema</label>
           <div className="grid grid-cols-2 gap-4">
-            <div className="border rounded-md p-4 flex flex-col items-center cursor-pointer">
+            <div
+              onClick={() => changeTheme("light")}
+              className="border rounded-md p-4 flex flex-col items-center cursor-pointer"
+            >
               <img
                 src="../src/assets/light-icon.png"
                 alt="Light Theme"
@@ -137,7 +176,10 @@ const AppearanceSettings = () => {
               />
               <span>Light</span>
             </div>
-            <div className="border rounded-md p-4 flex flex-col items-center cursor-pointer">
+            <div
+              onClick={() => changeTheme("dark")}
+              className="border rounded-md p-4 flex flex-col items-center cursor-pointer"
+            >
               <img
                 src="./src/assets/dark-icon.png"
                 alt="Dark Theme"
@@ -145,7 +187,10 @@ const AppearanceSettings = () => {
               />
               <span>Dark</span>
             </div>
-            <div className="border rounded-md p-4 flex flex-col items-center cursor-pointer">
+            <div
+              onClick={() => changeTheme("black")}
+              className="border rounded-md p-4 flex flex-col items-center cursor-pointer"
+            >
               <img
                 src="./src/assets/black-icon.png"
                 alt="Black Theme"
@@ -153,7 +198,10 @@ const AppearanceSettings = () => {
               />
               <span>Black</span>
             </div>
-            <div className="border rounded-md p-4 flex flex-col items-center cursor-pointer">
+            <div
+              onClick={() => changeTheme("auto")}
+              className="border rounded-md p-4 flex flex-col items-center cursor-pointer"
+            >
               <img
                 src="./src/assets/auto-icon.png"
                 alt="Auto Theme"
@@ -165,7 +213,7 @@ const AppearanceSettings = () => {
         </div>
 
         <div className="mb-8">
-          <label className="block text-gray-600 mb-2">Ukuran Teks</label>
+          <label className="block mb-2">Ukuran Teks</label>
           <select className="border border-gray-300 rounded-md p-2 w-40">
             <option>16px</option>
             <option>18px</option>
@@ -174,15 +222,18 @@ const AppearanceSettings = () => {
         </div>
 
         <div className="flex justify-end space-x-4">
-          <button className="border border-gray-300 text-gray-700 rounded-md px-4 py-2">
+          <button
+            onClick={resetTheme}
+            className="border border-gray-300 rounded-md px-4 py-2"
+          >
             Batal
           </button>
           <button
-              type="submit"
-              className="bg-[#6D7E5E] text-white rounded-md px-4 py-2 border border-[#C4C8AD] hover:bg-[#91A079]"
-            >
-              Simpan Perubahan
-            </button>
+            type="submit"
+            className="bg-[#6D7E5E] text-white rounded-md px-4 py-2 border border-[#C4C8AD] hover:bg-[#91A079]"
+          >
+            Simpan Perubahan
+          </button>
         </div>
       </div>
     </div>

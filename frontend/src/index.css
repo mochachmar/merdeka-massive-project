@@ -7,3 +7,42 @@ html,
 #root {
   font-family: 'Poppins', sans-serif;
 }
+
+/* Light theme */
+.light {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+}
+
+/* Dark theme */
+.dark {
+  --bg-color: #333333;
+  --text-color: #ffffff;
+}
+
+/* Black theme */
+.black {
+  --bg-color: #000000;
+  --text-color: #ffffff;
+}
+
+/* Auto theme - uses system preference */
+@media (prefers-color-scheme: dark) {
+  .auto {
+    --bg-color: #333333;
+    --text-color: #ffffff;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .auto {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+  }
+}
+
+/* Apply the colors globally */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const OtherSettings = () => {
@@ -7,6 +7,14 @@ const OtherSettings = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  // Tambahkan useEffect untuk memastikan teks dropdown tetap hitam
+  useEffect(() => {
+    const dropdown = document.querySelector("select");
+    if (dropdown) {
+      dropdown.style.color = "black"; // Pastikan teks dropdown selalu hitam
+    }
+  }, []);
 
   return (
     <div className="flex h-screen w-screen overflow-hidden">
@@ -55,7 +63,7 @@ const OtherSettings = () => {
       <aside
         className={`${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 fixed lg:relative lg:w-1/4 w-3/4 bg-[#E7F0DC] p-4 sm:p-6 h-full transition-transform duration-300 ease-in-out z-20`}
+        } lg:translate-x-0 fixed lg:relative lg:w-1/4 w-3/4 bg-[#E7F0DC] p-4 sm:p-6 h-full transition-transform duration-300 ease-in-out z-20 text-black`}
       >
         <Link to="/beranda-login" className="flex items-center space-x-2">
           <img
@@ -126,7 +134,7 @@ const OtherSettings = () => {
         <h2 className="text-xl font-bold mb-6">Lainnya</h2>
 
         <div className="mb-4">
-          <label className="block text-gray-600 mb-1">Bahasa</label>
+          <label className="block mb-1">Bahasa</label>
           <select className="border border-gray-300 rounded-md p-2 w-40">
             <option>Bahasa Indonesia</option>
             <option>English</option>
@@ -139,15 +147,15 @@ const OtherSettings = () => {
         </button>
 
         <div className="flex justify-end space-x-4">
-          <button className="border border-gray-300 text-gray-700 rounded-md px-4 py-2">
+          <button className="border border-gray-300  rounded-md px-4 py-2">
             Batal
           </button>
           <button
-              type="submit"
-              className="bg-[#6D7E5E] text-white rounded-md px-4 py-2 border border-[#C4C8AD] hover:bg-[#91A079]"
-            >
-              Simpan Perubahan
-            </button>
+            type="submit"
+            className="bg-[#6D7E5E] text-white rounded-md px-4 py-2 border border-[#C4C8AD] hover:bg-[#91A079]"
+          >
+            Simpan Perubahan
+          </button>
         </div>
       </div>
     </div>
