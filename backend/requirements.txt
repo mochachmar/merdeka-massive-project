@@ -1,5 +1,5 @@
-Flask==2.3.0
-flask-mysql==1.5.1
-Flask-Cors==3.1.1
-flask-sqlalchemy==2.5.1
-Flask-Migrate==3.1.0
+Flask>=2.3.2  # Latest stable version as of Dec 2024
+Flask-SQLAlchemy>=3.0.1  # Database ORM
+Flask-Migrate>=4.0.0  # Database migrations
+Flask-Cors>=4.0.0  # Enable CORS if needed
+PyMySQL>=1.1.0  # MySQL database driver (alternative to flask-mysql)
