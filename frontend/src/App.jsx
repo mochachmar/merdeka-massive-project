@@ -57,6 +57,9 @@ import Panduan from './pages/Panduan';
 import PanduanLogin from './pages/Panduan-Login';
 import Tips from './pages/Tips';
 import TipsLogin from './pages/Tips-Login';
+import UpgradePro from './pages/UpgradePro';
+import UpgradePlan from './pages/UpgradePlan';
+import Payment from './pages/Payment';
 import { useAuthStore } from './store/FetchDataWithAxios';
 import ProtectedAdminRoute from './store/ProtectedAdminRoute'; // Import ProtectedAdminRoute
 import RedirectAuthenticatedAdmin from './store/RedirectAuthenticatedAdmin'; // Import RedirectAuthenticatedAdmin
@@ -328,6 +331,32 @@ function App() {
         element={
           <ProtectedAdminRoute>
             <FormOtherEditSettingAdmin />
+          </ProtectedAdminRoute>
+        }
+      />
+
+      {/* Route Subscription */}
+      <Route
+        path="upgrade-pro"
+        element={
+          <ProtectedAdminRoute>
+            <UpgradePro />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="upgrade-plan"
+        element={
+          <ProtectedAdminRoute>
+            <UpgradePlan />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="payment"
+        element={
+          <ProtectedAdminRoute>
+            <Payment />
           </ProtectedAdminRoute>
         }
       />
