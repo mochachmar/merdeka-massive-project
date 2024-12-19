@@ -54,6 +54,9 @@ import Panduan from './pages/Panduan';
 import PanduanLogin from './pages/Panduan-Login';
 import Tips from './pages/Tips';
 import TipsLogin from './pages/Tips-Login';
+import UpgradePro from './pages/UpgradePro';
+import UpgradePlan from './pages/UpgradePlan';
+import Payment from './pages/Payment';
 import { useAuthStore } from './store/FetchDataWithAxios';
 
 const ProtectedRoute = ({ children }) => {
@@ -240,6 +243,11 @@ function App() {
       <Route path="/admin/other-setting" element={<OtherSettingAdmin />} />
       <Route path="/admin/form-other-setting" element={<FormOtherSettingAdmin />} />
       <Route path="/admin/form-other-edit-setting" element={<FormOtherEditSettingAdmin />} />
+
+      {/* Route Subscription */}
+      <Route path="upgrade-pro" element={<UpgradePro />} />
+      <Route path="upgrade-plan" element={<UpgradePlan />} />
+      <Route path="payment" element={<Payment />} />
 
       {/* Route Panduan */}
       <Route path="/admin/card-panduan" element={<AdminPanduan />} />
