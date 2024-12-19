@@ -53,13 +53,8 @@ const HistoryDeteksi = () => {
                 <div className="border-l-2 border-[#565E6D] h-24 mx-4"></div>
                 <div className="flex flex-col items-center">
                   <Link
-                    to={{
-                      pathname: '/identifikasi-ai',
-                      state: {
-                        plantData: plant,
-                        isHistory: true, // Menandakan bahwa ini berasal dari histori
-                      },
-                    }}
+                    to="/hasil-ai"
+                    state={{ plantData: plant, isHistory: true }} // Kirim data tanaman sebagai state
                     className="relative group"
                   >
                     <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-200 rounded-lg"></div>

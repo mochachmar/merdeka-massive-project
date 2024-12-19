@@ -1,22 +1,22 @@
 // controllers/plantController.js
 import { insertPlant } from '../models/plantModel.js';
-import { db } from '../database/db.js'; // Pastikan db diimport
+import { db } from '../database/db.js';
 import { getPlantHistory } from '../models/plantModel.js';
 import { deleteAllPlants } from '../models/plantModel.js';
 
 export const addPlantHistory = async (req, res) => {
   const connection = await db.getConnection();
   try {
-    const { plant_name, scientific_name, description, care_instructions, created_by, health_status, disease_name } = req.body;
+    const { plant_name, scientific_name, description, care_instructions, health_status, disease_name } = req.body;
 
     const photo_url = req.file ? req.file.path : null;
     console.log('Photo URL:', photo_url);
     console.log('File:', req.file);
     console.log('Body:', req.body);
 
-    if (!plant_name || !created_by || !photo_url || !health_status || !disease_name) {
+    if (!plant_name || !photo_url || !health_status || !disease_name) {
       console.log('Validation failed: Missing required fields');
-      return res.status(400).json({ message: 'plant_name, created_by, photo_url, health_status, and disease_name are required!' });
+      return res.status(400).json({ message: 'plant_name, photo_url, health_status, and disease_name are required!' });
     }
 
     await connection.beginTransaction();
@@ -28,7 +28,9 @@ export const addPlantHistory = async (req, res) => {
       description,
       care_instructions,
       photo_url,
-      created_by,
+      created_by: req.userId, // Gunakan userId dari token
+      health_status,
+      disease_name,
     });
     console.log('Inserted Plant with ID:', plantId);
 
@@ -48,7 +50,7 @@ export const addPlantHistory = async (req, res) => {
 
 export const fetchPlantHistory = async (req, res) => {
   try {
-    const plantHistory = await getPlantHistory();
+    const plantHistory = await getPlantHistory(req.userId);
     res.status(200).json(plantHistory);
   } catch (error) {
     console.error('Error fetching plant history:', error);
@@ -60,7 +62,7 @@ export const removeAllPlantHistory = async (req, res) => {
   const connection = await db.getConnection();
   try {
     await connection.beginTransaction();
-    await deleteAllPlants();
+    await deleteAllPlants(req.userId);
     await connection.commit();
     res.status(200).json({ message: 'Semua riwayat tanaman berhasil dihapus.' });
   } catch (error) {

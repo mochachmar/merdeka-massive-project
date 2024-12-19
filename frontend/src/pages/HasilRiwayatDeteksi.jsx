@@ -1,8 +1,7 @@
-// IdentifikasiAi.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
-import Swal from 'sweetalert2'; // Import SweetAlert2
+import Swal from 'sweetalert2';
 import '../index.css';
 import { ArrowBackOutline, LeafOutline, ScanOutline } from 'react-ionicons';
 import Navbar from '../components/Navbar-Login';
@@ -19,9 +18,11 @@ const plantsData = {
   melon: { name: 'Melon', scientificName: 'Cucumis melo' },
 };
 
-const IdentifikasiAI = () => {
+const HasilRiwayatDeteksi = () => {
   const [predictions, setPredictions] = useState([]);
   const [image, setImage] = useState(null);
+  const [description, setDescription] = useState('');
+  const [careInstructions, setCareInstructions] = useState('');
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const detectCalled = useRef(false);
@@ -29,6 +30,19 @@ const IdentifikasiAI = () => {
 
   useEffect(() => {
     const detectPlant = async () => {
+      if (location.state?.isHistory) {
+        // Jika diakses dari histori, gunakan data yang ada
+        const { plantData } = location.state;
+        if (plantData) {
+          setPredictions([{ class_label: plantData.plant_name, solution: plantData.care_instructions }]);
+          setDescription(plantData.description);
+          setCareInstructions(plantData.care_instructions);
+          setImage(plantData.photo_url); // Asumsikan photo_url adalah URL yang dapat diakses
+        }
+        return;
+      }
+
+      // Jika bukan dari histori, lakukan deteksi seperti biasa
       if (!location.state?.imageFile || detectCalled.current) {
         return;
       }
@@ -70,10 +84,10 @@ const IdentifikasiAI = () => {
     detectPlant();
   }, [location.state]);
 
-  // Untuk upload ke backend lokal
+  // Untuk upload ke backend lokal, hanya jika bukan dari histori
   useEffect(() => {
     const uploadPlantData = async () => {
-      if (!location.state?.imageFile || predictions.length === 0 || uploadCalled.current) {
+      if (location.state?.isHistory || !location.state?.imageFile || predictions.length === 0 || uploadCalled.current) {
         return;
       }
 
@@ -101,8 +115,7 @@ const IdentifikasiAI = () => {
       formData.append('care_instructions', topPrediction.solution || 'No care instructions');
       formData.append('health_status', health_status);
       formData.append('disease_name', disease_name);
-      // Hapus baris berikut
-      // formData.append('created_by', '2');
+      // Hapus formData.append('created_by', '2'); // Hapus baris ini karena backend akan mengatur
 
       try {
         const response = await axios({
@@ -112,7 +125,7 @@ const IdentifikasiAI = () => {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-          withCredentials: true, // Tetap true untuk backend lokal
+          withCredentials: true, // tetap true untuk backend lokal
         });
         console.log('Response:', response.data);
         Swal.fire({
@@ -149,54 +162,59 @@ const IdentifikasiAI = () => {
 
       <div className="flex-grow relative mt-4 mx-auto w-full max-w-4xl px-4">
         <div className="flex justify-between items-center mb-4">
-          <Link to="/deteksi-penyakit" className="flex items-center text-black font-semibold text-sm ml-4">
+          <Link to={location.state?.isHistory ? '/histori-tanaman' : '/deteksi-penyakit'} className="flex items-center text-black font-semibold text-sm ml-4">
             <ArrowBackOutline className="mr-5" color="black" height="50px" width="30px" />
             Kembali
           </Link>
-          <Link to="/histori-tanaman" className="text-black font-semibold text-sm mr-4">
-            Riwayat Deteksi Tanaman
-          </Link>
+          {!location.state?.isHistory && (
+            <Link to="/histori-tanaman" className="text-black font-semibold text-sm mr-4">
+              Riwayat Deteksi Tanaman
+            </Link>
+          )}
         </div>
 
-        {image && predictions.length > 0 && (
-          <div className="mb-6">
-            <h2 className="text-2xl font-semibold mb-4 text-center">Hasil Deteksi</h2>
-            <div className="flex flex-col md:flex-row gap-6">
-              <div className="flex-1">
-                <img src={`data:image/png;base64,${image}`} alt="Hasil Prediksi" className="w-full object-contain rounded-lg border" />
-              </div>
-
-              <div className="flex-1">
-                {predictions.map((prediction, index) => (
-                  <div key={index} className="bg-transparent bg-opacity-50 border border-[#45543D] shadow-lg rounded-lg p-4 mb-4">
-                    <h3 className="text-lg font-bold mb-2 text-center">{prediction.class_label}</h3>
-                    <ReactMarkdown>{prediction.solution}</ReactMarkdown>
+        {location.state?.isHistory
+          ? // Jika diakses dari histori
+            image && (
+              <div className="mb-6">
+                <h2 className="text-2xl font-semibold mb-4 text-center">Hasil Deteksi</h2>
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="flex-1">
+                    <img src={`http://localhost:3000/${image}`} alt="Hasil Prediksi" className="w-full object-contain rounded-lg border" />
                   </div>
-                ))}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 mb-12">
+                    <div className="bg-transparent bg-opacity-50 border border-[#45543D] shadow-lg rounded-lg p-4 h-fit">
+                      <h3 className="text-lg font-bold mb-2 text-center flex items-center justify-center">Spesifikasi Tanaman</h3>
+                      <ReactMarkdown>{description}</ReactMarkdown>
+                    </div>
+                    <div className="bg-transparent bg-opacity-50 border border-[#45543D] shadow-lg rounded-lg p-4">
+                      <h3 className="text-lg font-bold mb-2 text-center flex items-center justify-center">Penilaian Kesehatan/Penyakit</h3>
+                      <ReactMarkdown>{careInstructions}</ReactMarkdown>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        )}
-
-        <div className="flex justify-center mb-4">{location.state?.imageFile && <img src={URL.createObjectURL(location.state.imageFile)} alt="Uploaded Plant" className="mb-4 min-w-56 max-h-56 h-auto mx-4" />}</div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 mb-12">
-          <div className="bg-transparent bg-opacity-50 border border-[#45543D] shadow-lg rounded-lg p-4 h-fit">
-            <h3 className="text-lg font-bold mb-2 text-center flex items-center justify-center">
-              <LeafOutline className="mr-2" color="black" height="20px" width="20px" />
-              Spesifikasi Tanaman
-            </h3>
-            <p>{predictions.length > 0 ? predictions[0].class_label : 'Memuat...'}</p>
-          </div>
-
-          <div className="bg-transparent bg-opacity-50 border border-[#45543D] shadow-lg rounded-lg p-4">
-            <h3 className="text-lg font-bold mb-2 text-center flex items-center justify-center">
-              <ScanOutline className="mr-2" color="black" height="20px" width="20px" />
-              Penilaian Kesehatan/Penyakit
-            </h3>
-            <ReactMarkdown>{predictions.length > 0 ? predictions[0].solution : 'Memuat...'}</ReactMarkdown>
-          </div>
-        </div>
+            )
+          : // Jika deteksi baru
+            image &&
+            predictions.length > 0 && (
+              <div className="mb-6">
+                <h2 className="text-2xl font-semibold mb-4 text-center">Hasil Deteksi</h2>
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="flex-1">
+                    <img src={`data:image/png;base64,${image}`} alt="Hasil Prediksi" className="w-full object-contain rounded-lg border" />
+                  </div>
+                  <div className="flex-1">
+                    {predictions.map((prediction, index) => (
+                      <div key={index} className="bg-transparent bg-opacity-50 border border-[#45543D] shadow-lg rounded-lg p-4 mb-4">
+                        <h3 className="text-lg font-bold mb-2 text-center">{prediction.class_label}</h3>
+                        <ReactMarkdown>{prediction.solution}</ReactMarkdown>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
       </div>
 
       <Footer className="mt-auto" />
@@ -204,4 +222,4 @@ const IdentifikasiAI = () => {
   );
 };
 
-export default IdentifikasiAI;
+export default HasilRiwayatDeteksi;

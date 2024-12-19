@@ -51,6 +51,7 @@ import Tentangkami from './pages/Tentangkami';
 import Tentangkamilogin from './pages/Tentangkamilogin';
 import DeteksiPenyakit from './pages/DeteksiPenyakit';
 import IdentifikasiAi from './pages/IdentifikasiAi';
+import HasilRiwayatDeteksi from './pages/HasilRiwayatDeteksi';
 import HistoryDeteksi from './pages/HistoryDeteksi';
 import Panduan from './pages/Panduan';
 import PanduanLogin from './pages/Panduan-Login';
@@ -390,6 +391,14 @@ function App() {
         element={
           <ProtectedRoute>
             <IdentifikasiAi />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/hasil-ai"
+        element={
+          <ProtectedRoute>
+            <HasilRiwayatDeteksi />
           </ProtectedRoute>
         }
       />

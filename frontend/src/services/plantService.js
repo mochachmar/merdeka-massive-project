@@ -10,6 +10,7 @@ export const getPlantHistory = async () => {
         // Jika menggunakan autentikasi, tambahkan header authorization
         // 'Authorization': `Bearer ${token}`,
       },
+      withCredentials: true, // Tambahkan ini jika diperlukan
     });
     return response.data;
   } catch (error) {
