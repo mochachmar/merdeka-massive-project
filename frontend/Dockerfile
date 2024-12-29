@@ -1,20 +1,37 @@
-# Use Node.js LTS as base image
-FROM node:18
+# syntax=docker/dockerfile:1.4
 
-# Set the working directory
-WORKDIR /app
+FROM node:lts AS development
 
-# Copy package.json and package-lock.json
-COPY backend/package*.json ./
+ENV CI=true
+ENV PORT=3000
 
-# Install dependencies
-RUN npm install
+WORKDIR /code
+COPY package.json /code/package.json
+COPY package-lock.json /code/package-lock.json
+RUN npm ci
+COPY . /code
 
-# Copy the entire backend directory
-COPY backend/ .
+CMD [ "npm", "start" ]
 
-# Expose the port the app runs on
-EXPOSE 5000
+FROM development AS builder
 
-# Command to start the backend
-CMD ["npm", "run", "start"]
+RUN npm run build
+
+FROM development as dev-envs
+RUN <<EOF
+apt-get update
+apt-get install -y --no-install-recommends git
+EOF
+
+RUN <<EOF
+useradd -s /bin/bash -m vscode
+groupadd docker
+usermod -aG docker vscode
+EOF
+# install Docker tools (cli, buildx, compose)
+COPY --from=gloursdocker/docker / /
+CMD [ "npm", "start" ]
+
+FROM nginx:1.13-alpine
+
+COPY --from=builder /code/build /usr/share/nginx/html
