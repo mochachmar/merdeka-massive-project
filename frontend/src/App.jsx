@@ -339,25 +339,25 @@ function App() {
       <Route
         path="upgrade-pro"
         element={
-          <ProtectedAdminRoute>
-            <UpgradePro />
-          </ProtectedAdminRoute>
+          // <ProtectedRoute>
+          <UpgradePro />
+          // </ProtectedRoute>
         }
       />
       <Route
         path="upgrade-plan"
         element={
-          <ProtectedAdminRoute>
-            <UpgradePlan />
-          </ProtectedAdminRoute>
+          // <ProtectedRoute>
+          <UpgradePlan />
+          // </ProtectedRoute>
         }
       />
       <Route
         path="payment"
         element={
-          <ProtectedAdminRoute>
-            <Payment />
-          </ProtectedAdminRoute>
+          // <ProtectedRoute>
+          <Payment />
+          // </ProtectedRoute>
         }
       />
 
