@@ -143,13 +143,13 @@
 <ol>
   <li>
     <div style="display: flex; align-items: center; gap: 8px;">
-      <span><strong>Hustler :</strong> [NULL]</span>
-      <a href="https://www.linkedin.com">
-          <img src="https://skillicons.dev/icons?i=linkedin" alt="LinkedIn" style="height: 24px;">
-      </a>
-      <a href="https://github.com">
-          <img src="https://skillicons.dev/icons?i=github" alt="GitHub" style="height: 24px;">
-      </a>
+      <span><strong>Hustler :</strong> Moch Achmar</span>
+      <a href="https://www.linkedin.com/in/moch-achmar/">
+              <img src="https://skillicons.dev/icons?i=linkedin" alt="LinkedIn" style="height: 24px;">
+          </a>
+          <a href="https://github.com/mochachmar">
+              <img src="https://skillicons.dev/icons?i=github" alt="GitHub" style="height: 24px;">
+          </a>
   </li>
   <li><strong>Hipster</strong>
     <ul>
